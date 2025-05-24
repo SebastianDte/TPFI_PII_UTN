@@ -14,7 +14,7 @@ El sistema está dividido en **módulos independientes**, cada uno con sus respe
 ## 📦 Módulos del Sistema
 
 - **Alumnos**: altas, bajas, modificación, búsqueda por legajo, listados ordenados y filtrados.
-- **Docentes**: gestión por ID, listados por nombre o especialidad.
+- **Docentes**: gestión por ID, listados por nombre.
 - **Cursos**: creación, asignación de docentes, cupo máximo, estado (activo/inactivo).
 - **Inscripciones**: asociación alumno-curso, control de cupos, importe y fecha.
 - **Reportes**: generación de estadísticas académicas y financieras.
