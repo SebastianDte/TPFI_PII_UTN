@@ -1,5 +1,5 @@
 #include <cstring>
-#include "persona.h"
+#include "Persona.h"
 #include <string>
 
 void Persona::copiarCadenaSegura(char *destino, const std::string &origen, size_t tam)
@@ -20,7 +20,7 @@ Persona::Persona()
     _fechaNacimiento = Fecha();
 }
 
-// Constructor con par√°metros
+// Constructor con par·metros
 Persona::Persona(const std::string &dni, const std::string &nombre, const std::string &apellido,
                  const std::string &telefono, const std::string &email, const std::string &direccion,
                  const Fecha &fechaNacimiento)

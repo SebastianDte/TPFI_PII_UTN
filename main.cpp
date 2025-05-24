@@ -1,9 +1,11 @@
 #include <iostream>
 #include <locale>
+#include "MenuPrincipal.h"
+#include "Persona.h"
+#include "Fecha.h"
+
 using namespace std;
-#include "menus/menuPrincipal.h"
-#include "entidades/persona.h"
-#include "entidades/fecha.h"
+
 int main()
 {
     setlocale(LC_ALL, "es_ES.UTF-8");

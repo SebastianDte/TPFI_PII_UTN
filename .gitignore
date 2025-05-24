@@ -1,0 +1,37 @@
+# === ARCHIVOS DE COMPILACIÓN ===
+*.d
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+
+# === LIBRERÍAS COMPILADAS ===
+*.so
+*.dylib
+*.dll
+*.lai
+*.la
+*.a
+*.lib
+
+# === EJECUTABLES ===
+*.exe
+*.out
+*.app
+
+# === CODE::BLOCKS (archivos temporales y de layout) ===
+*.depend
+*.layout
+*.layout.save
+
+# === CARPETAS DE COMPILACIÓN AUTOMÁTICA ===
+bin/
+obj/
+
+# === ARCHIVOS TEMPORALES / DEL SISTEMA ===
+*~
+*.swp
+.DS_Store
+Thumbs.db

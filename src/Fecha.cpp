@@ -2,7 +2,8 @@
 #include "Fecha.h"
 using namespace std;
 
-bool esAnioBisiesto(int anio) {
+bool esAnioBisiesto(int anio)
+{
     return (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
 }
 
