@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 
 class Curso
@@ -8,24 +7,27 @@ private:
     int _id;
     char _nombre[50];
     int _cantMaximaAlumnos;
+    int _numeroAula;
     int _idProfesor;
     bool _estado;
 
 public:
     Curso();
-    Curso(int id, std::string nombre, int cantMaximaAlumnos, int idProfesor, bool estado);
+    Curso(int id, const std::string& nombre, int cantMaximaAlumnos, int idProfesor, bool estado);
 
     void setId(int id);
-    void setNombre(std::string nombre);
+    void setNombre(const std::string& nombre);
     void setCantMaximaAlumnos(int cantMaximaAlumnos);
+    void setNumeroAula(int numeroAula);
     void setIdProfesor(int idProfesor);
     void setEstado(bool estado);
 
-    int getId();
-    std::string getNombre();
-    int getCantMaximaAlumnos();
-    int getIdProfesor();
-    bool getEstado();
+    int getId() const;
+    std::string getNombre() const;
+    int getCantMaximaAlumnos() const;
+    int getNumeroAula() const;
+    int getIdProfesor() const;
+    bool getEstado() const;
 
-    std::string toCSV();
+    std::string toCSV() const;
 };

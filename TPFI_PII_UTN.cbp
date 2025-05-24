@@ -41,6 +41,7 @@
 		<Unit filename="include/MenuCurso.h" />
 		<Unit filename="include/MenuPrincipal.h" />
 		<Unit filename="include/Persona.h" />
+		<Unit filename="include/Utilidades.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Curso.cpp" />
 		<Unit filename="src/CursoArchivo.cpp" />
@@ -49,6 +50,7 @@
 		<Unit filename="src/MenuCurso.cpp" />
 		<Unit filename="src/MenuPrincipal.cpp" />
 		<Unit filename="src/Persona.cpp" />
+		<Unit filename="src/Utilidades.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

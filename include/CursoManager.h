@@ -1,10 +1,19 @@
+#pragma once
+#include "CursoArchivo.h"
+#include "Utilidades.h"
 
 class CursoManager
 {
-    public:
-        CursoManager();
+private:
+    CursoArchivo _archivo;
+    Utilidades _utilidades;
 
-    protected:
+public:
+    CursoManager();
 
-    private:
+    void altaCurso();
+    void bajaCurso();
+    void modificarCurso();
+    void listarCursos();
+    void buscarCursoID();
 };

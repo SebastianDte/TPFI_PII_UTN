@@ -1,10 +1,12 @@
+#pragma once
+#include "CursoManager.h"
 
 class MenuCurso
 {
-    public:
-        MenuCurso();
+private:
+    CursoManager _manager;
 
-    protected:
-
-    private:
+public:
+    MenuCurso();
+    void mostrarMenuCurso();
 };
