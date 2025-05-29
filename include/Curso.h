@@ -30,4 +30,6 @@ public:
     bool getEstado() const;
 
     std::string toCSV() const;
+
+    bool operator!=(const Curso& otro) const;
 };

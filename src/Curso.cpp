@@ -90,3 +90,14 @@ std::string Curso::toCSV() const
            std::to_string(_idProfesor) + "," +
            (_estado ? "ACTIVO" : "INACTIVO");
 }
+
+
+bool Curso::operator!=(const Curso& otro) const
+{
+    return _id == otro._id &&
+           _nombre == otro._nombre &&
+           _cantMaximaAlumnos == otro._cantMaximaAlumnos &&
+           _numeroAula == otro._numeroAula &&
+           _idProfesor == otro._idProfesor &&
+           _estado == otro._estado;
+}
