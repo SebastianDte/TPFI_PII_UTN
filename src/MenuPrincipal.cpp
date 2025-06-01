@@ -4,7 +4,6 @@
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
-    MenuProfesor menuProfesor;
 
     int opcion;
     do
@@ -29,10 +28,11 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 // alumnoMenu.mostrarMenu();
                 break;
             case 2:
-                menuProfesor.mostrarMenuProfesor();
+                _profesorMenu.mostrarMenuProfesor();
                 break;
             case 3:
                 _cursoMenu.mostrarMenuCurso();
+
                 break;
             case 4:
                 // inscripcionMenu.mostrarMenu();
