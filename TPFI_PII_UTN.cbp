@@ -42,13 +42,10 @@
 		<Unit filename="include/MenuPrincipal.h" />
 		<Unit filename="include/MenuProfesor.h" />
 		<Unit filename="include/Persona.h" />
-<<<<<<< HEAD
 		<Unit filename="include/Profesor.h" />
 		<Unit filename="include/ProfesorArchivo.h" />
 		<Unit filename="include/ProfesorManager.h" />
-=======
 		<Unit filename="include/Utilidades.h" />
->>>>>>> 006ac0bd12b17ffa58530006e19209322c892fee
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Curso.cpp" />
 		<Unit filename="src/CursoArchivo.cpp" />
@@ -58,13 +55,10 @@
 		<Unit filename="src/MenuPrincipal.cpp" />
 		<Unit filename="src/MenuProfesor.cpp" />
 		<Unit filename="src/Persona.cpp" />
-<<<<<<< HEAD
 		<Unit filename="src/Profesor.cpp" />
 		<Unit filename="src/ProfesorArchivo.cpp" />
 		<Unit filename="src/ProfesorManager.cpp" />
-=======
 		<Unit filename="src/Utilidades.cpp" />
->>>>>>> 006ac0bd12b17ffa58530006e19209322c892fee
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

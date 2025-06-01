@@ -1,17 +1,12 @@
 #include "MenuPrincipal.h"
-<<<<<<< HEAD
 #include "MenuProfesor.h"
+#include "MenuCurso.h"
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
     MenuProfesor menuProfesor;
-=======
-#include "MenuCurso.h"
-#include <iostream>
+    // Si usás MenuCurso como atributo (_cursoMenu), asegurate de declararlo en la clase.
 
-void MenuPrincipal::mostrarMenuPrincipal()
-{
->>>>>>> 006ac0bd12b17ffa58530006e19209322c892fee
     int opcion;
     do
     {
@@ -28,22 +23,23 @@ void MenuPrincipal::mostrarMenuPrincipal()
         std::cout << "Ingrese una opcion: ";
         std::cin >> opcion;
 
-<<<<<<< HEAD
+        system("cls");
+
         switch(opcion) {
             case 1:
-                //alumnoMenu.mostrarMenu();
+                // alumnoMenu.mostrarMenu();
                 break;
             case 2:
                 menuProfesor.mostrarMenuProfesor();
                 break;
             case 3:
-                //cursoMenu.mostrarMenuCurso();
+                _cursoMenu.mostrarMenuCurso();  // ojo que _cursoMenu debe ser un atributo
                 break;
             case 4:
-                //inscripcionMenu.mostrarMenu();
+                // inscripcionMenu.mostrarMenu();
                 break;
             case 5:
-                //reportesMenu.mostrarMenuReportes();
+                // reportesMenu.mostrarMenuReportes();
                 break;
             case 0:
                 std::cout << "Saliendo del sistema...\n";
@@ -51,33 +47,8 @@ void MenuPrincipal::mostrarMenuPrincipal()
             default:
                 std::cout << "Opcion invalida, intente nuevamente.\n";
                 break;
-=======
-        system("cls");
-        switch(opcion)
-        {
-        case 1:
-            //alumnoMenu.mostrarMenu();
-            break;
-        case 2:
-            //profesorMenu.mostrarMenuProfesor();
-            break;
-        case 3:
-            _cursoMenu.mostrarMenuCurso();
-            break;
-        case 4:
-            //inscripcionMenu.mostrarMenu();
-            break;
-        case 5:
-            //reportesMenu.mostrarMenuReportes();
-            break;
-        case 0:
-            std::cout << "Saliendo del sistema...\n";
-            break;
-        default:
-            std::cout << "Opcion invalida, intente nuevamente.\n";
-            break;
->>>>>>> 006ac0bd12b17ffa58530006e19209322c892fee
         }
+
         std::cout << std::endl;
         system("pause");
     }
