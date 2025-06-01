@@ -1,7 +1,9 @@
 #include "MenuPrincipal.h"
+#include "MenuProfesor.h"
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
+    MenuProfesor menuProfesor;
     int opcion;
     do {
         std::cout << "\n=== MENU PRINCIPAL ===\n";
@@ -19,7 +21,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 //alumnoMenu.mostrarMenu();
                 break;
             case 2:
-                //profesorMenu.mostrarMenuProfesor();
+                menuProfesor.mostrarMenuProfesor();
                 break;
             case 3:
                 //cursoMenu.mostrarMenuCurso();

@@ -27,5 +27,5 @@ public:
     bool esMayorQue(Fecha otraFecha);
     bool esIgualA(Fecha otraFecha);
     std::string toString();
-};
 
+};

@@ -40,7 +40,11 @@
 		<Unit filename="include/Fecha.h" />
 		<Unit filename="include/MenuCurso.h" />
 		<Unit filename="include/MenuPrincipal.h" />
+		<Unit filename="include/MenuProfesor.h" />
 		<Unit filename="include/Persona.h" />
+		<Unit filename="include/Profesor.h" />
+		<Unit filename="include/ProfesorArchivo.h" />
+		<Unit filename="include/ProfesorManager.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Curso.cpp" />
 		<Unit filename="src/CursoArchivo.cpp" />
@@ -48,7 +52,11 @@
 		<Unit filename="src/Fecha.cpp" />
 		<Unit filename="src/MenuCurso.cpp" />
 		<Unit filename="src/MenuPrincipal.cpp" />
+		<Unit filename="src/MenuProfesor.cpp" />
 		<Unit filename="src/Persona.cpp" />
+		<Unit filename="src/Profesor.cpp" />
+		<Unit filename="src/ProfesorArchivo.cpp" />
+		<Unit filename="src/ProfesorManager.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
