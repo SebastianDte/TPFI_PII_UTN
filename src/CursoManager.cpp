@@ -3,6 +3,8 @@
 #include "CursoManager.h"
 #include "CursoArchivo.h"
 #include "Utilidades.h"
+#include "ProfesorArchivo.h"
+#include "Profesor.h"
 
 CursoManager::CursoManager()
 {
@@ -13,10 +15,6 @@ CursoManager::CursoManager()
 void CursoManager::altaCurso()
 {
 
-    /*TODOS:
-    1. Se deba validar si el id de profesor es valido antes de asignarlo!
-    2. preguntar si el id debe setearse automaticamente.!!
-    */
     Curso nuevoCurso;
     std::string inputUsuario; // uso un input general para poder detectar la palabra clave "salir" si el usuario la ingresa
     int cantMaximaAlumnos = 0;
@@ -62,8 +60,8 @@ void CursoManager::altaCurso()
         break;
     }
 
-    system("cls");
-    std::cout << "Nombre del curso registrado: " << nuevoCurso.getNombre() << "\n\n";
+
+
 
     while (true)
     {
@@ -94,8 +92,8 @@ void CursoManager::altaCurso()
         break;
     }
 
-    system("cls");
-    std::cout << "Cantidad máxima de alumnos registrada: " << nuevoCurso.getCantMaximaAlumnos() << "\n\n";
+
+
 
     while(true)
     {
@@ -126,8 +124,8 @@ void CursoManager::altaCurso()
         break;
     }
 
-    system("cls");
-    std::cout << "Número de aula registrado: " << nuevoCurso.getNumeroAula() << "\n\n";
+
+
 
     while(true)
     {
@@ -154,13 +152,23 @@ void CursoManager::altaCurso()
             continue;
         }
 
+        // buscar si el profesor existe
+        ProfesorArchivo profeArchivo;
+        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+
+        if (posicionRegProfesor < 0)
+        {
+            std::cout << "\nNo existe un profesor registrado con el ID indicado. Por favor, intente nuevamente.\n\n";
+            continue;
+        }
+
         nuevoCurso.setIdProfesor(idProfesor);
         break;
     }
 
     nuevoCurso.setEstado(true);
 
-    system("cls");
+
     std::cout << "Registrando curso...\n\n";
 
     if(_archivo.alta(nuevoCurso))
@@ -176,9 +184,6 @@ void CursoManager::altaCurso()
 void CursoManager::bajaCurso()
 {
     /* TODOS:
-        1. tenemos que confirmar que sea el curso a dar de baja antes de proceder a hacer alguna accion
-           como tenemos el profesor, seria bueno unir ambos archivos para tener los datos completos para validar que sea el que se quiere dar de baja
-           Pendiente implementar aca esa union, por ahora muestro el nombre
         2. Pendiente agregar validacion para ver si el curso no tiene alumnos inscriptos, si tiene no se puede dar de baja.
     */
 
@@ -238,11 +243,19 @@ void CursoManager::bajaCurso()
             return;
         }
 
+        ProfesorArchivo profeArchivo;
+        int idProfesor = curso.getIdProfesor();
+        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+        Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+
         system("cls");
         std::cout << "=========================================\n";
         std::cout << "Curso encontrado:\n";
         std::cout << "ID: " << curso.getId() << "\n";
         std::cout << "Nombre: " << curso.getNombre() << "\n";
+        std::cout << "Profesor Asignado:\n";
+        std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+        std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
         std::cout << "=========================================\n";
         std::cout << "¿Confirma dar de baja este curso? (s/n): ";
         std::getline(std::cin, inputUsuario);
@@ -437,10 +450,6 @@ void CursoManager::modificarCurso()
 
 void CursoManager::listarCursos()
 {
-    /* TODOS:
-    1. Pendiente agregar el nombre del profesor asignado cuando exista la clase de Profesor.
-
-    */
     int total = _archivo.cantRegistros();
 
     if(total <= 0)
@@ -459,14 +468,100 @@ void CursoManager::listarCursos()
 
         if(curso.getEstado())
         {
+            ProfesorArchivo profeArchivo;
+            int idProfesor = curso.getIdProfesor();
+            int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+            Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+
+
             std::cout << "ID: " << curso.getId() << std::endl;
             std::cout << "Nombre: " << curso.getNombre() << std::endl;
             std::cout << "Cantidad máxima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
             std::cout << "Número de aula: " << curso.getNumeroAula() << std::endl;
+            std::cout << "Profesor Asignado:\n";
+            std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+            std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
             std::cout << "---------------------------" << std::endl;
         }
     }
 
 }
 
-void CursoManager::buscarCursoID() {}
+void CursoManager::buscarCursoID()
+{
+    int total = _archivo.cantRegistros();
+    Curso curso;
+    int posicion = -1;
+
+    if (total <= 0)
+    {
+        std::cout << "\nNo hay cursos registrados.\n";
+        return;
+    }
+
+
+    std::string inputUsuario;
+    int idCurso;
+
+    std::cout << "=========================================\n";
+    std::cout << "         === BÚSQUEDA DE CURSOS ===      \n";
+    std::cout << "=========================================\n";
+
+    while (true)
+    {
+        std::cout << "\nIngrese el ID del curso a buscar (o escriba 'salir' para cancelar): ";
+        std::getline(std::cin, inputUsuario);
+
+        if (_utilidades.esComandoSalir(inputUsuario))
+        {
+            std::cout << "\nOperación cancelada.\n";
+            return;
+        }
+
+        if (!_utilidades.esEnteroValido(inputUsuario))
+        {
+            std::cout << "Debe ingresar un número entero válido. Intente nuevamente.\n";
+            continue;
+        }
+
+        idCurso = std::stoi(inputUsuario);
+        if (idCurso <= 0)
+        {
+            std::cout << "El ID debe ser mayor que 0.\n";
+            continue;
+        }
+
+        posicion = _archivo.buscar(idCurso);
+        if (posicion == -1)
+        {
+            std::cout << "No se encontró un curso activo con ese ID. Intente nuevamente.\n";
+            continue;
+        }
+
+        curso = _archivo.leer(posicion);
+        break;
+    }
+
+    if (curso.getEstado())
+    {
+        ProfesorArchivo profeArchivo;
+        int idProfesor = curso.getIdProfesor();
+        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+        Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+
+        std::cout << "ID: " << curso.getId() << std::endl;
+        std::cout << "Nombre: " << curso.getNombre() << std::endl;
+        std::cout << "Cantidad máxima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+        std::cout << "Número de aula: " << curso.getNumeroAula() << std::endl;
+        std::cout << "Profesor Asignado:\n";
+        std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+        std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
+        std::cout << "---------------------------" << std::endl;
+    }
+    else
+    {
+        std::cout << "El curso se encuentra dado de baja.\n";
+    }
+
+
+}
