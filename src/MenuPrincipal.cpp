@@ -5,7 +5,6 @@
 
 void MenuPrincipal::mostrarMenuPrincipal() {
     MenuProfesor menuProfesor;
-    // Si usás MenuCurso como atributo (_cursoMenu), asegurate de declararlo en la clase.
 
     int opcion;
     do
@@ -33,7 +32,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 menuProfesor.mostrarMenuProfesor();
                 break;
             case 3:
-                _cursoMenu.mostrarMenuCurso();  // ojo que _cursoMenu debe ser un atributo
+                _cursoMenu.mostrarMenuCurso();
                 break;
             case 4:
                 // inscripcionMenu.mostrarMenu();
