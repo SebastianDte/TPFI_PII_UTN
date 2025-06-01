@@ -1,4 +1,3 @@
-
 #pragma once
 #include "Curso.h"
 
@@ -9,12 +8,12 @@ class CursoArchivo
         int _tamanioRegistro;
 
     public:
-        CursoArchivo(const char *n="Propietarios.dat");
+        CursoArchivo(const char *n="cursos.dat");
 
-        bool alta(Curso regCurso);
-        int buscar(int idCurso);
-        bool modificar(Curso regCurso, int posicion);
+        bool alta(const Curso& regCurso);
+        int buscar(int idCurso) const;
+        bool modificar(const Curso& regCurso, int posicion);
         Curso leer(int posicion);
 
-        int cantRegistros();
+        int cantRegistros() const;
 };

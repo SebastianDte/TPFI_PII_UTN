@@ -2,8 +2,6 @@
 #include "Curso.h"
 #include <string>
 
-using namespace std;
-
 Curso::Curso()
 {
     _id = 0;
@@ -13,7 +11,7 @@ Curso::Curso()
     _estado = true;
 }
 
-Curso::Curso(int id, string nombre, int cantMaximaAlumnos, int idProfesor, bool estado)
+Curso::Curso(int id, const std::string& nombre, int cantMaximaAlumnos, int idProfesor, bool estado)
 {
     _id = id;
     strncpy(_nombre, nombre.c_str(), sizeof(_nombre) - 1);
@@ -28,7 +26,7 @@ void Curso::setId(int id)
     _id = id;
 }
 
-void Curso::setNombre(string nombre)
+void Curso::setNombre(const std::string& nombre)
 {
     strncpy(_nombre, nombre.c_str(), sizeof(_nombre) - 1);
     _nombre[sizeof(_nombre) - 1] = '\0';
@@ -37,6 +35,11 @@ void Curso::setNombre(string nombre)
 void Curso::setCantMaximaAlumnos(int cantMaximaAlumnos)
 {
     _cantMaximaAlumnos = cantMaximaAlumnos;
+}
+
+void Curso::setNumeroAula(int numeroAula)
+{
+    _numeroAula = numeroAula;
 }
 
 void Curso::setIdProfesor(int idProfesor)
@@ -49,36 +52,52 @@ void Curso::setEstado(bool estado)
     _estado = estado;
 }
 
-int Curso::getId()
+int Curso::getId() const
 {
     return _id;
 }
 
-string Curso::getNombre()
+std::string Curso::getNombre() const
 {
-    return string(_nombre);
+    return std::string(_nombre);
 }
 
-int Curso::getCantMaximaAlumnos()
+int Curso::getCantMaximaAlumnos() const
 {
     return _cantMaximaAlumnos;
 }
 
-int Curso::getIdProfesor()
+int Curso::getNumeroAula() const
+{
+    return _numeroAula;
+}
+
+int Curso::getIdProfesor() const
 {
     return _idProfesor;
 }
 
-bool Curso::getEstado()
+bool Curso::getEstado() const
 {
     return _estado;
 }
 
-string Curso::toCSV()
+std::string Curso::toCSV() const
 {
-    return to_string(_id) + "," +
-           string(_nombre) + "," +
-           to_string(_cantMaximaAlumnos) + "," +
-           to_string(_idProfesor) + "," +
+    return std::to_string(_id) + "," +
+           std::string(_nombre) + "," +
+           std::to_string(_cantMaximaAlumnos) + "," +
+           std::to_string(_idProfesor) + "," +
            (_estado ? "ACTIVO" : "INACTIVO");
+}
+
+
+bool Curso::operator!=(const Curso& otro) const
+{
+    return _id == otro._id &&
+           _nombre == otro._nombre &&
+           _cantMaximaAlumnos == otro._cantMaximaAlumnos &&
+           _numeroAula == otro._numeroAula &&
+           _idProfesor == otro._idProfesor &&
+           _estado == otro._estado;
 }

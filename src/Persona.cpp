@@ -2,6 +2,7 @@
 #include "Persona.h"
 #include <string>
 
+// Copia segura: trunca si es necesario y asegura null-terminaci√≥n
 void Persona::copiarCadenaSegura(char *destino, const std::string &origen, size_t tam)
 {
     strncpy(destino, origen.c_str(), tam);
@@ -20,18 +21,18 @@ Persona::Persona()
     _fechaNacimiento = Fecha();
 }
 
-// Constructor con par·metros
+// Constructor con parametros
 Persona::Persona(const std::string &dni, const std::string &nombre, const std::string &apellido,
                  const std::string &telefono, const std::string &email, const std::string &direccion,
                  const Fecha &fechaNacimiento)
 {
-    copiarCadenaSegura(_dni, dni, sizeof(_dni));
-    copiarCadenaSegura(_nombre, nombre, sizeof(_nombre));
-    copiarCadenaSegura(_apellido, apellido, sizeof(_apellido));
-    copiarCadenaSegura(_telefono, telefono, sizeof(_telefono));
-    copiarCadenaSegura(_email, email, sizeof(_email));
-    copiarCadenaSegura(_direccion, direccion, sizeof(_direccion));
-    _fechaNacimiento = fechaNacimiento;
+    setDni(dni);
+    setNombre(nombre);
+    setApellido(apellido);
+    setTelefono(telefono);
+    setEmail(email);
+    setDireccion(direccion);
+    setFechaNacimiento(fechaNacimiento);
 }
 
 // Setters
