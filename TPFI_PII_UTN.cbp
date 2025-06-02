@@ -38,6 +38,9 @@
 		<Unit filename="include/CursoArchivo.h" />
 		<Unit filename="include/CursoManager.h" />
 		<Unit filename="include/Fecha.h" />
+		<Unit filename="include/Inscripcion.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="include/MenuCurso.h" />
 		<Unit filename="include/MenuPrincipal.h" />
 		<Unit filename="include/MenuProfesor.h" />
@@ -51,6 +54,9 @@
 		<Unit filename="src/CursoArchivo.cpp" />
 		<Unit filename="src/CursoManager.cpp" />
 		<Unit filename="src/Fecha.cpp" />
+		<Unit filename="src/Inscripcion.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="src/MenuCurso.cpp" />
 		<Unit filename="src/MenuPrincipal.cpp" />
 		<Unit filename="src/MenuProfesor.cpp" />

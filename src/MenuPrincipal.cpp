@@ -4,11 +4,14 @@
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
+<<<<<<< HEAD
     MenuProfesor menuProfesor;
 <<<<<<< HEAD
 =======
     // Si usás MenuCurso como atributo (_cursoMenu), asegurate de declararlo en la clase.
 >>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
+=======
+>>>>>>> 2857864cda34b847e28b41884e2eb583e68d3193
 
     int opcion;
     do {
@@ -35,9 +38,10 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 // alumnoMenu.mostrarMenu();
                 break;
             case 2:
-                menuProfesor.mostrarMenuProfesor();
+                _profesorMenu.mostrarMenuProfesor();
                 break;
             case 3:
+<<<<<<< HEAD
 <<<<<<< HEAD
                 // Acá lo nuevo que sumó la otra rama:
                 // MenuCurso cursoMenu;
@@ -51,6 +55,10 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 // reportesMenu.mostrarMenuReportes();  // pendiente
 =======
                 _cursoMenu.mostrarMenuCurso();  // ojo que _cursoMenu debe ser un atributo
+=======
+                _cursoMenu.mostrarMenuCurso();
+
+>>>>>>> 2857864cda34b847e28b41884e2eb583e68d3193
                 break;
             case 4:
                 // inscripcionMenu.mostrarMenu();
