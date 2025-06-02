@@ -1,9 +1,14 @@
 #include "MenuPrincipal.h"
 #include "MenuProfesor.h"
+#include "MenuCurso.h"
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
     MenuProfesor menuProfesor;
+<<<<<<< HEAD
+=======
+    // Si usás MenuCurso como atributo (_cursoMenu), asegurate de declararlo en la clase.
+>>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
 
     int opcion;
     do {
@@ -20,6 +25,11 @@ void MenuPrincipal::mostrarMenuPrincipal() {
         std::cout << "Ingrese una opcion: ";
         std::cin >> opcion;
 
+<<<<<<< HEAD
+=======
+        system("cls");
+
+>>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
         switch(opcion) {
             case 1:
                 // alumnoMenu.mostrarMenu();
@@ -28,6 +38,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 menuProfesor.mostrarMenuProfesor();
                 break;
             case 3:
+<<<<<<< HEAD
                 // Acá lo nuevo que sumó la otra rama:
                 // MenuCurso cursoMenu;
                 // cursoMenu.mostrarMenuCurso();
@@ -38,6 +49,15 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 break;
             case 5:
                 // reportesMenu.mostrarMenuReportes();  // pendiente
+=======
+                _cursoMenu.mostrarMenuCurso();  // ojo que _cursoMenu debe ser un atributo
+                break;
+            case 4:
+                // inscripcionMenu.mostrarMenu();
+                break;
+            case 5:
+                // reportesMenu.mostrarMenuReportes();
+>>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
                 break;
             case 0:
                 std::cout << "Saliendo del sistema...\n";
@@ -46,6 +66,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 std::cout << "Opcion invalida, intente nuevamente.\n";
                 break;
         }
+
         std::cout << std::endl;
         system("pause");
     } while(opcion != 0);
