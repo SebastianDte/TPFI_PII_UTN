@@ -4,14 +4,10 @@
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
-<<<<<<< HEAD
     MenuProfesor menuProfesor;
-<<<<<<< HEAD
-=======
+
     // Si usás MenuCurso como atributo (_cursoMenu), asegurate de declararlo en la clase.
->>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
-=======
->>>>>>> 2857864cda34b847e28b41884e2eb583e68d3193
+
 
     int opcion;
     do {
@@ -28,11 +24,9 @@ void MenuPrincipal::mostrarMenuPrincipal() {
         std::cout << "Ingrese una opcion: ";
         std::cin >> opcion;
 
-<<<<<<< HEAD
-=======
+
         system("cls");
 
->>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
         switch(opcion) {
             case 1:
                 // alumnoMenu.mostrarMenu();
@@ -41,8 +35,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 _profesorMenu.mostrarMenuProfesor();
                 break;
             case 3:
-<<<<<<< HEAD
-<<<<<<< HEAD
+
                 // Acá lo nuevo que sumó la otra rama:
                 // MenuCurso cursoMenu;
                 // cursoMenu.mostrarMenuCurso();
@@ -53,20 +46,14 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 break;
             case 5:
                 // reportesMenu.mostrarMenuReportes();  // pendiente
-=======
+
                 _cursoMenu.mostrarMenuCurso();  // ojo que _cursoMenu debe ser un atributo
-=======
+
                 _cursoMenu.mostrarMenuCurso();
 
->>>>>>> 2857864cda34b847e28b41884e2eb583e68d3193
+
                 break;
-            case 4:
-                // inscripcionMenu.mostrarMenu();
-                break;
-            case 5:
-                // reportesMenu.mostrarMenuReportes();
->>>>>>> 6079b8feeab91656aca8ec71e83b7818b84a1de6
-                break;
+
             case 0:
                 std::cout << "Saliendo del sistema...\n";
                 break;
