@@ -4,13 +4,10 @@
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
-    MenuProfesor menuProfesor;
-
-    // Si usás MenuCurso como atributo (_cursoMenu), asegurate de declararlo en la clase.
-
 
     int opcion;
-    do {
+    do
+    {
         system("cls");
         std::cout << "=== SISTEMA COLEGIO ===\n";
         std::cout << "\n=== MENU PRINCIPAL ===\n";
@@ -24,7 +21,6 @@ void MenuPrincipal::mostrarMenuPrincipal() {
         std::cout << "Ingrese una opcion: ";
         std::cin >> opcion;
 
-
         system("cls");
 
         switch(opcion) {
@@ -35,25 +31,15 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 _profesorMenu.mostrarMenuProfesor();
                 break;
             case 3:
-
-                // Acá lo nuevo que sumó la otra rama:
-                // MenuCurso cursoMenu;
-                // cursoMenu.mostrarMenuCurso();
-                // _cursoMenu.mostrarMenuCurso();
-                break;
-            case 4:
-                // inscripcionMenu.mostrarMenu();  // pendiente
-                break;
-            case 5:
-                // reportesMenu.mostrarMenuReportes();  // pendiente
-
-                _cursoMenu.mostrarMenuCurso();  // ojo que _cursoMenu debe ser un atributo
-
                 _cursoMenu.mostrarMenuCurso();
 
-
                 break;
-
+            case 4:
+                // inscripcionMenu.mostrarMenu();
+                break;
+            case 5:
+                // reportesMenu.mostrarMenuReportes();
+                break;
             case 0:
                 std::cout << "Saliendo del sistema...\n";
                 break;
@@ -64,5 +50,6 @@ void MenuPrincipal::mostrarMenuPrincipal() {
 
         std::cout << std::endl;
         system("pause");
-    } while(opcion != 0);
+    }
+    while(opcion != 0);
 }
