@@ -41,7 +41,16 @@
 		<Unit filename="include/Inscripcion.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="include/InscripcionArchivo.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/InscripcionManager.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="include/MenuCurso.h" />
+		<Unit filename="include/MenuInscripcion.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="include/MenuPrincipal.h" />
 		<Unit filename="include/MenuProfesor.h" />
 		<Unit filename="include/Persona.h" />
@@ -57,7 +66,16 @@
 		<Unit filename="src/Inscripcion.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="src/InscripcionArchivo.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/InscripcionManager.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="src/MenuCurso.cpp" />
+		<Unit filename="src/MenuInscripcion.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="src/MenuPrincipal.cpp" />
 		<Unit filename="src/MenuProfesor.cpp" />
 		<Unit filename="src/Persona.cpp" />

@@ -3,6 +3,7 @@
 
 // Constructor por defecto
 Inscripcion::Inscripcion(){
+	_idInscripcion = 0;
 	_legajoAlumno = 0;
 	_idCurso = 0;
 	_importeAbonado = 0.0f;
@@ -10,7 +11,8 @@ Inscripcion::Inscripcion(){
 	_estado = true;
 }
 //Constructor con parámetros
-Inscripcion::Inscripcion(int legajoAlumno, int idCurso, const Fecha& fechaInscripcion, float importeAbonado,bool estado) {
+Inscripcion::Inscripcion(int idInscripcion,int legajoAlumno, int idCurso, const Fecha& fechaInscripcion, float importeAbonado,bool estado) {
+	_idInscripcion = idInscripcion;
 	_legajoAlumno = legajoAlumno;
 	_idCurso = idCurso;
 	_fechaInscripcion = fechaInscripcion;
@@ -19,6 +21,9 @@ Inscripcion::Inscripcion(int legajoAlumno, int idCurso, const Fecha& fechaInscri
 }
 
 //Setters
+void Inscripcion::setIdInscripcion(int idInscripcion) {
+	_idInscripcion = idInscripcion;
+}
 void Inscripcion::setLegajoAlumno(int legajo) {
 	_legajoAlumno = legajo;
 }
@@ -35,6 +40,9 @@ void Inscripcion::setEstado(bool estado) {
 	_estado = estado;
 }
 //Getters
+int Inscripcion::getIdInscripcion() const {
+	return _idInscripcion;
+}
 int Inscripcion::getLegajoAlumno() const {
 	return _legajoAlumno;
 }

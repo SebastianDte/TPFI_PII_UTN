@@ -5,6 +5,7 @@
 
 class Inscripcion{
 private:
+	int _idInscripcion;
 	int _legajoAlumno;
 	int _idCurso;
 	Fecha _fechaInscripcion;
@@ -15,14 +16,16 @@ public:
 	Inscripcion();
 
 	// Constructor con parámetros
-	Inscripcion(int legajoAlumno, int idCurso, const Fecha& fechaInscripcion, float importeAbonado,bool estado);
+	Inscripcion(int idInscripcion,int legajoAlumno, int idCurso, const Fecha& fechaInscripcion, float importeAbonado,bool estado);
 	// Getters
+	int getIdInscripcion() const;
 	int getLegajoAlumno() const;
 	int getIdCurso() const;
 	Fecha getFechaInscripcion() const;
 	float getImporteAbonado() const ;
 	bool getEstado()const;
 	// Setters
+	void setIdInscripcion(int idInscripcion);
 	void setLegajoAlumno(int legajo);
 	void setIdCurso(int idCurso);
 	void setFechaInscripcion(const Fecha& fecha);

@@ -1,6 +1,7 @@
 #include "MenuPrincipal.h"
 #include "MenuProfesor.h"
 #include "MenuCurso.h"
+#include "MenuInscripcion.h"
 #include <iostream>
 
 void MenuPrincipal::mostrarMenuPrincipal() {
@@ -35,7 +36,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
 
                 break;
             case 4:
-                // inscripcionMenu.mostrarMenu();
+                _inscripcionMenu.mostrarMenu();
                 break;
             case 5:
                 // reportesMenu.mostrarMenuReportes();

@@ -8,7 +8,6 @@ private:
     int _mes;
     int _anio;
 
-    bool esFechaValida(int dia, int mes, int anio);
     int diasEnMes(int mes, int anio);
     void agregarDia();
     void restarDia();
@@ -24,6 +23,7 @@ public:
     int getAnio();
     void setAnio(int anio);
 
+    bool esFechaValida(int dia, int mes, int anio);
     bool esMayorQue(Fecha otraFecha);
     bool esIgualA(Fecha otraFecha);
     std::string toString();
