@@ -2,7 +2,7 @@
 #include <string>
 #include "Alumno.h"
 #include "Persona.h"
-
+/// asdasdasdasdsadasasdasdasd
 // Constructor por defecto: se invoca automáticamente el constructor por defecto de Persona.
 Alumno::Alumno()
     : Persona(), _legajo(0), _activo(true)
