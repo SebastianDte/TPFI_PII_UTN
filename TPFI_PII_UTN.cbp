@@ -34,6 +34,15 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Alumno.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/AlumnoArchivo.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/AlumnoManager.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="include/Curso.h" />
 		<Unit filename="include/CursoArchivo.h" />
 		<Unit filename="include/CursoManager.h" />
@@ -45,6 +54,9 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="include/InscripcionManager.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/MenuAlumno.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="include/MenuCurso.h" />
@@ -59,6 +71,9 @@
 		<Unit filename="include/ProfesorManager.h" />
 		<Unit filename="include/Utilidades.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Alumno.cpp" />
+		<Unit filename="src/AlumnoArchivo.cpp" />
+		<Unit filename="src/AlumnoManager.cpp" />
 		<Unit filename="src/Curso.cpp" />
 		<Unit filename="src/CursoArchivo.cpp" />
 		<Unit filename="src/CursoManager.cpp" />
@@ -72,6 +87,7 @@
 		<Unit filename="src/InscripcionManager.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="src/MenuAlumno.cpp" />
 		<Unit filename="src/MenuCurso.cpp" />
 		<Unit filename="src/MenuInscripcion.cpp">
 			<Option target="&lt;{~None~}&gt;" />
