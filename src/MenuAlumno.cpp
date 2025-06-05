@@ -1,6 +1,7 @@
 #include <iostream>
 #include "MenuAlumno.h"
 #include "AlumnoManager.h"
+#include "Utilidades.h"
 
 MenuAlumno::MenuAlumno()
 {
@@ -9,22 +10,20 @@ MenuAlumno::MenuAlumno()
 
 void MenuAlumno:: mostrarMenuAlumno()
 {
-
+    Utilidades _utilidades = Utilidades();
     int opcion;
 
     do
     {
-        system("cls");
-        std::cout << "=== SISTEMA COLEGIO ===\n";
-        std::cout << "\n=== MENU DE ALUMNOS ===\n";
+        _utilidades.limpiarPantallaConEncabezado("=== MENU DE ALUMNOS ===");;
         std::cout << "1. Alta de alumno" << std::endl;
         std::cout << "2. Baja de alumno" << std::endl;
         std::cout << "3. Modificar alumno" << std::endl;
         std::cout << "4. Listar alumnos" << std::endl;
         std::cout << "5. Buscar alumno por Legajo" << std::endl;
-        std::cout << "0. Volver al menú principal" << std::endl;
-        std::cout << "======================" << std::endl;
-        std::cout << "Seleccione una opción: ";
+        std::cout << "0. Volver al menï¿½ principal" << std::endl;
+        std::cout << "=========================================\n";
+        std::cout << "Seleccione una opciï¿½n: ";
         std::cin >> opcion;
 
         system("cls");
@@ -51,10 +50,10 @@ void MenuAlumno:: mostrarMenuAlumno()
             system("pause");
             break;
         case 0:
-            std::cout << "Volviendo al menú principal..." << std::endl;
+            std::cout << "Volviendo al menï¿½ principal..." << std::endl;
             break;
         default:
-            std::cout << "Opción inválida. Intente nuevamente.\n";
+            std::cout << "Opciï¿½n invï¿½lida. Intente nuevamente.\n";
         }
 
     }

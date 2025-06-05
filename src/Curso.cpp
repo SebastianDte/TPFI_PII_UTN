@@ -94,10 +94,10 @@ std::string Curso::toCSV() const
 
 bool Curso::operator!=(const Curso& otro) const
 {
-    return _id == otro._id &&
-           _nombre == otro._nombre &&
-           _cantMaximaAlumnos == otro._cantMaximaAlumnos &&
-           _numeroAula == otro._numeroAula &&
-           _idProfesor == otro._idProfesor &&
-           _estado == otro._estado;
+    return _id != otro._id ||
+           strcmp(_nombre, otro._nombre) != 0 ||
+           _cantMaximaAlumnos != otro._cantMaximaAlumnos ||
+           _numeroAula != otro._numeroAula ||
+           _idProfesor != otro._idProfesor ||
+           _estado != otro._estado;
 }

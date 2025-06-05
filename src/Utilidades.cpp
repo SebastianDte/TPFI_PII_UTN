@@ -1,3 +1,6 @@
+#include <limits>
+#include <iostream>
+#include <iomanip>
 #include "Utilidades.h"
 
 std::string Utilidades::aMinusculas(const std::string& inputUsuario)
@@ -33,3 +36,27 @@ bool Utilidades::esComandoSalir(const std::string& inputUsuario)
 {
     return aMinusculas(inputUsuario) == "salir";
 }
+
+
+void Utilidades::mostrarEncabezado(const std::string& subtitulo)
+{
+    const int anchoTotal = 41;
+    std::string linea(anchoTotal, '=');
+
+    std::cout << linea << "\n";
+    std::cout << std::setw((anchoTotal + 15) / 2) << "SISTEMA COLEGIO" << "\n";
+    if (!subtitulo.empty())
+    {
+        int espaciosIzquierda = (anchoTotal - (int)subtitulo.length()) / 2;
+        std::cout << std::setw(espaciosIzquierda + (int)subtitulo.length()) << subtitulo << "\n";
+    }
+    std::cout << linea << "\n";
+}
+
+void Utilidades::limpiarPantallaConEncabezado(const std::string& subtitulo)
+{
+    system("cls");
+    mostrarEncabezado(subtitulo);
+}
+
+

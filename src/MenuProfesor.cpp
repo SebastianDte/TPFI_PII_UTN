@@ -1,24 +1,24 @@
-#include "iostream"
+#include <iostream>
 #include "MenuProfesor.h"
+#include "Utilidades.h"
 
 
 
 void MenuProfesor::mostrarMenuProfesor(){
     int opcion;
-
+    Utilidades _utilidades = Utilidades();
 
 
     do{
 
-        system("cls");
-
-        std::cout << "\n==== Menu Profesor ==== \n";
-        std::cout << "1) Agregar profesor.\n";
-        std::cout << "2) Borrar profesor.\n";
-        std::cout << "3) Modificar profersor.\n";
-        std::cout << "4) Listar profesores.\n";
-        std::cout << "5) Buscar profesor por ID.\n";
-        std::cout << "0) Volver al menu principal.\n";
+        _utilidades.limpiarPantallaConEncabezado("=== MENU PROFESOR ===");
+        std::cout << "1. Agregar profesor.\n";
+        std::cout << "2. Borrar profesor.\n";
+        std::cout << "3. Modificar profersor.\n";
+        std::cout << "4. Listar profesores.\n";
+        std::cout << "5. Buscar profesor por ID.\n";
+        std::cout << "0. Volver al menu principal.\n";
+         std::cout << "=========================================\n";
         std::cout << "Ingrese una opcion.\n";
         std::cin >> opcion;
 

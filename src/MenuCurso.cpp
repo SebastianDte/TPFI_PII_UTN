@@ -10,7 +10,7 @@ MenuCurso::MenuCurso()
 
 void MenuCurso::mostrarMenuCurso()
 {
-    Utilidades utilidades;
+    Utilidades _utilidades;
     std::string inputUsuario;
     int opcion = -1;
 
@@ -18,25 +18,21 @@ void MenuCurso::mostrarMenuCurso()
     {
         std::cin.clear();
         std::cin.ignore();
-        system("cls");
-        std::cout << "=========================================\n";
-        std::cout << "             SISTEMA COLEGIO             \n";
-        std::cout << "         === MENU DE CURSOS ===          \n";
-        std::cout << "=========================================\n";
+        _utilidades.limpiarPantallaConEncabezado("=== MENU DE CURSOS ===");
         std::cout << "1. Alta de curso\n";
         std::cout << "2. Baja de curso\n";
         std::cout << "3. Modificar curso\n";
         std::cout << "4. Listar cursos\n";
         std::cout << "5. Buscar curso por ID\n";
-        std::cout << "0. Volver al menú principal\n";
+        std::cout << "0. Volver al menï¿½ principal\n";
         std::cout << "=========================================\n";
-        std::cout << "Seleccione una opción: ";
+        std::cout << "Seleccione una opciï¿½n: ";
 
         std::getline(std::cin, inputUsuario);
 
-        if (!utilidades.esEnteroValido(inputUsuario))
+        if (!_utilidades.esEnteroValido(inputUsuario))
         {
-            std::cout << "Entrada inválida. Debe ingresar un número entero.\n";
+            std::cout << "Entrada invï¿½lida. Debe ingresar un nï¿½mero entero.\n";
             system("pause");
             continue;
         }
@@ -71,10 +67,10 @@ void MenuCurso::mostrarMenuCurso()
                 system("pause");
                 break;
             case 0:
-                std::cout << "Volviendo al menú principal..." << std::endl;
+                std::cout << "Volviendo al menï¿½ principal..." << std::endl;
                 break;
             default:
-                std::cout << "Opción inválida. Intente nuevamente.\n";
+                std::cout << "Opciï¿½n invï¿½lida. Intente nuevamente.\n";
                 system("pause");
                 break;
         }

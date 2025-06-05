@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iostream>
 #include "CursoArchivo.h"
 #include "Curso.h"
 
@@ -17,9 +18,9 @@ bool CursoArchivo::alta(const Curso& regCurso)
     pCurso = fopen(_nombreArchivo, "ab");
     if (pCurso == nullptr) return false;
 
-    bool escribio = fwrite(&regCurso, _tamanioRegistro, 1, pCurso) == 1;
+    size_t escribio = fwrite(&regCurso, _tamanioRegistro, 1, pCurso) == 1;
     fclose(pCurso);
-    return escribio;
+    return escribio == 1;
 }
 
 int CursoArchivo::buscar(int idCurso) const
@@ -47,17 +48,18 @@ int CursoArchivo::buscar(int idCurso) const
 bool CursoArchivo::modificar(const Curso& regCurso, int posicion)
 {
     FILE* pCurso = fopen(_nombreArchivo, "rb+");
-    if(pCurso == nullptr) return false;
+    if (pCurso == nullptr) return false;
 
-    if(fseek(pCurso, posicion*_tamanioRegistro, SEEK_SET) != 0)
+    if (fseek(pCurso, posicion * _tamanioRegistro, SEEK_SET) != 0)
     {
         fclose(pCurso);
         return false;
     }
 
-    bool modifico = fwrite(&regCurso, _tamanioRegistro, 1, pCurso);
+    size_t escritos = fwrite(&regCurso, _tamanioRegistro, 1, pCurso);
     fclose(pCurso);
-    return modifico;
+
+    return escritos == 1;
 }
 
 Curso CursoArchivo::leer(int posicion)

@@ -2,16 +2,16 @@
 #include "MenuProfesor.h"
 #include "MenuCurso.h"
 #include "MenuInscripcion.h"
+#include "Utilidades.h"
 #include <iostream>
 
-void MenuPrincipal::mostrarMenuPrincipal() {
 
+void MenuPrincipal::mostrarMenuPrincipal() {
+    Utilidades _utilidades = Utilidades();
     int opcion;
     do
     {
-        system("cls");
-        std::cout << "=== SISTEMA COLEGIO ===\n";
-        std::cout << "\n=== MENU PRINCIPAL ===\n";
+        _utilidades.limpiarPantallaConEncabezado("MENU PRINCIPAL");
         std::cout << "1. Menu Alumno\n";
         std::cout << "2. Menu Profesor\n";
         std::cout << "3. Menu Curso\n";
