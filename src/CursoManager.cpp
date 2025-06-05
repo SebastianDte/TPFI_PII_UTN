@@ -556,7 +556,8 @@ void CursoManager::listarInactivos()
 void CursoManager::listarPorProfesor()
 {
     int total = _archivo.cantRegistros();
-    int registrosEncontrados;
+    //Agregué la inicialización de registrosEncontrados, por un warning.
+    int registrosEncontrados = 0;
     if(total <= 0)
     {
         std::cout << "No hay cursos registrados." << std::endl;

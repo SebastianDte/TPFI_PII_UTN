@@ -1,4 +1,4 @@
-# === ARCHIVOS DE COMPILACI”N ===
+# === ARCHIVOS DE COMPILACI√ìN ===
 *.d
 *.slo
 *.lo
@@ -7,7 +7,7 @@
 *.gch
 *.pch
 
-# === LIBRERÕAS COMPILADAS ===
+# === LIBRER√çAS COMPILADAS ===
 *.so
 *.dylib
 *.dll
@@ -26,7 +26,7 @@
 *.layout
 *.layout.save
 
-# === CARPETAS DE COMPILACI”N AUTOM¡TICA ===
+# === CARPETAS DE COMPILACI√ìN AUTOM√ÅTICA ===
 bin/
 obj/
 
@@ -35,3 +35,19 @@ obj/
 *.swp
 .DS_Store
 Thumbs.db
+
+# === Visual Studio Community - Ignorar TODO el proyecto y sus archivos generados ===
+TPI_UTN_VISUALSTUDIO/
+*.vcxproj*
+*.sln
+*.user
+*.filters
+x64/
+*.pdb
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.sdf
+*.opensdf
+*.vcxproj.*

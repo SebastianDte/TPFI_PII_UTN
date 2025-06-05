@@ -36,7 +36,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
 
                 break;
             case 4:
-                //_inscripcionMenu.mostrarMenu();
+                _inscripcionMenu.mostrarMenu();
                 break;
             case 5:
                 // reportesMenu.mostrarMenuReportes();
