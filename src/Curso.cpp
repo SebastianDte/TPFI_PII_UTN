@@ -7,18 +7,18 @@ Curso::Curso()
     _id = 0;
     _nombre[0] = '\0';
     _cantMaximaAlumnos = 0;
+    _numeroAula = 0;
     _idProfesor = 0;
-    _estado = true;
 }
 
-Curso::Curso(int id, const std::string& nombre, int cantMaximaAlumnos, int idProfesor, bool estado)
+Curso::Curso(int id, const std::string& nombre, int cantMaximaAlumnos, int numeroAula, int idProfesor)
 {
     _id = id;
     strncpy(_nombre, nombre.c_str(), sizeof(_nombre) - 1);
     _nombre[sizeof(_nombre) - 1] = '\0'; //agregar valor nulo al final
     _cantMaximaAlumnos = cantMaximaAlumnos;
+    _numeroAula = numeroAula;
     _idProfesor = idProfesor;
-    _estado = estado;
 }
 
 void Curso::setId(int id)
@@ -47,10 +47,6 @@ void Curso::setIdProfesor(int idProfesor)
     _idProfesor = idProfesor;
 }
 
-void Curso::setEstado(bool estado)
-{
-    _estado = estado;
-}
 
 int Curso::getId() const
 {
@@ -77,18 +73,13 @@ int Curso::getIdProfesor() const
     return _idProfesor;
 }
 
-bool Curso::getEstado() const
-{
-    return _estado;
-}
 
 std::string Curso::toCSV() const
 {
     return std::to_string(_id) + "," +
            std::string(_nombre) + "," +
            std::to_string(_cantMaximaAlumnos) + "," +
-           std::to_string(_idProfesor) + "," +
-           (_estado ? "ACTIVO" : "INACTIVO");
+           std::to_string(_idProfesor);
 }
 
 
@@ -98,6 +89,5 @@ bool Curso::operator!=(const Curso& otro) const
            strcmp(_nombre, otro._nombre) != 0 ||
            _cantMaximaAlumnos != otro._cantMaximaAlumnos ||
            _numeroAula != otro._numeroAula ||
-           _idProfesor != otro._idProfesor ||
-           _estado != otro._estado;
+           _idProfesor != otro._idProfesor;
 }

@@ -18,9 +18,9 @@ bool CursoArchivo::alta(const Curso& regCurso)
     pCurso = fopen(_nombreArchivo, "ab");
     if (pCurso == nullptr) return false;
 
-    size_t escribio = fwrite(&regCurso, _tamanioRegistro, 1, pCurso) == 1;
+    bool ok = fwrite(&regCurso, _tamanioRegistro, 1, pCurso) == 1;
     fclose(pCurso);
-    return escribio == 1;
+    return ok;
 }
 
 int CursoArchivo::buscar(int idCurso) const
@@ -33,7 +33,7 @@ int CursoArchivo::buscar(int idCurso) const
 
     while(fread(&cursoEncontrado, _tamanioRegistro, 1, pCurso) == 1)
     {
-        if(cursoEncontrado.getEstado() == true && cursoEncontrado.getId() == idCurso)
+        if(cursoEncontrado.getId() == idCurso)
         {
             fclose(pCurso);
             return posicion;
