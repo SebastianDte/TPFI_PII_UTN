@@ -26,7 +26,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
 
         switch(opcion) {
             case 1:
-                 alumnoMenu.mostrarMenuAlumno();
+                 _alumnoMenu.mostrarMenuAlumno();
                 break;
             case 2:
                 _profesorMenu.mostrarMenuProfesor();

@@ -4,10 +4,12 @@
 #include "CursoManager.h"
 #include <iostream>
 #include "Fecha.h"
-//#include "AlumnoArchivo.h"
+#include "AlumnoArchivo.h"
+#include "AlumnoManager.h"
+#include "Utilidades.h"
 using namespace std;
 
-//int InscripcionArchivo::obtenerProximoId() const {
+//int InscripcionArchivo::obtenerProximoId(){
 //    int cantidad = cantRegistros();
 //    if (cantidad == 0) return 1; // Primer ID
 //    Inscripcion ultima;
@@ -17,27 +19,47 @@ using namespace std;
 //    return 1; // Si no se pudo leer, por seguridad
 //}
 
+
 void InscripcionManager::altaInscripcion() {
     InscripcionArchivo archivoInscripciones;
-    //AlumnoArchivo archivoAlumnos; // Falta Implementar Modúlo de Alumno.
+    AlumnoArchivo archivoAlumnos; 
     CursoArchivo archivoCursos;
-
+    string entrada;
     int legajo;
+    Utilidades utilidades;
+    //Ingreso del Legajo Alumno.
     while (true) {
+		
         cout << "Legajo Alumno: ";
-        cin >> legajo;
-       /* if (archivoAlumnos.buscar(legajo) != -1) break;
-        cout << "Legajo no encontrado. Intente nuevamente." << endl;*/
+        std::getline(cin, entrada);
+		if (utilidades.esEnteroValido(entrada)) {
+			legajo = stoi(entrada);
+		}
+		else {
+			cout << "Debe ingresar un número entero válido." << endl;
+			continue;
+		}
+        if (archivoAlumnos.buscar(legajo,true) != -1) break;
+        cout << "Legajo no encontrado. Intente nuevamente." << endl;
     }
 
+	//Ingreso del ID del Curso.
     int idCurso;
     while (true) {
         cout << "ID Curso: ";
-        cin >> idCurso;
+	    std:getline(cin, entrada);
+		if (utilidades.esEnteroValido(entrada)) {
+			idCurso = stoi(entrada);
+		}
+		else {
+			cout << "Debe ingresar un número entero válido." << endl;
+			continue;
+		}
         if (archivoCursos.buscar(idCurso) != -1) break;
         cout << "ID de curso no encontrado. Intente nuevamente." << endl;
     }
 
+	//Ingreso del Importe Abonado.
     float importe;
     while (true) {
         cout << "Importe abonado: ";

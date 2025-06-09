@@ -23,7 +23,7 @@ void MenuAlumno:: mostrarMenuAlumno()
         std::cout << "5. Buscar alumno por Legajo" << std::endl;
         std::cout << "0. Volver al men� principal" << std::endl;
         std::cout << "=========================================\n";
-        std::cout << "Seleccione una opci�n: ";
+        std::cout << "Seleccione una opción: ";
         std::cin >> opcion;
 
         system("cls");
@@ -50,10 +50,10 @@ void MenuAlumno:: mostrarMenuAlumno()
             system("pause");
             break;
         case 0:
-            std::cout << "Volviendo al men� principal..." << std::endl;
+            std::cout << "Volviendo al menú principal..." << std::endl;
             break;
         default:
-            std::cout << "Opci�n inv�lida. Intente nuevamente.\n";
+            std::cout << "Opción inválida. Intente nuevamente.\n";
         }
 
     }

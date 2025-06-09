@@ -16,4 +16,6 @@ public:
 	int buscar(int idInscripcion) const;
 	bool leer(int posicion, Inscripcion& insc) const;
 	int cantRegistros() const;
+	int obtenerProximoId();
+
 };
