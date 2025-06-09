@@ -69,12 +69,11 @@ int InscripcionArchivo::cantRegistros() const {
 }
 
 int InscripcionArchivo::obtenerProximoId() {
-	FILE* pInscripcion = fopen(_nombreArchivo, "rb");
-	if (pInscripcion == nullptr) {
-		return 1; // Si el archivo no existe, el próximo ID es 1
+	int cantidad = cantRegistros();
+	if (cantidad == 0) return 1; // Primer ID
+	Inscripcion ultima;
+	if (leer(cantidad - 1, ultima)) {
+		return ultima.getIdInscripcion() + 1;
 	}
-	fseek(pInscripcion, 0, SEEK_END);
-	int cantidad = ftell(pInscripcion) / _tamanioRegistro;
-	fclose(pInscripcion);
-	return cantidad + 1; // El próximo ID es la cantidad actual + 1
+	return 1; // Si no se pudo leer, por seguridad
 }

@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "InscripcionManager.h"
 #include "InscripcionArchivo.h"
 #include "Inscripcion.h"
@@ -9,17 +10,7 @@
 #include "Utilidades.h"
 using namespace std;
 
-//int InscripcionArchivo::obtenerProximoId(){
-//    int cantidad = cantRegistros();
-//    if (cantidad == 0) return 1; // Primer ID
-//    Inscripcion ultima;
-//    if (leer(cantidad - 1, ultima)) {
-//        return ultima.getIdInscripcion() + 1;
-//    }
-//    return 1; // Si no se pudo leer, por seguridad
-//}
-
-
+//Método para dar de alta una Inscripción.
 void InscripcionManager::altaInscripcion() {
     InscripcionArchivo archivoInscripciones;
     AlumnoArchivo archivoAlumnos; 
@@ -27,11 +18,12 @@ void InscripcionManager::altaInscripcion() {
     string entrada;
     int legajo;
     Utilidades utilidades;
+
     //Ingreso del Legajo Alumno.
     while (true) {
 		
         cout << "Legajo Alumno: ";
-        std::getline(cin, entrada);
+        getline(cin, entrada);
 		if (utilidades.esEnteroValido(entrada)) {
 			legajo = stoi(entrada);
 		}
@@ -47,7 +39,7 @@ void InscripcionManager::altaInscripcion() {
     int idCurso;
     while (true) {
         cout << "ID Curso: ";
-	    std:getline(cin, entrada);
+	    getline(cin, entrada);
 		if (utilidades.esEnteroValido(entrada)) {
 			idCurso = stoi(entrada);
 		}
@@ -63,28 +55,50 @@ void InscripcionManager::altaInscripcion() {
     float importe;
     while (true) {
         cout << "Importe abonado: ";
-        cin >> importe;
-        if (!cin.fail() && importe >= 0) break;
-        cout << "Importe inválido. Intente nuevamente." << endl;
-        cin.clear();
-        cin.ignore(10000, '\n');
+		getline(cin, entrada);
+        if (utilidades.esFloatValido(entrada)) {
+			importe = stof(entrada);
+            break;
+        }
+        else {
+            cout << "Importe inválido. Intente nuevamente." << endl;
+        }
     }
 
-    int dia, mes, anio;
-    while (true) {
-        cout << "Fecha (dd mm aaaa): ";
-        cin >> dia >> mes >> anio;
-        Fecha fechaTemp;
-        if (fechaTemp.esFechaValida(dia, mes, anio)) break;
-        cout << "Fecha inválida. Intente nuevamente." << endl;
-    }
-    Fecha fecha(dia, mes, anio);
+    //Fecha automatica del sistema.
+    Fecha fecha = Fecha::fechaActual();
 
-    int id = archivoInscripciones.cantRegistros() + 1;
+	// Generación del ID de inscripción automatico.
+	int id = archivoInscripciones.obtenerProximoId();
+
+	//Estado Activo por defecto.
     bool estado = true;
 
+	// Creación de la inscripción.
     Inscripcion inscripcion(id, legajo, idCurso, fecha, importe, estado);
 
+	// Antes de crear la inscripción, se verifica que el alumno no esté ya inscripto en el curso.
+    bool yaInscripto = false;
+    Inscripcion inscTemp;
+    int cantidad = archivoInscripciones.cantRegistros();
+    for (int i = 0; i < cantidad; i++) {
+        if (archivoInscripciones.leer(i, inscTemp) &&
+            inscTemp.getLegajoAlumno() == legajo &&
+            inscTemp.getIdCurso() == idCurso &&
+            inscTemp.getEstado()) // Solo inscripciones activas
+        {
+            yaInscripto = true;
+            break;
+        }
+    }
+
+    if (yaInscripto) {
+        cout << "El alumno ya está inscripto en ese curso." << endl;
+        return;
+    }
+
+
+	//Se da de alta la inscripción.
     if (archivoInscripciones.alta(inscripcion)) {
         cout << "Inscripción realizada con éxito." << endl;
     }
@@ -93,6 +107,7 @@ void InscripcionManager::altaInscripcion() {
     }
 }
 
+//Método para dar de baja una Inscripción.
 void InscripcionManager::bajaInscripcion() {
 	int idInscripcion;
 	cout << "Ingrese el ID de la inscripción a dar de baja: ";
@@ -106,6 +121,7 @@ void InscripcionManager::bajaInscripcion() {
 	}
 }
 
+// Método para modificar una Inscripción.
 void InscripcionManager::modificarInscripcion() {
     int idInscripcion;
     cout << "Ingrese el ID de la inscripción a modificar: ";
@@ -146,6 +162,7 @@ void InscripcionManager::modificarInscripcion() {
     }
 }
 
+// Método para listar todas las Inscripciones activas.
 void InscripcionManager::listarInscripciones() {
 	InscripcionArchivo archivoInscripciones;
 	int cantidad = archivoInscripciones.cantRegistros();
@@ -160,7 +177,10 @@ void InscripcionManager::listarInscripciones() {
 			cout << "Legajo Alumno: " << inscripcion.getLegajoAlumno() << endl;
 			cout << "ID Curso: " << inscripcion.getIdCurso() << endl;
 			cout << "Fecha: " << inscripcion.getFechaInscripcion().toString() << endl;
-			cout << "Importe Abonado: " << inscripcion.getImporteAbonado() << endl;
+
+            cout << std::fixed << std::setprecision(3);
+            cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
+
 			cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
 			cout << "------------------------" << endl;
 		}
