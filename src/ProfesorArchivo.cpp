@@ -10,14 +10,6 @@
 
     }
 
-    ProfesorArchivo::ProfesorArchivo(std::string nombreArchivo){
-
-        strncpy(_nombreArchivo, nombreArchivo.c_str(), sizeof _nombreArchivo);   ///Utilizar la funcion copiarcadenasegura
-        _nombreArchivo[sizeof _nombreArchivo  - 1] = '\0';
-
-
-    }
-
     bool ProfesorArchivo::alta(Profesor regProfesor){
         bool result;
 

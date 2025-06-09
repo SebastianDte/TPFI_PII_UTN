@@ -1,34 +1,441 @@
 #include "ProfesorManager.h"
 #include <iostream>
 #include "Profesor.h"
+#include "string"
+#include <regex>
+
+///Validaciones
+bool ProfesorManager::dniValidacion(const std::string& input){
+    const int minimoDNI =7;
+    const int tamanioDNI = 8;
 
 
+    if (input.empty()){
+        std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+
+
+    if ( _utilidades.soloNumeros(input) == false ){
+
+       std::cout << "Debe completar este campo con valores numericos. Intente nuevamente.\n\n";
+
+       system("pause");
+
+       return false;
+
+    }
+
+
+
+    if ( (input.length() < minimoDNI || input.length() > tamanioDNI ) && _utilidades.soloNumeros(input)== true ){
+
+        std::cout << "La cantidad de valores ingresados no corresponen a un DNI. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    return true;
+}
+
+
+bool ProfesorManager::nombreValidacion(const std::string& input){
+    const int minimoNombre = 2;
+    std::string nombreMin = _utilidades.aMinusculas(input);///Lo paso a minuscula para validar con soloLotras()
+
+
+    if ( nombreMin.empty() ){
+
+
+        std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+
+    }
+
+    if ( _utilidades.soloLetras(nombreMin) == false){
+
+        std::cout << "Debe completar este campo sin simbolos, numeros ni espacios inecesarios. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    if ( (nombreMin.length() < minimoNombre) && (_utilidades.soloLetras(nombreMin) == true) ){
+
+        std::cout << "Debe ingresar un nombre que contenga al menos 2 letras. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+bool ProfesorManager::apellidoValidacion(const std::string& input){
+    const int minimoApellido = 2;
+    std::string apellidoMin = _utilidades.aMinusculas(input);///Lo paso a minuscula para validar con soloLotras()
+
+
+    if ( apellidoMin.empty() ){
+
+
+        std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+
+    }
+
+    if ( _utilidades.soloLetras(apellidoMin) == false){
+
+        std::cout << "Debe completar este campo sin simbolos, numeros ni espacios inecesarios. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    if ( (apellidoMin.length() < minimoApellido) && (_utilidades.soloLetras(apellidoMin)== true) ){
+
+        std::cout << "Debe ingresar un nombre que contenga al menos 2 letras. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    return true;
+
+
+}
+
+bool ProfesorManager::telefonoValidacion(const std::string& input){
+
+    const int tamanioTEL = 20;
+    const int minimoTEL = 8;
+
+
+    if (input.empty()){
+        std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+
+
+    if ( _utilidades.soloNumeros(input) == false ){
+
+       std::cout << "Debe completar este campo con valores numericos. Intente nuevamente.\n\n";
+
+       system("pause");
+
+       return false;
+
+    }
+
+
+
+    if ( (input.length() < minimoTEL || input.length() > tamanioTEL ) && _utilidades.soloNumeros(input)== true ){
+
+        std::cout << "La cantidad de valores ingresados no corresponen a un numero telefonico. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    return true;
+
+
+}
+
+
+bool ProfesorManager::emailValidacion(const std::string& input ) {
+    const int maximoEmail = 50;
+    const int minimoEmail = 5;
+    int tamanioEmail = input.length();
+    int contArroba = 0;  ///Contenga al menos un punto y solamente 1 arroba
+    int contPuntos = 0;
+
+    if ( tamanioEmail < minimoEmail || tamanioEmail >maximoEmail ){
+
+        std::cout << "La cantidad de valores ingresados no corresponen a un email. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+    for (int i=0; i < tamanioEmail; i++ ){
+
+        if ( input [i] == '@' ){
+
+           contArroba ++;
+
+        }
+
+        if ( input [i] == '.' ){
+
+            contPuntos ++;
+
+        }
+
+    }
+
+    if ( contArroba != 1 || contPuntos == 0 ){
+
+        std::cout << "Los valores ingresados no corresponen al formato de un email. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+   return true;
+
+}
+
+bool ProfesorManager::direccionValidacion(const std::string& input){
+    const int maximoDire = 50;
+    const int minimoDire = 3;
+    std::regex patronDireccion(R"(^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ.\s]+[ ]\d{1,5}$)");/// Patron de una direccion estandard de la bibliteca regex
+
+    int tamanioCadena = input.length();
+
+    if ( tamanioCadena < minimoDire || tamanioCadena >maximoDire ){
+
+        std::cout << "La cantidad de valores ingresados no corresponen a una direccion valida. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
+
+
+    if (std::regex_match(input, patronDireccion)) {
+        return true;
+    } else {
+        std::cout << "Dirección inválida. Use el formato: 'Calle Nombre 123'.\n";
+
+        system("pause");
+
+        return false;
+    }
+
+    return true;
+}
+
+
+/// ABML
 
 void ProfesorManager::alta(){
     Profesor regProf;
     ProfesorArchivo archivoProf;
 
+
+
     int dia,mes,anio,id,cantidadRegistros;
     Fecha fechaNacimiento;
-    std::string dni,nombre,apellido,telefono,email,direccion;
+    std::string dni,nombre,apellido,telefono,email,direccion,input;
 
-    std::cout<<"Ingrese el DNI: \n";
-    std::cin>>dni;
+    std::cin.ignore();
 
-    std::cout<<"Ingrese el nombre: \n";
-    std::cin>>nombre;
 
-    std::cout<<"Ingrese el apellido: \n";
-    std::cin>>apellido;
+    while(true){
 
-    std::cout<<"Ingrese el telefono: \n";
-    std::cin>>telefono;
+        system("cls");
 
-    std::cout<<"Ingrese el email: \n";
-    std::cin>>email;
+        std::cout<<"Ingrese DNI: \n";
+        std::getline(std::cin,input);
 
-    std::cout<<"Ingrese la direccion: \n";
-    std::cin>>direccion;
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if( dniValidacion(input)) {
+
+            _profesor.setDni(input);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+
+        }
+
+    }
+
+    std::cin.ignore();
+
+    while(true){
+
+
+        system("cls");
+
+
+        std::cout<<"Ingrese su nombre: \n";
+        std::getline(std::cin,input);
+
+
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if( nombreValidacion(input)) {
+
+            _profesor.setNombre(input);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+        }
+
+    }
+
+
+    std::cin.ignore();
+
+    while(true){
+
+
+        system("cls");
+
+
+        std::cout<<"Ingrese su apellido: \n";
+        std::getline(std::cin,input);
+
+
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if( nombreValidacion(input)) {
+
+            _profesor.setApellido(input);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+        }
+
+    }
+
+
+    std::cin.ignore();
+
+
+    while(true){
+
+        system("cls");
+
+        std::cout<<"Ingrese su numero telefonico: \n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if( telefonoValidacion(input) ) {
+
+            _profesor.setTelefono(input);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+
+        }
+
+    }
+
+    std::cin.ignore();
+
+
+    while(true){
+
+        system("cls");
+
+        std::cout<<"Ingrese su email: \n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if( emailValidacion(input) ) {
+
+            _profesor.setEmail(input);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+
+        }
+
+    }
+
+    std::cin.ignore();
+
+
+    while(true){
+
+        system("cls");
+
+        std::cout<<"Ingrese su domicilio(calle y numero): \n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if( direccionValidacion(input) ) {
+
+            _profesor.setDireccion(input);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+
+        }
+
+    }
+
+
+
 
    ///Fecha de nacimiento
 
@@ -46,20 +453,22 @@ void ProfesorManager::alta(){
 
     fechaNacimiento = Fecha(dia,mes,anio);
 
+
+
     cantidadRegistros = archivoProf.cantRegistros();
 
     if ( cantidadRegistros < 0 ){
 
         id = 1;
 
-        regProf = Profesor (id,dni,nombre,apellido,telefono,email,direccion,fechaNacimiento);
+        _profesor.setId(id);
 
-        if ( archivoProf.alta( regProf ) ){
+        if ( archivoProf.alta( _profesor ) ){
 
             system("cls");
 
             std::cout<<"Se guardo el registro correctamente. \n ";
-            regProf.mostrar();
+            _profesor.mostrar();
 
             system("pause");
 
@@ -94,15 +503,15 @@ void ProfesorManager::alta(){
 
         }
 
-        regProf = Profesor (id,dni,nombre,apellido,telefono,email,direccion,fechaNacimiento);
+        _profesor.setId(id);
 
 
-        if ( archivoProf.alta( regProf ) ){
+        if ( archivoProf.alta( _profesor ) ){
 
             system("cls");
 
             std::cout<<"Se guardo el registro correctamente. \n ";
-            regProf.mostrar();
+            _profesor.mostrar();
 
         }else{
             system("cls");
@@ -115,6 +524,7 @@ void ProfesorManager::alta(){
 
 
 }
+
 
 void ProfesorManager::listar(){
     Profesor regProf;
@@ -467,4 +877,4 @@ void ProfesorManager::modificar(){
 
 }
 
-   // void baja();
+
