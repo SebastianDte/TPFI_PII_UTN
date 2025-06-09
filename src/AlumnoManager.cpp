@@ -163,11 +163,11 @@ void AlumnoManager::altaAlumno()
             std::cout << "Alta de alumno cancelada." << std::endl;
             return;
         }
-        Fecha fechaNacimiento;
-        /*if (!fechaNacimiento.setFromString(inputUsuario)) {
+        Fecha fechaNacimiento = Fecha();
+        if (!fechaNacimiento.validarFechaStr(inputUsuario)) {
             std::cout << "Formato de fecha incorrecto. Intente nuevamente." << std::endl;
             continue;
-        }*/
+        }
         nuevoAlumno.setFechaNacimiento(fechaNacimiento);
         break;
     }

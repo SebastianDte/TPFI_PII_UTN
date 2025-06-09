@@ -8,12 +8,13 @@
 #include "AlumnoArchivo.h"
 #include "AlumnoManager.h"
 #include "Utilidades.h"
+#include <limits>
 using namespace std;
 
 //Método para dar de alta una Inscripción.
 void InscripcionManager::altaInscripcion() {
     InscripcionArchivo archivoInscripciones;
-    AlumnoArchivo archivoAlumnos; 
+    AlumnoArchivo archivoAlumnos;
     CursoArchivo archivoCursos;
     string entrada;
     int legajo;
@@ -136,7 +137,7 @@ void InscripcionManager::bajaInscripcion() {
     int idInscripcion;
     InscripcionArchivo archivoInscripciones;
 
-    // Limpiar buffer 
+    // Limpiar buffer
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     utilidades.limpiarPantallaConEncabezado("BAJA DE INSCRIPCION");
     while (true) {

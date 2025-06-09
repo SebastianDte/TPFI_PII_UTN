@@ -26,6 +26,7 @@ public:
     bool esMayorQue(Fecha otraFecha);
     bool esIgualA(Fecha otraFecha);
     std::string toString();
+    bool validarFechaStr(std::string fecha);
 
     static Fecha fechaActual();
 
