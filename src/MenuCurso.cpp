@@ -20,10 +20,9 @@ void MenuCurso::mostrarMenuCurso()
         std::cin.ignore();
         _utilidades.limpiarPantallaConEncabezado("=== MENU DE CURSOS ===");
         std::cout << "1. Alta de curso\n";
-        std::cout << "2. Baja de curso\n";
-        std::cout << "3. Modificar curso\n";
-        std::cout << "4. Listar cursos\n";
-        std::cout << "5. Buscar curso por ID\n";
+        std::cout << "2. Modificar curso\n";
+        std::cout << "3. Listar cursos\n";
+        std::cout << "4. Buscar curso por ID\n";
         std::cout << "0. Volver al men� principal\n";
         std::cout << "=========================================\n";
         std::cout << "Seleccione una opci�n: ";
@@ -48,20 +47,15 @@ void MenuCurso::mostrarMenuCurso()
                 break;
             case 2:
                 system("cls");
-                _manager.bajaCurso();
+                _manager.modificarCurso();
                 system("pause");
                 break;
             case 3:
                 system("cls");
-                _manager.modificarCurso();
-                system("pause");
-                break;
-            case 4:
-                system("cls");
                 _manager.listarCursos();
                 system("pause");
                 break;
-            case 5:
+            case 4:
                 system("cls");
                 _manager.buscarCursoID();
                 system("pause");

@@ -12,12 +12,10 @@ public:
     CursoManager();
 
     void altaCurso();
-    void bajaCurso();
     void modificarCurso();
 
     void listarCursos();
-    void listarActivos();
-    void listarInactivos();
+    void listar();
     void listarSinCupo();
     void listarPorProfesor();
 
@@ -25,6 +23,7 @@ public:
 
     bool pedirNombreCurso(std::string& nombre);
     bool pedirCantidadMaximaAlumnos(int& cantidad);
-    bool pedirNumeroAula(int& aula);
+    bool pedirNumeroAula(int& aula, int idCursoExcluido = -1);
     bool pedirIdProfesor(int& idProfesor);
+    bool aulaUnica(int& numeroAula, int idCursoExcluido = -1);
 };
