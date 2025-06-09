@@ -11,6 +11,19 @@ AlumnoManager::AlumnoManager()
     _utilidades = Utilidades();
 }
 
+void AlumnoManager::mostrarAlumno(const Alumno& alumno)
+{
+    std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
+    std::cout << "DNI: "<< alumno.getDni()<< std::endl;
+    std::cout << "Nombre: " << alumno.getNombre()<< std::endl;
+    std::cout << "Apellido: "<< alumno.getApellido()<< std::endl;
+    std::cout << "Telefono: "<< alumno.getTelefono()<< std::endl;
+    std::cout << "Email: "<< alumno.getEmail()<< std::endl;
+    std::cout << "Direccion: "<< alumno.getDireccion()<< std::endl;
+    // std::cout << "Fecha de nacimiento: "<< alumno.getFechaNacimiento().toString() << std::endl;
+    std::cout << "---------------------------" << std::endl;
+}
+
 
 void AlumnoManager::altaAlumno()
 {
@@ -172,46 +185,9 @@ void AlumnoManager::altaAlumno()
     }
 }
 
-void AlumnoManager::listarAlumnos()
+
+void AlumnoManager::bajaAlumno()
 {
-
-    int total = _archivo.cantRegistros();
-
-    if(total <= 0)
-    {
-        std::cout << "No hay alumnos registrados." << std::endl;
-        return;
-    }
-
-    std::cout << "=========================================\n";
-    std::cout << "         === LISTADO DE ALUMNOS ===       \n";
-    std::cout << "=========================================\n";
-
-    for(int i = 0; i < total; i++)
-    {
-        Alumno alumno = _archivo.leer(i);
-
-        if(alumno.getActivo())
-        {
-            std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
-            std::cout << "DNI: "<< alumno.getDni()<< std::endl;
-            std::cout << "Nombre: " << alumno.getNombre()<< std::endl;
-            std::cout << "Apellido: "<< alumno.getApellido()<< std::endl;
-            std::cout << "Telefono: "<< alumno.getTelefono()<< std::endl;
-            std::cout << "Email: "<< alumno.getEmail()<< std::endl;
-            std::cout << "Direccion: "<< alumno.getDireccion()<< std::endl;
-            //std::cout << "Fecha de nacimiento: "<< alumno.getFechaNacimiento.toString()<< std::endl;
-
-
-
-
-
-            std::cout << "---------------------------" << std::endl;
-        }
-    }
-
-}
-void AlumnoManager::bajaAlumno() {
     std::string inputUsuario;
     int legajo;
     int posicion;
@@ -221,29 +197,34 @@ void AlumnoManager::bajaAlumno() {
     std::cout << "         === BAJA DE ALUMNOS ===       \n";
     std::cout << "=========================================\n";
 
-    while (true) {
+    while (true)
+    {
         std::cout << "\nIngrese el legajo del alumno a dar de baja (o 'salir' para cancelar): ";
         std::getline(std::cin, inputUsuario);
 
-        if (_utilidades.esComandoSalir(inputUsuario)) {
+        if (_utilidades.esComandoSalir(inputUsuario))
+        {
             std::cout << "\nOperación cancelada." << std::endl;
             return;
         }
 
-        if (!_utilidades.esEnteroValido(inputUsuario)) {
+        if (!_utilidades.esEnteroValido(inputUsuario))
+        {
             std::cout << "Debe ingresar un número entero válido. Intente nuevamente." << std::endl;
             continue;
         }
 
         legajo = std::stoi(inputUsuario);
-        if (legajo <= 0) {
+        if (legajo <= 0)
+        {
             std::cout << "El legajo debe ser mayor que 0." << std::endl;
             continue;
         }
 
         // Se utiliza filtrarActivos=false para obtener el alumno sin importar su estado.
         posicion = _archivo.buscar(legajo, false);
-        if (posicion == -1) {
+        if (posicion == -1)
+        {
             std::cout << "No se encontró un alumno con ese legajo. Intente nuevamente." << std::endl;
             continue;
         }
@@ -251,7 +232,8 @@ void AlumnoManager::bajaAlumno() {
         alumno = _archivo.leer(posicion);
 
         // Si el alumno ya fue dado de baja, se notifica y se sale.
-        if (!alumno.getActivo()) {
+        if (!alumno.getActivo())
+        {
             std::cout << "El alumno ya fue dado de baja." << std::endl;
             std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
             std::cout << "Nombre: " << alumno.getNombre() << std::endl;
@@ -269,17 +251,20 @@ void AlumnoManager::bajaAlumno() {
 
     std::cout << "\n¿Confirma dar de baja este alumno? (s/n): ";
     std::getline(std::cin, inputUsuario);
-    if (_utilidades.aMinusculas(inputUsuario) != "s") {
+    if (_utilidades.aMinusculas(inputUsuario) != "s")
+    {
         std::cout << "\nBaja de alumno cancelada." << std::endl;
         return;
     }
 
     // Se procede a desactivar el alumno.
     alumno.setActivo(false);
-    if (_archivo.modificar(alumno, posicion)) {
+    if (_archivo.modificar(alumno, posicion))
+    {
         std::cout << "\nAlumno dado de baja correctamente." << std::endl;
     }
-    else {
+    else
+    {
         std::cout << "\nError al dar de baja el alumno." << std::endl;
     }
 }
@@ -342,9 +327,7 @@ void AlumnoManager::buscarAlumnoLegajo()
     if (alumno.getActivo())
     {
         std::cout << "\nAlumno encontrado:" << std::endl;
-        std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
-        std::cout << "Nombre: " << alumno.getNombre() << std::endl;
-        std::cout << "Apellido: " << alumno.getApellido() << std::endl;
+        mostrarAlumno(alumno);
     }
     else
     {
@@ -377,48 +360,48 @@ void AlumnoManager::modificarAlumno()
     std::cout << "         === MODIFICAR ALUMNO ===        \n";
     std::cout << "=========================================\n";
 
-while (true)
-{
-    std::cout << "\nIngrese el LEGAJO del alumno a modificar (o escriba 'salir' para cancelar): ";
-    std::getline(std::cin, inputUsuario);
-
-    if (_utilidades.esComandoSalir(inputUsuario))
+    while (true)
     {
-        std::cout << "\nOperación cancelada.\n";
-        return;
-    }
+        std::cout << "\nIngrese el LEGAJO del alumno a modificar (o escriba 'salir' para cancelar): ";
+        std::getline(std::cin, inputUsuario);
 
-    if (!_utilidades.esEnteroValido(inputUsuario))
-    {
-        std::cout << "Debe ingresar un número entero válido. Intente nuevamente.\n";
-        continue;
-    }
+        if (_utilidades.esComandoSalir(inputUsuario))
+        {
+            std::cout << "\nOperación cancelada.\n";
+            return;
+        }
 
-    legajo = std::stoi(inputUsuario);
-    if (legajo <= 0)
-    {
-        std::cout << "El LEGAJO debe ser mayor que 0.\n";
-        continue;
-    }
+        if (!_utilidades.esEnteroValido(inputUsuario))
+        {
+            std::cout << "Debe ingresar un número entero válido. Intente nuevamente.\n";
+            continue;
+        }
 
-    // Se utiliza filtrarActivos = false para obtener el alumno independientemente de su estado.
-    posicion = _archivo.buscar(legajo, false);
-    if (posicion == -1)
-    {
-        std::cout << "No se encontró un alumno con ese legajo. Intente nuevamente.\n";
-        continue;
-    }
+        legajo = std::stoi(inputUsuario);
+        if (legajo <= 0)
+        {
+            std::cout << "El LEGAJO debe ser mayor que 0.\n";
+            continue;
+        }
 
-    alumno = _archivo.leer(posicion);
+        // Se utiliza filtrarActivos = false para obtener el alumno independientemente de su estado.
+        posicion = _archivo.buscar(legajo, false);
+        if (posicion == -1)
+        {
+            std::cout << "No se encontró un alumno con ese legajo. Intente nuevamente.\n";
+            continue;
+        }
 
-    // Si el alumno está inactivo, notificar y salir.
-    if (!alumno.getActivo())
-    {
-        std::cout << "El alumno se encuentra dado de baja.\n";
-        return;
+        alumno = _archivo.leer(posicion);
+
+        // Si el alumno está inactivo, notificar y salir.
+        if (!alumno.getActivo())
+        {
+            std::cout << "El alumno se encuentra dado de baja.\n";
+            return;
+        }
+        break;
     }
-    break;
-}
     Alumno alumnoOriginal = alumno; // esto es para mantener el estado original y poder comparar si hubo modificaciones
 
 
@@ -450,7 +433,7 @@ while (true)
 
         switch (opcion)
         {
-            case 1:
+        case 1:
         {
             std::string nuevoDni;
             std::cout << "Nuevo DNI del alumno: ";
@@ -528,3 +511,155 @@ while (true)
     }
     while (opcion != 0);
 }
+
+void AlumnoManager::listarAlumnos()
+{
+    int opcion;
+
+    do
+    {
+        _utilidades.limpiarPantallaConEncabezado("=== SUBMENÚ - LISTADO DE ALUMNOS ===");
+        std::cout << "1. Listar alumnos activos\n";
+        std::cout << "2. Listar alumnos inactivos\n";
+        std::cout << "3. Listar alumnos por apellido\n";
+        std::cout << "0. Volver al menú anterior\n";
+        std::cout << "=========================================\n";
+        std::cout << "Seleccione una opción: ";
+        std::cin >> opcion;
+        std::cin.ignore();
+        switch(opcion)
+        {
+        case 1:
+            listarActivos();
+            system("pause");
+            break;
+        case 2:
+            listarInactivos();
+            system("pause");
+            break;
+        case 3:
+            listarPorApellido();
+            system("pause");
+            break;
+        case 0:
+            std::cout << "Volviendo al menú anterior...\n";
+            break;
+        default:
+            std::cout << "Opción no válida. Intente nuevamente.\n";
+            system("pause");
+            break;
+        }
+    }
+    while(opcion != 0);
+}
+
+
+void AlumnoManager::listarActivos()
+{
+
+    int total = _archivo.cantRegistros();
+
+    if(total <= 0)
+    {
+        std::cout << "No hay alumnos registrados." << std::endl;
+        return;
+    }
+    _utilidades.limpiarPantallaConEncabezado("=== LISTADO DE ALUMNOS ACTIVOS ===");
+    for(int i = 0; i < total; i++)
+    {
+        Alumno alumno = _archivo.leer(i);
+
+        if(alumno.getActivo())
+        {
+           mostrarAlumno(alumno);
+
+
+        }
+    }
+
+}
+
+
+void AlumnoManager::listarInactivos()
+{
+    int total = _archivo.cantRegistros();
+    int registrosEncontrados = 0;
+
+    if(total <= 0)
+    {
+        std::cout << "No hay alumnos registrados." << std::endl;
+        return;
+    }
+    _utilidades.limpiarPantallaConEncabezado("=== LISTADO DE ALUMNOS INACTIVOS ===");
+    for(int i = 0; i < total; i++)
+    {
+        Alumno alumno = _archivo.leer(i);
+
+        if(!alumno.getActivo())
+        {
+            registrosEncontrados++;
+            mostrarAlumno(alumno);
+        }
+    }
+    if (registrosEncontrados == 0)
+    {
+        std::cout << "No hay alumnos inactivos para mostrar." << std::endl;
+    }
+}
+void AlumnoManager::listarPorApellido()
+{
+    _utilidades.limpiarPantallaConEncabezado("=== LISTADO DE ALUMNOS POR APELLIDO ===");
+    int total = _archivo.cantRegistros();
+
+    if (total <= 0)
+    {
+        std::cout << "No hay alumnos registrados." << std::endl;
+        return;
+    }
+    Alumno* alumnos = new Alumno[total];
+    if (alumnos == nullptr) {
+        std::cout << "Error al asignar memoria." << std::endl;
+        return;
+    }
+    for (int i = 0; i < total; i++)
+    {
+        alumnos[i] = _archivo.leer(i);
+    }
+
+    for (int i = 0; i < total - 1; i++)
+    {
+        for (int j = 0; j < total - i - 1; j++)
+        {
+            // Comparamos los apellidos de los alumnos adyacentes
+            if (alumnos[j].getApellido() > alumnos[j + 1].getApellido())
+            {
+                // Si están en el orden incorrecto, los intercambiamos (swap)
+                Alumno temp = alumnos[j];
+                alumnos[j] = alumnos[j + 1];
+                alumnos[j + 1] = temp;
+            }
+        }
+    }
+
+
+    std::cout << "\nAlumnos activos ordenados por apellido:\n";
+    std::cout << "-------------------------------------\n";
+    int registrosEncontrados = 0;
+    for (int i = 0; i < total; i++)
+    {
+        if (alumnos[i].getActivo())
+        {
+            mostrarAlumno(alumnos[i]);
+            registrosEncontrados++;
+        }
+    }
+
+    if (registrosEncontrados == 0)
+    {
+        std::cout << "No hay alumnos activos para mostrar." << std::endl;
+    }
+
+
+    delete[] alumnos;
+}
+

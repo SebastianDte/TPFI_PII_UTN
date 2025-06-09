@@ -8,6 +8,7 @@ class AlumnoManager{
 private:
     AlumnoArchivo _archivo;
     Utilidades _utilidades;
+    void mostrarAlumno(const Alumno& alumno);
 
 public:
     AlumnoManager();
@@ -15,6 +16,13 @@ public:
     void altaAlumno();
     void bajaAlumno();
     void modificarAlumno();
+
     void listarAlumnos();
+    void listarActivos();
+    void listarInactivos();
+    void listarPorApellido();
+
+
+
     void buscarAlumnoLegajo();
 };
