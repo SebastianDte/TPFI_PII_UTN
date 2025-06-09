@@ -259,21 +259,20 @@ bool ProfesorManager::direccionValidacion(const std::string& input){
 /// ABML
 
 void ProfesorManager::alta(){
-    Profesor regProf;
-    ProfesorArchivo archivoProf;
 
-
-
-    int dia,mes,anio,id,cantidadRegistros;
+    int id,dia,mes,anio,cantidadRegistros;
     Fecha fechaNacimiento;
-    std::string dni,nombre,apellido,telefono,email,direccion,input;
+    std::string input;
 
     std::cin.ignore();
-
 
     while(true){
 
         system("cls");
+
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
 
         std::cout<<"Ingrese DNI: \n";
         std::getline(std::cin,input);
@@ -302,6 +301,9 @@ void ProfesorManager::alta(){
 
         system("cls");
 
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
 
         std::cout<<"Ingrese su nombre: \n";
         std::getline(std::cin,input);
@@ -331,6 +333,9 @@ void ProfesorManager::alta(){
 
         system("cls");
 
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
 
         std::cout<<"Ingrese su apellido: \n";
         std::getline(std::cin,input);
@@ -360,6 +365,10 @@ void ProfesorManager::alta(){
 
         system("cls");
 
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
+
         std::cout<<"Ingrese su numero telefonico: \n";
         std::getline(std::cin,input);
 
@@ -386,6 +395,10 @@ void ProfesorManager::alta(){
     while(true){
 
         system("cls");
+
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
 
         std::cout<<"Ingrese su email: \n";
         std::getline(std::cin,input);
@@ -414,6 +427,10 @@ void ProfesorManager::alta(){
 
         system("cls");
 
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
+
         std::cout<<"Ingrese su domicilio(calle y numero): \n";
         std::getline(std::cin,input);
 
@@ -434,9 +451,6 @@ void ProfesorManager::alta(){
 
     }
 
-
-
-
    ///Fecha de nacimiento
 
     std::cout<<"Ingrese dia de nacimiento: \n ";
@@ -455,7 +469,7 @@ void ProfesorManager::alta(){
 
 
 
-    cantidadRegistros = archivoProf.cantRegistros();
+    cantidadRegistros = _archivo.cantRegistros();
 
     if ( cantidadRegistros < 0 ){
 
@@ -463,14 +477,14 @@ void ProfesorManager::alta(){
 
         _profesor.setId(id);
 
-        if ( archivoProf.alta( _profesor ) ){
+        if ( _archivo.alta( _profesor ) ){
 
             system("cls");
 
             std::cout<<"Se guardo el registro correctamente. \n ";
             _profesor.mostrar();
 
-            system("pause");
+            std::cin.get();
 
             return;
 
@@ -481,14 +495,16 @@ void ProfesorManager::alta(){
 
             std::cout<<"No se pudo guardar el registro correctamente. \n ";
 
-            system("pause");
+            std::cin.get();
+
+            return;
 
         }
 
 
     }else{
 
-        id = archivoProf.generarID(cantidadRegistros);
+        id = _archivo.generarID(cantidadRegistros);
 
 
         if ( id < 0 ){
@@ -497,7 +513,7 @@ void ProfesorManager::alta(){
 
             std::cout<<"No se puede generar un nuevo registro de profesor. \n";
 
-            system("pause");
+            std::cin.get();
 
             return;
 
@@ -506,7 +522,7 @@ void ProfesorManager::alta(){
         _profesor.setId(id);
 
 
-        if ( archivoProf.alta( _profesor ) ){
+        if ( _archivo.alta( _profesor ) ){
 
             system("cls");
 
@@ -516,7 +532,9 @@ void ProfesorManager::alta(){
         }else{
             system("cls");
             std::cout<<"No se pudo guardar el registro correctamente. \n ";
+            std::cin.get();
 
+            return;
         }
 
 
@@ -527,18 +545,28 @@ void ProfesorManager::alta(){
 
 
 void ProfesorManager::listar(){
-    Profesor regProf;
-    ProfesorArchivo archivoProf;
+
     int cantRegistros;
 
-    cantRegistros = archivoProf.cantRegistros();
+    cantRegistros = _archivo.cantRegistros();
 
+    if(cantRegistros < 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+
+    }
+
+    std::cout << "=========================================\n";
+    std::cout << "         === LISTADO DE PROFESORES ===   \n";
+    std::cout << "=========================================\n";
 
     for ( int i=0; i<cantRegistros;i++ ){
 
-        regProf = archivoProf.leer(i);
+        _profesor = _archivo.leer(i);
 
-        regProf.mostrar();
+        _profesor.mostrar();
 
 
 
@@ -548,14 +576,17 @@ void ProfesorManager::listar(){
 }
 
 void ProfesorManager::buscar(){
-    Profesor regProf;
-    ProfesorArchivo archivoProf;
+
     int id, posicion;
+
+    std::cout << "========================================== \n";
+    std::cout << "         === BÚSQUEDA DE PROFESOR ===      \n";
+    std::cout << "==========================================\n";
 
     std::cout<<"Ingrese el ID del profesor que desea buscar: \n";
     std::cin>> id;
 
-    posicion = archivoProf.buscar(id);
+    posicion = _archivo.buscar(id);
 
     if ( posicion < 0 ){
 
@@ -567,23 +598,26 @@ void ProfesorManager::buscar(){
 
     }
 
-    regProf = archivoProf.leer(posicion);
+    _profesor = _archivo.leer(posicion);
 
-    regProf.mostrar();
+    _profesor.mostrar();
 
 }
 
 void ProfesorManager::modificar(){
-    Profesor regProf;
-    ProfesorArchivo archivoProf;
+
     Fecha fechaNac;
     int id, posicion, opcion,diaN,mesN,anioN;
-    std::string dni,nombre,apellido,telefono,email,direccion;
+    std::string input;
 
-    std::cout<<"Ingrese el ID del profesor que desea modificar: \n";
+    std::cout << "=========================================\n";
+    std::cout << "         === MODIFICAR PROFESOR ===        \n";
+    std::cout << "=========================================\n";
+
+    std::cout<<"\nIngrese el ID del profesor que desea modificar: \n";
     std::cin>> id;
 
-    posicion = archivoProf.buscar(id);
+    posicion = _archivo.buscar(id);
 
 
     if ( posicion < 0 ){
@@ -596,26 +630,25 @@ void ProfesorManager::modificar(){
 
     }
 
-    if ( posicion < 0 ){
-
-        system("pause");
-
-        return;
-
-    }
 
 
-    regProf = archivoProf.leer(posicion);
+    _profesor = _archivo.leer(posicion);
 
     system("cls");
 
-    regProf.mostrar();
+    std::cout<<"\nEl profesor que desea modificar es: \n";
+
+    _profesor.mostrar();
 
     system("pause");
 
     do{
 
         system("cls");
+
+        std::cout << "=========================================\n";
+        std::cout << "         === MODIFICAR PROFESOR ===        \n";
+        std::cout << "=========================================\n";
 
         std::cout<<"Ingrese el atributo que desea modificar: \n";
         std::cout << "1) DNI.\n";
@@ -632,13 +665,37 @@ void ProfesorManager::modificar(){
         switch(opcion){
 
         case 1:
-            system("cls");
+            std::cin.ignore();
 
-            std::cout << "Ingrese el nuevo DNI.\n";
-            std::cin>> dni;
-            regProf.setDni(dni);
+            while(true){
 
-            if ( archivoProf.alta(regProf,posicion) ){
+                system("cls");
+
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout<<"Ingrese el nuevo DNI: \n";
+                std::getline(std::cin,input);
+
+                if (_utilidades.esComandoSalir(input)){
+
+                    return;
+
+                }
+
+                if( dniValidacion(input)) {
+
+                    _profesor.setDni(input);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+
+                }
+
+            }
+
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
@@ -661,20 +718,43 @@ void ProfesorManager::modificar(){
             break;
 
         case 2:
+           std::cin.ignore();
 
-            system("cls");
+            while(true){
 
-            std::cout << "Ingrese el nuevo nombre.\n";
-            std::cin>> nombre;
-            regProf.setNombre(nombre);
 
-            if ( archivoProf.alta(regProf,posicion) ){
+                system("cls");
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout<<"Ingrese el nuevo nombre: \n";
+                std::getline(std::cin,input);
+
+
+                if (_utilidades.esComandoSalir(input)){
+
+                    return;
+
+                }
+
+                if( nombreValidacion(input)) {
+
+                    _profesor.setNombre(input);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+                }
+
+            }
+
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
                 std::cout<<"El registro se modifico correctamente. \n";
 
-                system("pause");
+                std::cin.get();
 
             }else{
 
@@ -682,7 +762,7 @@ void ProfesorManager::modificar(){
 
                 std::cout<<"No se pudo modificar el registro. \n";
 
-                system("pause");
+                std::cin.get();
 
                 return;
 
@@ -692,19 +772,43 @@ void ProfesorManager::modificar(){
 
         case 3:
 
-            system("cls");
+            std::cin.ignore();
 
-            std::cout << "Ingrese el nuevo apellido.\n";
-            std::cin>> apellido;
-            regProf.setApellido(apellido);
+            while(true){
 
-            if ( archivoProf.alta(regProf,posicion) ){
+                system("cls");
+
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout<<"Ingrese el nuevo apellido: \n";
+                std::getline(std::cin,input);
+
+                if (_utilidades.esComandoSalir(input)){
+
+                    return;
+
+                }
+
+                if( apellidoValidacion(input)) {
+
+                    _profesor.setApellido(input);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+
+                }
+
+            }
+
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
                 std::cout<<"El registro se modifico correctamente. \n";
 
-                system("pause");
+                std::cin.get();
 
             }else{
 
@@ -712,7 +816,7 @@ void ProfesorManager::modificar(){
 
                 std::cout<<"No se pudo modificar el registro. \n";
 
-                system("pause");
+                std::cin.get();
 
                 return;
 
@@ -722,20 +826,43 @@ void ProfesorManager::modificar(){
 
         case 4:
 
-            system("cls");
+            std::cin.ignore();
 
-            std::cout << "Ingrese el nuevo numero de telefono.\n";
-            std::cin>> telefono;
-            regProf.setTelefono(telefono);
+            while(true){
 
 
-            if ( archivoProf.alta(regProf,posicion) ){
+                system("cls");
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout<<"Ingrese el nuevo numero de telefono: \n";
+                std::getline(std::cin,input);
+
+
+                if (_utilidades.esComandoSalir(input)){
+
+                    return;
+
+                }
+
+                if( telefonoValidacion(input)) {
+
+                    _profesor.setTelefono(input);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+                }
+
+            }
+
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
                 std::cout<<"El registro se modifico correctamente. \n";
 
-                system("pause");
+                std::cin.get();
 
             }else{
 
@@ -743,7 +870,7 @@ void ProfesorManager::modificar(){
 
                 std::cout<<"No se pudo modificar el registro. \n";
 
-                system("pause");
+                std::cin.get();
 
                 return;
 
@@ -753,20 +880,43 @@ void ProfesorManager::modificar(){
 
         case 5:
 
-            system("cls");
+            std::cin.ignore();
 
-            std::cout << "Ingrese el nuevo email.\n";
-            std::cin>> email;
-            regProf.setNombre(email);
+            while(true){
 
 
-            if ( archivoProf.alta(regProf,posicion) ){
+                system("cls");
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout<<"Ingrese el nuevo email: \n";
+                std::getline(std::cin,input);
+
+
+                if (_utilidades.esComandoSalir(input)){
+
+                    return;
+
+                }
+
+                if( emailValidacion(input)) {
+
+                    _profesor.setEmail(input);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+                }
+
+            }
+
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
                 std::cout<<"El registro se modifico correctamente. \n";
 
-                system("pause");
+                std::cin.get();
 
             }else{
 
@@ -774,7 +924,7 @@ void ProfesorManager::modificar(){
 
                 std::cout<<"No se pudo modificar el registro. \n";
 
-                system("pause");
+                std::cin.get();
 
                 return;
 
@@ -785,20 +935,43 @@ void ProfesorManager::modificar(){
 
         case 6:
 
-            system("cls");
+            std::cin.ignore();
 
-            std::cout << "Ingrese la nueva direccion.\n";
-            std::cin>> direccion;
-            regProf.setDireccion(direccion);
+            while(true){
 
 
-            if ( archivoProf.alta(regProf,posicion) ){
+                system("cls");
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout<<"Ingrese la nueva direccion: \n";
+                std::getline(std::cin,input);
+
+
+                if (_utilidades.esComandoSalir(input)){
+
+                    return;
+
+                }
+
+                if( direccionValidacion(input)) {
+
+                    _profesor.setDireccion(input);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+                }
+
+            }
+
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
                 std::cout<<"El registro se modifico correctamente. \n";
 
-                system("pause");
+                std::cin.get();
 
             }else{
 
@@ -806,7 +979,7 @@ void ProfesorManager::modificar(){
 
                 std::cout<<"No se pudo modificar el registro. \n";
 
-                system("pause");
+                std::cin.get();
 
                 return;
 
@@ -827,15 +1000,15 @@ void ProfesorManager::modificar(){
 
             fechaNac = Fecha(diaN,mesN,anioN);
 
-            regProf.setFechaNacimiento( fechaNac);
+            _profesor.setFechaNacimiento( fechaNac);
 
-            if ( archivoProf.alta(regProf,posicion) ){
+            if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
                 std::cout<<"El registro se modifico correctamente. \n";
 
-                system("pause");
+                std::cin.get();
 
             }else{
 
@@ -843,14 +1016,13 @@ void ProfesorManager::modificar(){
 
                 std::cout<<"No se pudo modificar el registro. \n";
 
-                system("pause");
+                std::cin.get();
 
                 return;
 
             }
 
             break;
-
 
         case 0:
 
@@ -862,7 +1034,7 @@ void ProfesorManager::modificar(){
 
             std::cout<<"La opcion ingresada es incorrecta, intente nuevamente.\n";
 
-            system("pause");
+            std::cin.get();
 
             break;
 
@@ -872,9 +1044,7 @@ void ProfesorManager::modificar(){
 
     }while( opcion !=0 );
 
-
-
-
 }
+
 
 
