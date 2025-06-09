@@ -65,10 +65,12 @@
 		</Unit>
 		<Unit filename="include/MenuPrincipal.h" />
 		<Unit filename="include/MenuProfesor.h" />
+		<Unit filename="include/MenuReportes.h" />
 		<Unit filename="include/Persona.h" />
 		<Unit filename="include/Profesor.h" />
 		<Unit filename="include/ProfesorArchivo.h" />
 		<Unit filename="include/ProfesorManager.h" />
+		<Unit filename="include/ReportesManager.h" />
 		<Unit filename="include/Utilidades.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Alumno.cpp" />
@@ -94,10 +96,12 @@
 		</Unit>
 		<Unit filename="src/MenuPrincipal.cpp" />
 		<Unit filename="src/MenuProfesor.cpp" />
+		<Unit filename="src/MenuReportes.cpp" />
 		<Unit filename="src/Persona.cpp" />
 		<Unit filename="src/Profesor.cpp" />
 		<Unit filename="src/ProfesorArchivo.cpp" />
 		<Unit filename="src/ProfesorManager.cpp" />
+		<Unit filename="src/ReportesManager.cpp" />
 		<Unit filename="src/Utilidades.cpp" />
 		<Extensions />
 	</Project>

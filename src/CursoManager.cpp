@@ -1,10 +1,13 @@
 #include <iostream>
+#include <limits>
 #include "Curso.h"
 #include "CursoManager.h"
 #include "CursoArchivo.h"
 #include "Utilidades.h"
 #include "ProfesorArchivo.h"
 #include "Profesor.h"
+#include "InscripcionArchivo.h"
+#include "Inscripcion.h"
 
 CursoManager::CursoManager()
 {
@@ -12,12 +15,35 @@ CursoManager::CursoManager()
     _utilidades = Utilidades();
 }
 
+
+
+// Verifica si el n√∫mero de aula est√° disponible para un nuevo curso, si es para
+// modificar un curso, se debe pasar el id del curso a modificar
+// para que no haya conflicto consigo mismo
+bool CursoManager::aulaUnica(int& numeroAula, int idCursoExcluido)
+{
+    CursoArchivo archivoCurso;
+    int cant = archivoCurso.cantRegistros();
+
+    for (int i = 0; i < cant; i++) {
+        Curso curso = archivoCurso.leer(i);
+        if (curso.getNumeroAula() == numeroAula) {
+            if (idCursoExcluido == -1 || curso.getId() != idCursoExcluido) {
+                return false;
+            }
+        }
+        }
+
+    return true;
+}
+
+
 bool CursoManager::pedirNombreCurso(std::string& nombre)
 {
     std::string input;
     while (true)
     {
-        std::cout << "Ingrese nombre del curso (m·ximo 49 caracteres): ";
+        std::cout << "Ingrese nombre del curso (mÔøΩximo 49 caracteres): ";
         std::getline(std::cin, input);
 
         if (_utilidades.esComandoSalir(input))
@@ -25,13 +51,13 @@ bool CursoManager::pedirNombreCurso(std::string& nombre)
 
         if (input.empty())
         {
-            std::cout << "\nEl nombre no puede estar vacÌo. Intente nuevamente.\n\n";
+            std::cout << "\nEl nombre no puede estar vacÔøΩo. Intente nuevamente.\n\n";
             continue;
         }
 
         if (input.length() > 49)
         {
-            std::cout << "\nEl nombre solo puede tener m·ximo 49 caracteres. Intente nuevamente.\n\n";
+            std::cout << "\nEl nombre solo puede tener mÔøΩximo 49 caracteres. Intente nuevamente.\n\n";
             continue;
         }
 
@@ -45,7 +71,7 @@ bool CursoManager::pedirCantidadMaximaAlumnos(int& cantidad)
     std::string input;
     while (true)
     {
-        std::cout << "Ingrese la cantidad m·xima de alumnos: ";
+        std::cout << "Ingrese la cantidad mÔøΩxima de alumnos: ";
         std::getline(std::cin, input);
 
         if (_utilidades.esComandoSalir(input))
@@ -53,7 +79,7 @@ bool CursoManager::pedirCantidadMaximaAlumnos(int& cantidad)
 
         if (!_utilidades.esEnteroValido(input))
         {
-            std::cout << "\nDebe ingresar un n˙mero entero v·lido. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nÔøΩmero entero vÔøΩlido. Intente nuevamente.\n\n";
             continue;
         }
 
@@ -68,12 +94,12 @@ bool CursoManager::pedirCantidadMaximaAlumnos(int& cantidad)
     }
 }
 
-bool CursoManager::pedirNumeroAula(int& aula)
+bool CursoManager::pedirNumeroAula(int& aula, int idCursoExcluido)
 {
     std::string input;
     while (true)
     {
-        std::cout << "Ingrese el n˙mero de aula: ";
+        std::cout << "Ingrese el nÔøΩmero de aula: ";
         std::getline(std::cin, input);
 
         if (_utilidades.esComandoSalir(input))
@@ -81,14 +107,20 @@ bool CursoManager::pedirNumeroAula(int& aula)
 
         if (!_utilidades.esEnteroValido(input))
         {
-            std::cout << "\nDebe ingresar un n˙mero entero v·lido. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nÔøΩmero entero vÔøΩlido. Intente nuevamente.\n\n";
             continue;
         }
 
         aula = std::stoi(input);
         if (aula <= 0)
         {
-            std::cout << "\nEl n˙mero de aula debe ser mayor que cero. Intente nuevamente.\n\n";
+            std::cout << "\nEl n√∫mero de aula debe ser mayor que cero. Intente nuevamente.\n\n";
+            continue;
+        }
+
+        if (!aulaUnica(aula, idCursoExcluido))
+        {
+            std::cout << "\nEl n√∫mero de aula ya est√° en uso. Intente nuevamente.\n\n";
             continue;
         }
 
@@ -111,7 +143,7 @@ bool CursoManager::pedirIdProfesor(int& idProfesor)
 
         if (!_utilidades.esEnteroValido(input))
         {
-            std::cout << "\nDebe ingresar un n˙mero entero v·lido. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nÔøΩmero entero vÔøΩlido. Intente nuevamente.\n\n";
             continue;
         }
 
@@ -125,13 +157,15 @@ bool CursoManager::pedirIdProfesor(int& idProfesor)
         int pos = archivoProfesor.buscar(idProfesor);
         if (pos < 0)
         {
-            std::cout << "\nNo se encontrÛ un profesor con ese ID. Intente nuevamente.\n\n";
+            std::cout << "\nNo se encontrÔøΩ un profesor con ese ID. Intente nuevamente.\n\n";
             continue;
         }
 
         return true;
     }
 }
+
+
 
 
 void CursoManager::altaCurso()
@@ -179,8 +213,6 @@ void CursoManager::altaCurso()
     }
     nuevoCurso.setIdProfesor(idProfesor);
 
-    nuevoCurso.setEstado(true);
-
     std::cout << "Registrando curso...\n\n";
 
     if (_archivo.alta(nuevoCurso))
@@ -189,113 +221,10 @@ void CursoManager::altaCurso()
     }
     else
     {
-        std::cout << "Error al guardar el curso. Intente nuevamente m·s tarde.\n";
+        std::cout << "Error al guardar el curso. Intente nuevamente mÔøΩs tarde.\n";
     }
 }
 
-void CursoManager::bajaCurso()
-{
-    /* TODOS:
-        2. Pendiente agregar validacion para ver si el curso no tiene alumnos inscriptos, si tiene no se puede dar de baja.
-    */
-
-    int total = _archivo.cantRegistros();
-
-    if(total <= 0)
-    {
-        std::cout << "\nNo hay cursos registrados.\n";
-        return;
-    }
-
-    std::string inputUsuario;
-    int idCurso;
-
-    _utilidades.limpiarPantallaConEncabezado("=== BAJA DE CURSO ===");
-
-    while(true)
-    {
-        _utilidades.limpiarPantallaConEncabezado("=== BAJA DE CURSO ===");
-        std::cout << "\nIngrese el ID del curso a dar de baja (ingrese 'salir' para cancelar): ";
-        std::getline(std::cin, inputUsuario);
-
-        if(_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "\nBaja de curso cancelada.\n";
-            return;
-        }
-
-        if(!_utilidades.esEnteroValido(inputUsuario))
-        {
-            std::cout << "\nDebe ingresar un n˙mero entero v·lido. Por favor, intente nuevamente.\n";
-            continue;
-        }
-
-        idCurso = std::stoi(inputUsuario);
-        if (idCurso <= 0)
-        {
-            std::cout << "\nEl ID debe ser un n˙mero mayor que 0.\n";
-            continue;
-        }
-
-        int posicion = _archivo.buscar(idCurso);
-        if (posicion == -1)
-        {
-            std::cout << "\nNo se encontrÛ un curso activo con ese ID. Intente nuevamente.\n";
-            continue;
-        }
-
-        Curso curso = _archivo.leer(posicion);
-
-        if(!curso.getEstado())
-        {
-            std::cout << "\nEl curso ya est· dado de baja.\n";
-            return;
-        }
-
-        ProfesorArchivo profeArchivo;
-        int idProfesor = curso.getIdProfesor();
-        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
-        Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
-
-        _utilidades.limpiarPantallaConEncabezado("=== BAJA DE CURSO ===");
-        std::cout << "Curso encontrado:\n";
-        std::cout << "ID: " << curso.getId() << "\n";
-        std::cout << "Nombre: " << curso.getNombre() << "\n";
-        std::cout << "Profesor Asignado:\n";
-        std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
-        std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
-        std::cout << "=========================================\n";
-        std::cout << "øConfirma dar de baja este curso? (s/n): ";
-        std::getline(std::cin, inputUsuario);
-
-        if (inputUsuario.empty())
-        {
-            std::cout << "\nNo puede dejar el campo vacÌo. Por favor ingrese 's' o 'n'.\n";
-            continue;
-        }
-
-        std::string inputUsuarioMin = _utilidades.aMinusculas(inputUsuario);
-
-        if(inputUsuarioMin == "s")
-        {
-            curso.setEstado(false);
-            if(_archivo.modificar(curso, posicion))
-            {
-                std::cout << "\nCurso dado de baja correctamente.\n";
-            }
-            else
-            {
-                std::cout << "\nError al modificar el archivo.\n";
-            }
-        }
-        else
-        {
-            std::cout << "\nBaja cancelada.\n";
-        }
-
-        break;
-    }
-}
 
 
 void CursoManager::modificarCurso()
@@ -321,13 +250,13 @@ void CursoManager::modificarCurso()
 
         if (_utilidades.esComandoSalir(inputUsuario))
         {
-            std::cout << "\nOperaciÛn cancelada.\n";
+            std::cout << "\nOperaciÔøΩn cancelada.\n";
             return;
         }
 
         if (!_utilidades.esEnteroValido(inputUsuario))
         {
-            std::cout << "Debe ingresar un n˙mero entero v·lido. Intente nuevamente.\n";
+            std::cout << "Debe ingresar un nÔøΩmero entero vÔøΩlido. Intente nuevamente.\n";
             continue;
         }
 
@@ -341,7 +270,7 @@ void CursoManager::modificarCurso()
         posicion = _archivo.buscar(idCurso);
         if (posicion == -1)
         {
-            std::cout << "No se encontrÛ un curso activo con ese ID. Intente nuevamente.\n";
+            std::cout << "No se encontrÔøΩ un curso activo con ese ID. Intente nuevamente.\n";
             continue;
         }
 
@@ -367,28 +296,28 @@ void CursoManager::modificarCurso()
             std::cout << "-----------------------------------------\n";
             std::cout << "ID: " << curso.getId() << "\n";
             std::cout << "Nombre: " << curso.getNombre() << std::endl;
-            std::cout << "Cantidad m·xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-            std::cout << "N˙mero de aula: " << curso.getNumeroAula() << std::endl;
+            std::cout << "Cantidad mÔøΩxima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+            std::cout << "N√∫mero de aula: " << curso.getNumeroAula() << std::endl;
             std::cout << "Profesor Asignado:\n";
             std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
             std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
             std::cout << "=========================================\n";
 
-            primeraVez = false; // para que no se vuelva a mostrar en la prÛxima iteraciÛn
+            primeraVez = false; // para que no se vuelva a mostrar en la prÔøΩxima iteraciÔøΩn
         }
         else
         {
             _utilidades.limpiarPantallaConEncabezado("=== MODIFICAR CURSO ===");
         }
 
-        std::cout << "\nSeleccione quÈ desea modificar:\n";
+        std::cout << "\nSeleccione quÔøΩ desea modificar:\n";
         std::cout << "1. Nombre del curso\n";
-        std::cout << "2. Cantidad m·xima de alumnos\n";
-        std::cout << "3. N˙mero de aula\n";
+        std::cout << "2. Cantidad mÔøΩxima de alumnos\n";
+        std::cout << "3. N√∫mero de aula\n";
         std::cout << "4. Profesor asignado\n";
         std::cout << "0. Guardar cambios y salir\n";
         std::cout << "-----------------------------------------\n";
-        std::cout << "Ingrese opciÛn: ";
+        std::cout << "Ingrese opciÔøΩn: ";
         std::cin >> opcion;
         std::cin.ignore();
 
@@ -417,7 +346,7 @@ void CursoManager::modificarCurso()
         case 3:
         {
             int nuevaAula;
-            if (pedirNumeroAula(nuevaAula))
+            if (pedirNumeroAula(nuevaAula, curso.getId()))
             {
                 curso.setNumeroAula(nuevaAula);
                 std::cout << "Aula actualizada.\n";
@@ -452,7 +381,7 @@ void CursoManager::modificarCurso()
             }
             break;
         default:
-            std::cout << "OpciÛn inv·lida. Intente nuevamente.\n";
+            std::cout << "OpciÔøΩn invÔøΩlida. Intente nuevamente.\n";
         }
 
         if (opcion != 0)
@@ -467,7 +396,7 @@ void CursoManager::modificarCurso()
 
 
 
-void CursoManager::listarActivos()
+void CursoManager::listar()
 {
     int total = _archivo.cantRegistros();
     int registrosEncontrados = 0;
@@ -485,24 +414,21 @@ void CursoManager::listarActivos()
     {
         Curso curso = _archivo.leer(i);
 
-        if(curso.getEstado())
-        {
-            registrosEncontrados++;
-            ProfesorArchivo profeArchivo;
-            int idProfesor = curso.getIdProfesor();
-            int posicionRegProfesor = profeArchivo.buscar(idProfesor);
-            Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+        registrosEncontrados++;
+        ProfesorArchivo profeArchivo;
+        int idProfesor = curso.getIdProfesor();
+        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+        Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
 
 
-            std::cout << "ID: " << curso.getId() << std::endl;
-            std::cout << "Nombre: " << curso.getNombre() << std::endl;
-            std::cout << "Cantidad m·xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-            std::cout << "N˙mero de aula: " << curso.getNumeroAula() << std::endl;
-            std::cout << "Profesor Asignado:\n";
-            std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
-            std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
-            std::cout << "---------------------------" << std::endl;
-        }
+        std::cout << "ID: " << curso.getId() << std::endl;
+        std::cout << "Nombre: " << curso.getNombre() << std::endl;
+        std::cout << "Cantidad mÔøΩxima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+        std::cout << "NÔøΩmero de aula: " << curso.getNumeroAula() << std::endl;
+        std::cout << "Profesor Asignado:\n";
+        std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+        std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
+        std::cout << "---------------------------" << std::endl;
     }
 
     if (registrosEncontrados == 0)
@@ -512,51 +438,13 @@ void CursoManager::listarActivos()
 
 }
 
-void CursoManager::listarInactivos()
-{
-    int total = _archivo.cantRegistros();
-    int registrosEncontrados = 0;
 
-    if(total <= 0)
-    {
-        std::cout << "No hay cursos registrados." << std::endl;
-        return;
-    }
-    _utilidades.limpiarPantallaConEncabezado("=== LISTADO DE CURSOS INACTIVOS ===");
-    for(int i = 0; i < total; i++)
-    {
-        Curso curso = _archivo.leer(i);
-
-        if(!curso.getEstado())
-        {
-            registrosEncontrados++;
-            ProfesorArchivo profeArchivo;
-            int idProfesor = curso.getIdProfesor();
-            int posicionRegProfesor = profeArchivo.buscar(idProfesor);
-            Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
-
-
-            std::cout << "ID: " << curso.getId() << std::endl;
-            std::cout << "Nombre: " << curso.getNombre() << std::endl;
-            std::cout << "Cantidad m·xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-            std::cout << "N˙mero de aula: " << curso.getNumeroAula() << std::endl;
-            std::cout << "Profesor Asignado:\n";
-            std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
-            std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
-            std::cout << "---------------------------" << std::endl;
-        }
-    }
-    if (registrosEncontrados == 0)
-    {
-        std::cout << "No hay cursos activos para mostrar." << std::endl;
-    }
-}
 
 
 void CursoManager::listarPorProfesor()
 {
     int total = _archivo.cantRegistros();
-    //AgreguÈ la inicializaciÛn de registrosEncontrados, por un warning.
+    //AgreguÔøΩ la inicializaciÔøΩn de registrosEncontrados, por un warning.
     int registrosEncontrados = 0;
     if(total <= 0)
     {
@@ -568,7 +456,6 @@ void CursoManager::listarPorProfesor()
 
     std::string inputUsuario;
     int idProfesor;
-    std::cin.ignore();
     while (true)
     {
         std::cout << "\nIngrese el ID del profesor asociado al curso a buscar (o escriba 'salir' para cancelar): ";
@@ -576,13 +463,13 @@ void CursoManager::listarPorProfesor()
 
         if (_utilidades.esComandoSalir(inputUsuario))
         {
-            std::cout << "\nOperaciÛn cancelada.\n";
+            std::cout << "\nOperaciÔøΩn cancelada.\n";
             return;
         }
 
         if (!_utilidades.esEnteroValido(inputUsuario))
         {
-            std::cout << "Debe ingresar un n˙mero entero v·lido. Intente nuevamente.\n";
+            std::cout << "Debe ingresar un nÔøΩmero entero vÔøΩlido. Intente nuevamente.\n";
             continue;
         }
 
@@ -607,11 +494,11 @@ void CursoManager::listarPorProfesor()
             int posicionRegProfesor = profeArchivo.buscar(idProfesor);
             Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
 
-
+            std::cout << "---------------------------" << std::endl;
             std::cout << "ID: " << curso.getId() << std::endl;
             std::cout << "Nombre: " << curso.getNombre() << std::endl;
-            std::cout << "Cantidad m·xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-            std::cout << "N˙mero de aula: " << curso.getNumeroAula() << std::endl;
+            std::cout << "Cantidad mÔøΩxima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+            std::cout << "NÔøΩmero de aula: " << curso.getNumeroAula() << std::endl;
             std::cout << "Profesor Asignado:\n";
             std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
             std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
@@ -637,24 +524,42 @@ void CursoManager::listarSinCupo()
         return;
     }
 
+    InscripcionArchivo archivoInscripciones;
     _utilidades.limpiarPantallaConEncabezado("=== LISTADO DE CURSOS SIN CUPO ===");
 
+    // contar todas las inscripciones que tiene cada curso
     for(int i = 0; i < total; i++)
     {
         Curso curso = _archivo.leer(i);
-
-        if(curso.getCantMaximaAlumnos() == 0)
+        int cantidadInscriptos = 0;
+        
+        int totalInscripciones = archivoInscripciones.cantRegistros();
+        for(int j = 0; j < totalInscripciones; j++)
         {
+            Inscripcion inscripcion;
+            if(archivoInscripciones.leer(j, inscripcion) && 
+               inscripcion.getEstado() && 
+               inscripcion.getIdCurso() == curso.getId())
+            {
+                cantidadInscriptos++;
+            }
+        }
+
+        // valido si el curso esta lleno
+        if(cantidadInscriptos >= curso.getCantMaximaAlumnos())
+        {
+            registrosEncontrados++;
             ProfesorArchivo profeArchivo;
             int idProfesor = curso.getIdProfesor();
             int posicionRegProfesor = profeArchivo.buscar(idProfesor);
             Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
 
-
+            std::cout << "---------------------------" << std::endl;
             std::cout << "ID: " << curso.getId() << std::endl;
             std::cout << "Nombre: " << curso.getNombre() << std::endl;
-            std::cout << "Cantidad m·xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-            std::cout << "N˙mero de aula: " << curso.getNumeroAula() << std::endl;
+            std::cout << "Cantidad m√°xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+            std::cout << "Cantidad de inscriptos: " << cantidadInscriptos << std::endl;
+            std::cout << "N√∫mero de aula: " << curso.getNumeroAula() << std::endl;
             std::cout << "Profesor Asignado:\n";
             std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
             std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
@@ -664,50 +569,53 @@ void CursoManager::listarSinCupo()
 
     if (registrosEncontrados == 0)
     {
-        std::cout << "No hay cursos activos para mostrar." << std::endl;
+        std::cout << "No hay cursos sin cupo disponible para mostrar." << std::endl;
     }
 }
 
 
 void CursoManager::listarCursos()
 {
-    int opcion;
+    std::string input;
+    int opcion = -1;
 
     do
     {
-        _utilidades.limpiarPantallaConEncabezado("=== SUBMEN⁄ - LISTADO DE CURSOS ===");
-        std::cout << "1. Listar cursos activos\n";
-        std::cout << "2. Listar cursos inactivos\n";
-        std::cout << "3. Listar cursos sin cupo disponible\n";
-        std::cout << "4. Listar cursos por profesor asignado\n";
-        std::cout << "0. Volver al men˙ anterior\n";
+        _utilidades.limpiarPantallaConEncabezado("=== SUBMENÔøΩ - LISTADO DE CURSOS ===");
+        std::cout << "1. Listar cursos\n";
+        std::cout << "2. Listar cursos sin cupo disponible\n";
+        std::cout << "3. Listar cursos por profesor asignado\n";
+        std::cout << "0. Volver al menÔøΩ anterior\n";
         std::cout << "=========================================\n";
-        std::cout << "Seleccione una opciÛn: ";
-        std::cin >> opcion;
-        std::cin.ignore();
+        std::cout << "Seleccione una opciÔøΩn: ";
+        std::getline(std::cin, input);
+
+        if (!_utilidades.esEnteroValido(input)) {
+            std::cout << "Debe ingresar un n√∫mero v√°lido. Intente nuevamente.\n";
+            system("pause");
+            continue;
+        }
+
+        opcion = std::stoi(input);
         switch(opcion)
         {
         case 1:
-            listarActivos();
+            listar();
             system("pause");
             break;
         case 2:
-            listarInactivos();
-            system("pause");
-            break;
-        case 3:
             listarSinCupo();
             system("pause");
             break;
-        case 4:
+        case 3:
             listarPorProfesor();
             system("pause");
             break;
         case 0:
-            std::cout << "Volviendo al men˙ anterior...\n";
+            std::cout << "Volviendo al menÔøΩ anterior...\n";
             break;
         default:
-            std::cout << "OpciÛn no v·lida. Intente nuevamente.\n";
+            std::cout << "OpciÔøΩn no vÔøΩlida. Intente nuevamente.\n";
             system("pause");
             break;
         }
@@ -732,7 +640,7 @@ void CursoManager::buscarCursoID()
     std::string inputUsuario;
     int idCurso;
 
-    _utilidades.limpiarPantallaConEncabezado("=== B⁄SQUEDA DE CURSOS ===");
+    _utilidades.limpiarPantallaConEncabezado("=== BÔøΩSQUEDA DE CURSOS ===");
     while (true)
     {
         std::cout << "\nIngrese el ID del curso a buscar (o escriba 'salir' para cancelar): ";
@@ -740,13 +648,13 @@ void CursoManager::buscarCursoID()
 
         if (_utilidades.esComandoSalir(inputUsuario))
         {
-            std::cout << "\nOperaciÛn cancelada.\n";
+            std::cout << "\nOperaciÔøΩn cancelada.\n";
             return;
         }
 
         if (!_utilidades.esEnteroValido(inputUsuario))
         {
-            std::cout << "Debe ingresar un n˙mero entero v·lido. Intente nuevamente.\n";
+            std::cout << "Debe ingresar un nÔøΩmero entero vÔøΩlido. Intente nuevamente.\n";
             continue;
         }
 
@@ -760,7 +668,7 @@ void CursoManager::buscarCursoID()
         posicion = _archivo.buscar(idCurso);
         if (posicion == -1)
         {
-            std::cout << "No se encontrÛ un curso activo con ese ID. Intente nuevamente.\n";
+            std::cout << "No se encontrÔøΩ un curso activo con ese ID. Intente nuevamente.\n";
             continue;
         }
 
@@ -768,24 +676,19 @@ void CursoManager::buscarCursoID()
         break;
     }
 
-    if (curso.getEstado())
-    {
-        ProfesorArchivo profeArchivo;
-        int idProfesor = curso.getIdProfesor();
-        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
-        Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+    ProfesorArchivo profeArchivo;
+    int idProfesor = curso.getIdProfesor();
+    int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+    Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+    
+    std::cout << "---------------------------" << std::endl;
+    std::cout << "ID: " << curso.getId() << std::endl;
+    std::cout << "Nombre: " << curso.getNombre() << std::endl;
+    std::cout << "Cantidad mÔøΩxima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+    std::cout << "NÔøΩmero de aula: " << curso.getNumeroAula() << std::endl;
+    std::cout << "Profesor Asignado:\n";
+    std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+    std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
+    std::cout << "---------------------------" << std::endl;
 
-        std::cout << "ID: " << curso.getId() << std::endl;
-        std::cout << "Nombre: " << curso.getNombre() << std::endl;
-        std::cout << "Cantidad m·xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-        std::cout << "N˙mero de aula: " << curso.getNumeroAula() << std::endl;
-        std::cout << "Profesor Asignado:\n";
-        std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
-        std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
-        std::cout << "---------------------------" << std::endl;
-    }
-    else
-    {
-        std::cout << "El curso se encuentra dado de baja.\n";
-    }
 }

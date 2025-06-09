@@ -31,6 +31,28 @@ bool Utilidades::esEnteroValido(const std::string& inputUsuario)
     return true;
 }
 
+bool Utilidades::esFloatValido(const std::string& inputUsuario)
+{
+    if (inputUsuario.empty()) return false;
+
+    bool puntoEncontrado = false;
+    int digitos = 0;
+
+    for (size_t i = 0; i < inputUsuario.length(); i++) {
+        char c = inputUsuario[i];
+        if (c >= '0' && c <= '9') {
+            digitos++;
+            continue;
+        }
+        if (c == '.') {
+            if (puntoEncontrado) return false;
+            puntoEncontrado = true;
+            continue;
+        }
+        return false; 
+    }
+    return digitos > 0;
+}
 
 bool Utilidades::esComandoSalir(const std::string& inputUsuario)
 {
@@ -60,3 +82,61 @@ void Utilidades::limpiarPantallaConEncabezado(const std::string& subtitulo)
 }
 
 
+bool Utilidades::soloNumeros(const std::string& input){
+
+    int tamanio = input.length();
+
+    for ( int i = 0; i<tamanio; i++ ){
+
+       if ( input[0] < '0' || input[0] > '9' ){
+
+            return false;
+
+       }
+
+    }
+
+   return true;
+}
+
+bool Utilidades::soloLetras(std::string& input){
+
+    int tamanio = input.length();
+
+
+    for ( int i = 0; i<tamanio; i++ ){
+
+        ///codigos ASCII para letras minusculas del 97 al 122, espacio=32
+
+        ///Nombres compuestos
+
+
+        if (input[i] < 'a' || input[i] > 'z'){
+
+
+            if ( input[i] == ' ' ){
+
+                if( input.front() == ' ' || input.back() == ' ' ) {
+
+                    return false;
+
+                }else{
+
+                    continue;
+
+                }
+
+            }
+
+            return false;
+
+        }
+
+
+
+
+    }
+
+    return true;
+
+}

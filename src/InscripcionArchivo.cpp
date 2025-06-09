@@ -67,3 +67,13 @@ int InscripcionArchivo::cantRegistros() const {
 	fclose(pInscripcion);
 	return cantidad;
 }
+
+int InscripcionArchivo::obtenerProximoId() {
+	int cantidad = cantRegistros();
+	if (cantidad == 0) return 1; // Primer ID
+	Inscripcion ultima;
+	if (leer(cantidad - 1, ultima)) {
+		return ultima.getIdInscripcion() + 1;
+	}
+	return 1; // Si no se pudo leer, por seguridad
+}

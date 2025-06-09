@@ -15,5 +15,6 @@ public:
 	void bajaInscripcion();
 	void modificarInscripcion();
 	void listarInscripciones();
+	
 
 };

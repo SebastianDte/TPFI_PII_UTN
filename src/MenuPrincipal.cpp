@@ -2,6 +2,7 @@
 #include "MenuProfesor.h"
 #include "MenuCurso.h"
 #include "MenuInscripcion.h"
+#include "MenuReportes.h"
 #include "Utilidades.h"
 #include <iostream>
 
@@ -26,7 +27,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
 
         switch(opcion) {
             case 1:
-                 alumnoMenu.mostrarMenuAlumno();
+                 _alumnoMenu.mostrarMenuAlumno();
                 break;
             case 2:
                 _profesorMenu.mostrarMenuProfesor();
@@ -39,7 +40,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 _inscripcionMenu.mostrarMenu();
                 break;
             case 5:
-                // reportesMenu.mostrarMenuReportes();
+                _reportesMenu.mostrarMenu();
                 break;
             case 0:
                 std::cout << "Saliendo del sistema...\n";
