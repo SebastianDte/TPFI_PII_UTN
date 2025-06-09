@@ -31,6 +31,28 @@ bool Utilidades::esEnteroValido(const std::string& inputUsuario)
     return true;
 }
 
+bool Utilidades::esFloatValido(const std::string& inputUsuario)
+{
+    if (inputUsuario.empty()) return false;
+
+    bool puntoEncontrado = false;
+    int digitos = 0;
+
+    for (size_t i = 0; i < inputUsuario.length(); i++) {
+        char c = inputUsuario[i];
+        if (c >= '0' && c <= '9') {
+            digitos++;
+            continue;
+        }
+        if (c == '.') {
+            if (puntoEncontrado) return false;
+            puntoEncontrado = true;
+            continue;
+        }
+        return false; 
+    }
+    return digitos > 0;
+}
 
 bool Utilidades::esComandoSalir(const std::string& inputUsuario)
 {
