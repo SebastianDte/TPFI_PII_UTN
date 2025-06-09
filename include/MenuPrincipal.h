@@ -11,9 +11,9 @@ public:
     void mostrarMenuPrincipal();
 
 private:
-    MenuAlumno alumnoMenu;
+    MenuAlumno _alumnoMenu;
     MenuProfesor _profesorMenu;
     MenuCurso _cursoMenu;
 	MenuInscripcion _inscripcionMenu;
-    MenuReportes reportesMenu;
+    MenuReportes _reportesMenu;
 };

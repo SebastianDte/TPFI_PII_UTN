@@ -40,7 +40,7 @@ void MenuPrincipal::mostrarMenuPrincipal() {
                 _inscripcionMenu.mostrarMenu();
                 break;
             case 5:
-                reportesMenu.mostrarMenu();
+                _reportesMenu.mostrarMenu();
                 break;
             case 0:
                 std::cout << "Saliendo del sistema...\n";
