@@ -70,10 +70,14 @@ int InscripcionArchivo::cantRegistros() const {
 
 int InscripcionArchivo::obtenerProximoId() {
 	int cantidad = cantRegistros();
-	if (cantidad == 0) return 1; // Primer ID
-	Inscripcion ultima;
-	if (leer(cantidad - 1, ultima)) {
-		return ultima.getIdInscripcion() + 1;
+	int maxId = 0;
+	Inscripcion insc;
+	for (int i = 0; i < cantidad; i++) {
+		if (leer(i, insc)) {
+			if (insc.getIdInscripcion() > maxId) {
+				maxId = insc.getIdInscripcion();
+			}
+		}
 	}
-	return 1; // Si no se pudo leer, por seguridad
+	return maxId + 1;
 }
