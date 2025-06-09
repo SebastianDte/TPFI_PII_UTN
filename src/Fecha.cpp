@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Fecha.h"
+#include <ctime>
 using namespace std;
 
 bool esAnioBisiesto(int anio)
@@ -211,4 +212,10 @@ bool Fecha::esIgualA(Fecha otraFecha)
 std::string Fecha::toString()
 {
     return std::to_string(_dia)  + "/" + std::to_string(_mes) + "/" + std::to_string(_anio);
+}
+
+Fecha Fecha::fechaActual() {
+    time_t t = time(nullptr);
+    tm* now = localtime(&t);
+    return Fecha(now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
 }

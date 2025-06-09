@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-
 class Fecha
 {
 private:
@@ -27,5 +26,8 @@ public:
     bool esMayorQue(Fecha otraFecha);
     bool esIgualA(Fecha otraFecha);
     std::string toString();
+
+    static Fecha fechaActual();
+
 
 };
