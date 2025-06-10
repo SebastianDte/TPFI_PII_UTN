@@ -49,7 +49,7 @@ bool Utilidades::esFloatValido(const std::string& inputUsuario)
             puntoEncontrado = true;
             continue;
         }
-        return false; 
+        return false;
     }
     return digitos > 0;
 }
