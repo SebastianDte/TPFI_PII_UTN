@@ -64,7 +64,7 @@ bool ProfesorManager::nombreValidacion(const std::string& input){
 
     }
 
-    if ( _utilidades.soloLetras(nombreMin) == false){
+    if ( !_utilidades.soloLetras(nombreMin) ){
 
         std::cout << "Debe completar este campo sin simbolos, numeros ni espacios inecesarios. Intente nuevamente.\n\n";
 
@@ -74,7 +74,7 @@ bool ProfesorManager::nombreValidacion(const std::string& input){
 
     }
 
-    if ( (nombreMin.length() < minimoNombre) && (_utilidades.soloLetras(nombreMin) == true) ){
+    if ( (nombreMin.length() < minimoNombre) && (_utilidades.soloLetras(nombreMin)) ){
 
         std::cout << "Debe ingresar un nombre que contenga al menos 2 letras. Intente nuevamente.\n\n";
 
@@ -106,7 +106,7 @@ bool ProfesorManager::apellidoValidacion(const std::string& input){
 
     }
 
-    if ( _utilidades.soloLetras(apellidoMin) == false){
+    if ( !_utilidades.soloLetras(apellidoMin) ){
 
         std::cout << "Debe completar este campo sin simbolos, numeros ni espacios inecesarios. Intente nuevamente.\n\n";
 
@@ -116,7 +116,7 @@ bool ProfesorManager::apellidoValidacion(const std::string& input){
 
     }
 
-    if ( (apellidoMin.length() < minimoApellido) && (_utilidades.soloLetras(apellidoMin)== true) ){
+    if ( (apellidoMin.length() < minimoApellido) && (_utilidades.soloLetras(apellidoMin) ) ){
 
         std::cout << "Debe ingresar un nombre que contenga al menos 2 letras. Intente nuevamente.\n\n";
 
@@ -148,7 +148,7 @@ bool ProfesorManager::telefonoValidacion(const std::string& input){
 
 
 
-    if ( _utilidades.soloNumeros(input) == false ){
+    if ( !_utilidades.soloNumeros(input) ){
 
        std::cout << "Debe completar este campo con valores numericos. Intente nuevamente.\n\n";
 
@@ -160,7 +160,7 @@ bool ProfesorManager::telefonoValidacion(const std::string& input){
 
 
 
-    if ( (input.length() < minimoTEL || input.length() > tamanioTEL ) && _utilidades.soloNumeros(input)== true ){
+    if ( (input.length() < minimoTEL || input.length() > tamanioTEL ) && _utilidades.soloNumeros(input) ){
 
         std::cout << "La cantidad de valores ingresados no corresponen a un numero telefonico. Intente nuevamente.\n\n";
 
@@ -182,6 +182,19 @@ bool ProfesorManager::emailValidacion(const std::string& input ) {
     int tamanioEmail = input.length();
     int contArroba = 0;  ///Contenga al menos un punto y solamente 1 arroba
     int contPuntos = 0;
+
+
+
+    if (input.empty()){
+
+        std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+        system("pause");
+
+        return false;
+
+    }
+
 
     if ( tamanioEmail < minimoEmail || tamanioEmail >maximoEmail ){
 
@@ -260,10 +273,11 @@ bool ProfesorManager::direccionValidacion(const std::string& input){
 
 void ProfesorManager::alta(){
 
-    int id,dia,mes,anio,cantidadRegistros;
+    int id,cantidadRegistros;
     Fecha fechaNacimiento;
     std::string input;
 
+    ///DNI
     std::cin.ignore();
 
     while(true){
@@ -294,6 +308,8 @@ void ProfesorManager::alta(){
 
     }
 
+
+    ///Nombre
     std::cin.ignore();
 
     while(true){
@@ -328,6 +344,7 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
+    ///Apellido
     while(true){
 
 
@@ -360,7 +377,7 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
-
+    ///TEL
     while(true){
 
         system("cls");
@@ -391,6 +408,7 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
+    ///Email
 
     while(true){
 
@@ -409,6 +427,7 @@ void ProfesorManager::alta(){
 
         }
 
+
         if( emailValidacion(input) ) {
 
             _profesor.setEmail(input);
@@ -422,7 +441,7 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
-
+    ///Domicilio
     while(true){
 
         system("cls");
@@ -453,20 +472,53 @@ void ProfesorManager::alta(){
 
    ///Fecha de nacimiento
 
-    std::cout<<"Ingrese dia de nacimiento: \n ";
-    std::cin>>dia;
-    fechaNacimiento.setDia(dia);
+    std::cin.ignore();
 
-    std::cout<<"Ingrese mes de nacimiento: \n ";
-    std::cin>>mes;
-    fechaNacimiento.setMes(mes);
+    while(true){
 
-    std::cout<<"Ingrese anio de nacimiento: \n ";
-    std::cin>>anio;
-    fechaNacimiento.setAnio(anio);
+        system("cls");
 
-    fechaNacimiento = Fecha(dia,mes,anio);
+        std::cout << "=========================================\n";
+        std::cout << "         === ALTA DE PROFESOR ===       \n";
+        std::cout << "=========================================\n";
 
+        std::cout<<"Ingrese la fecha de nacimiento (DD/MM//AAAA): \n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+
+            return;
+
+        }
+
+        if (input.empty()){
+
+            std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+            system("pause");
+
+            continue;
+
+        }
+
+
+        if( !fechaNacimiento.validarFechaStr(input) ) {
+
+            std::cout << "Formato de fecha incorrecto. Intente nuevamente." << std::endl;
+
+            system("pause");
+
+            continue;
+
+        }else{
+
+            _profesor.setFechaNacimiento(fechaNacimiento);
+            std::cout<<"Presione cualquier tecla para continuar... \n";
+            break;
+
+        }
+
+    }
 
 
     cantidadRegistros = _archivo.cantRegistros();
