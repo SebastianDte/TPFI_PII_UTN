@@ -9,6 +9,7 @@ private:
     int _cantMaximaAlumnos;
     int _numeroAula;
     int _idProfesor;
+    int _estado;
 
 public:
     Curso();
@@ -19,12 +20,14 @@ public:
     void setCantMaximaAlumnos(int cantMaximaAlumnos);
     void setNumeroAula(int numeroAula);
     void setIdProfesor(int idProfesor);
+    void setEstado(bool estado);
 
     int getId() const;
     std::string getNombre() const;
     int getCantMaximaAlumnos() const;
     int getNumeroAula() const;
     int getIdProfesor() const;
+    bool getEstado() const;
 
     std::string toCSV() const;
 

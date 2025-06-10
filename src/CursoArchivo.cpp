@@ -2,6 +2,8 @@
 #include <iostream>
 #include "CursoArchivo.h"
 #include "Curso.h"
+#include "Inscripcion.h"
+#include "InscripcionArchivo.h"
 
 using namespace std;
 
@@ -22,6 +24,9 @@ bool CursoArchivo::alta(const Curso& regCurso)
     fclose(pCurso);
     return ok;
 }
+
+
+
 
 int CursoArchivo::buscar(int idCurso) const
 {
@@ -45,11 +50,13 @@ int CursoArchivo::buscar(int idCurso) const
     return -1;
 }
 
+
 bool CursoArchivo::modificar(const Curso& regCurso, int posicion)
 {
     FILE* pCurso = fopen(_nombreArchivo, "rb+");
     if (pCurso == nullptr) return false;
 
+    // validamos que el puntero del archivo pudo moverse a la posicion que queremos
     if (fseek(pCurso, posicion * _tamanioRegistro, SEEK_SET) != 0)
     {
         fclose(pCurso);
@@ -61,6 +68,49 @@ bool CursoArchivo::modificar(const Curso& regCurso, int posicion)
 
     return escritos == 1;
 }
+
+
+bool CursoArchivo::tieneInscripcionesActivas(int idCurso) const {
+    InscripcionArchivo archivoInscripcion = InscripcionArchivo();
+    int cantidad = archivoInscripcion.cantRegistros();
+    Inscripcion insc;
+
+    if (cantidad <= 0) {
+        return false;
+    }
+
+    for (int i = 0; i < cantidad; i++) {
+        if (archivoInscripcion.leer(i, insc)) {
+            if (insc.getEstado() && insc.getIdCurso() == idCurso) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool CursoArchivo::baja(int idCurso)
+{
+    int posicion = buscar(idCurso);
+    if (posicion == -1) return false;
+
+    InscripcionArchivo archivoInscripcion = InscripcionArchivo();
+    int cantRegistrosInscripciones = archivoInscripcion.cantRegistros();
+    Inscripcion registroInscripcion;
+
+    for (int i = 0; i < cantRegistrosInscripciones; i++){
+        if(archivoInscripcion.leer(i, registroInscripcion)){
+            if(registroInscripcion.getEstado() == true && registroInscripcion.getIdCurso() == idCurso){
+                return false;
+            }
+        }
+    }
+
+    Curso registro = leer(posicion);
+    registro.setEstado(false);
+    return modificar(registro, posicion);
+}
+
 
 Curso CursoArchivo::leer(int posicion)
 {

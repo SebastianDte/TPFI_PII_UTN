@@ -13,6 +13,7 @@ public:
 
     void altaCurso();
     void modificarCurso();
+    void bajaCurso();
 
     void listarCursos();
     void listar();

@@ -9,6 +9,7 @@ Curso::Curso()
     _cantMaximaAlumnos = 0;
     _numeroAula = 0;
     _idProfesor = 0;
+    _estado = true;
 }
 
 Curso::Curso(int id, const std::string& nombre, int cantMaximaAlumnos, int numeroAula, int idProfesor)
@@ -19,6 +20,7 @@ Curso::Curso(int id, const std::string& nombre, int cantMaximaAlumnos, int numer
     _cantMaximaAlumnos = cantMaximaAlumnos;
     _numeroAula = numeroAula;
     _idProfesor = idProfesor;
+    _estado = true;
 }
 
 void Curso::setId(int id)
@@ -80,6 +82,16 @@ std::string Curso::toCSV() const
            std::string(_nombre) + "," +
            std::to_string(_cantMaximaAlumnos) + "," +
            std::to_string(_idProfesor);
+}
+
+void Curso::setEstado(bool estado)
+{
+    _estado = estado;
+}
+
+bool Curso::getEstado() const
+{
+    return _estado;
 }
 
 
