@@ -234,6 +234,47 @@ bool Fecha::validarFechaStr(std::string fecha){
     int mes = std::stoi(fecha.substr(3, 2));
     int anio = std::stoi(fecha.substr(6, 4));
 
-    std::cout << "Dia " << dia << " mes: " << mes << " Anio: " << anio << std::endl;
-    return esFechaValida(dia, mes, anio);
+
+    if (esFechaValida(dia, mes, anio)) { // Comprobamos si valida
+        _dia = dia;
+        _mes = mes;
+        _anio = anio;
+        return true; // Carga
+    }
+
+    return false; // La fecha no era válida
 }
+
+/*bool Fecha::validarFechaStr(std::string fecha){
+
+    if (fecha.length() != 10) return false; // validamos que tenga 10 caracteres -> dd/mm/yyyy
+
+    if (fecha[2] != '/' || fecha [5] != '/') return false; // validamos que en la posicion 2 y 5 de la cadena de caracteres tengamos un caracter '/'
+
+
+
+    for(int caracter = 0; caracter < 10; caracter++){
+
+        if(caracter == 2 || caracter == 5) continue;
+
+        if(!std::isdigit(fecha[caracter])) return false; // validamos que los caracteres sean digitos validos -> 0 - 9
+
+    }
+
+
+
+    int dia = std::stoi(fecha.substr(0, 2)); // se extraen partes de la fecha str y se parsean. substr permite extraer esas partecitas indicando las posiciones desde donde comenzar y terminar.
+
+    int mes = std::stoi(fecha.substr(3, 2));
+
+    int anio = std::stoi(fecha.substr(6, 4));
+
+
+
+    std::cout << "Dia " << dia << " mes: " << mes << " Anio: " << anio << std::endl;
+
+    return esFechaValida(dia, mes, anio);
+
+}
+}*/
+

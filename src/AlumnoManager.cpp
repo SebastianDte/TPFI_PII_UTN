@@ -20,7 +20,7 @@ void AlumnoManager::mostrarAlumno(const Alumno& alumno)
     std::cout << "Telefono: "<< alumno.getTelefono()<< std::endl;
     std::cout << "Email: "<< alumno.getEmail()<< std::endl;
     std::cout << "Direccion: "<< alumno.getDireccion()<< std::endl;
-    // std::cout << "Fecha de nacimiento: "<< alumno.getFechaNacimiento().toString() << std::endl;
+    std::cout << "Fecha de nacimiento: "<< alumno.getFechaNacimiento().toString() << std::endl;
     std::cout << "---------------------------" << std::endl;
 }
 
