@@ -9,19 +9,24 @@ class Profesor : public Persona {
 private:
 
     int _id;
+    bool _estado;
 
 public:
 
     Profesor ();
 
-    Profesor ( int id,const std::string& dni,const std::string& nombre,const std::string& apellido,
-              const std::string& telefono,const std::string& email,const std::string& direccion,const Fecha& fechaNacimiento);
+    Profesor ( const int &id, const bool &estado,const std::string& dni,
+            const std::string& nombre,const std::string& apellido,
+            const std::string& telefono,const std::string& email,
+            const std::string& direccion,const Fecha& fechaNacimiento);
 
-    void setId ( int id );
+    ///Setters
+    void setId ( const int &id );
+    void setEstado (const bool &estado);
 
+    ///Getters
     int getId ();
-
-    //void cargar(int id);
+    bool getEstado ();
 
     void mostrar();
 

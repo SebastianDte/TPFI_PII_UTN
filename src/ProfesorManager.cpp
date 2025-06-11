@@ -273,11 +273,10 @@ bool ProfesorManager::direccionValidacion(const std::string& input){
 
 void ProfesorManager::alta(){
 
-    int id,cantidadRegistros;
+int id,cantidadRegistros;
     Fecha fechaNacimiento;
     std::string input;
 
-    ///DNI
     std::cin.ignore();
 
     while(true){
@@ -308,8 +307,6 @@ void ProfesorManager::alta(){
 
     }
 
-
-    ///Nombre
     std::cin.ignore();
 
     while(true){
@@ -344,7 +341,6 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
-    ///Apellido
     while(true){
 
 
@@ -377,7 +373,7 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
-    ///TEL
+
     while(true){
 
         system("cls");
@@ -408,7 +404,6 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
-    ///Email
 
     while(true){
 
@@ -427,7 +422,6 @@ void ProfesorManager::alta(){
 
         }
 
-
         if( emailValidacion(input) ) {
 
             _profesor.setEmail(input);
@@ -441,7 +435,6 @@ void ProfesorManager::alta(){
 
     std::cin.ignore();
 
-    ///Domicilio
     while(true){
 
         system("cls");
@@ -471,6 +464,7 @@ void ProfesorManager::alta(){
     }
 
    ///Fecha de nacimiento
+
 
     std::cin.ignore();
 
@@ -519,7 +513,6 @@ void ProfesorManager::alta(){
         }
 
     }
-
 
     cantidadRegistros = _archivo.cantRegistros();
 
