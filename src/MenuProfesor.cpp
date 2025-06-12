@@ -37,7 +37,7 @@ void MenuProfesor::mostrarMenuProfesor(){
 
             system("cls");
 
-            //Metodo baja Managger
+            _manager.baja();
 
             system("pause");
 

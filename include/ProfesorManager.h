@@ -23,6 +23,9 @@ public:
     void alta();
     void modificar();
     void listar();
+    void listarActivos();
+    void listarInactivos();
     void buscar();
+    void baja();
 
 };

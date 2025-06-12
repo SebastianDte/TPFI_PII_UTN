@@ -279,6 +279,7 @@ int id,cantidadRegistros;
 
     std::cin.ignore();
 
+///DNI
     while(true){
 
         system("cls");
@@ -287,11 +288,13 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese DNI: \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -309,6 +312,7 @@ int id,cantidadRegistros;
 
     std::cin.ignore();
 
+///Nombre
     while(true){
 
 
@@ -318,12 +322,14 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese su nombre: \n";
         std::getline(std::cin,input);
 
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -341,6 +347,7 @@ int id,cantidadRegistros;
 
     std::cin.ignore();
 
+///Apellido
     while(true){
 
 
@@ -350,12 +357,14 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese su apellido: \n";
         std::getline(std::cin,input);
 
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -373,7 +382,7 @@ int id,cantidadRegistros;
 
     std::cin.ignore();
 
-
+///Telefono
     while(true){
 
         system("cls");
@@ -382,11 +391,13 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese su numero telefonico: \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -404,7 +415,7 @@ int id,cantidadRegistros;
 
     std::cin.ignore();
 
-
+///Email
     while(true){
 
         system("cls");
@@ -413,11 +424,13 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese su email: \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -433,8 +446,10 @@ int id,cantidadRegistros;
 
     }
 
+
     std::cin.ignore();
 
+///Direccion
     while(true){
 
         system("cls");
@@ -443,11 +458,13 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese su domicilio(calle y numero): \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -463,11 +480,10 @@ int id,cantidadRegistros;
 
     }
 
-   ///Fecha de nacimiento
-
 
     std::cin.ignore();
 
+///Fecha de nacimiento
     while(true){
 
         system("cls");
@@ -476,11 +492,13 @@ int id,cantidadRegistros;
         std::cout << "         === ALTA DE PROFESOR ===       \n";
         std::cout << "=========================================\n";
 
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese la fecha de nacimiento (DD/MM//AAAA): \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
 
+            std::cout << "\nAlta de profesor cancelada.\n";
             return;
 
         }
@@ -498,7 +516,7 @@ int id,cantidadRegistros;
 
         if( !fechaNacimiento.validarFechaStr(input) ) {
 
-            std::cout << "Formato de fecha incorrecto. Intente nuevamente." << std::endl;
+            std::cout << "La fecha ingresada no es valida. Intente nuevamente." << std::endl;
 
             system("pause");
 
@@ -573,6 +591,7 @@ int id,cantidadRegistros;
 
             std::cout<<"Se guardo el registro correctamente. \n ";
             _profesor.mostrar();
+            return;
 
         }else{
             system("cls");
@@ -588,14 +607,51 @@ int id,cantidadRegistros;
 
 }
 
-
 void ProfesorManager::listar(){
+
+    int opcion;
+
+    do
+    {
+        _utilidades.limpiarPantallaConEncabezado("=== SUBMENÚ - LISTADO DE PROFESORES ===");
+        std::cout << "1. Listar profesores activos\n";
+        std::cout << "2. Listar profesores inactivos\n";
+        std::cout << "0. Volver al menú anterior\n";
+        std::cout << "=========================================\n";
+        std::cout << "Seleccione una opción: ";
+        std::cin >> opcion;
+        std::cin.ignore();
+        switch(opcion)
+        {
+        case 1:
+            system("cls");
+            listarActivos();
+            system("pause");
+            break;
+        case 2:
+            system("cls");
+            listarInactivos();
+            system("pause");
+            break;
+        case 0:
+            return;
+        default:
+            std::cout << "Opción no válida. Intente nuevamente.\n";
+            system("pause");
+            break;
+        }
+    }
+    while(opcion != 0);
+}
+
+void ProfesorManager::listarActivos(){
 
     int cantRegistros;
 
     cantRegistros = _archivo.cantRegistros();
 
-    if(cantRegistros < 0){
+
+    if(cantRegistros <= 0){
 
         std::cout << "No hay profesores registrados.\n";
 
@@ -604,18 +660,54 @@ void ProfesorManager::listar(){
     }
 
     std::cout << "=========================================\n";
-    std::cout << "         === LISTADO DE PROFESORES ===   \n";
+    std::cout << " === LISTADO DE PROFESORES ACTIVOS ===   \n";
     std::cout << "=========================================\n";
 
     for ( int i=0; i<cantRegistros;i++ ){
 
         _profesor = _archivo.leer(i);
 
-        _profesor.mostrar();
+        if ( _profesor.getEstado() == true ) {
 
+            _profesor.mostrar();
+
+        }
 
 
     }
+}
+
+void ProfesorManager::listarInactivos(){
+
+    int cantRegistros;
+
+    cantRegistros = _archivo.cantRegistros();
+
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+
+    }
+
+    std::cout << "=========================================\n";
+    std::cout << "=== LISTADO DE PROFESORES INACTIVOS ===  \n";
+    std::cout << "=========================================\n";
+
+    for ( int i=0; i<cantRegistros;i++ ){
+
+        _profesor = _archivo.leer(i);
+
+        if ( _profesor.getEstado() == false ) {
+
+            _profesor.mostrar();
+
+        }
+
+
+    }
+
 
 
 }
@@ -674,8 +766,6 @@ void ProfesorManager::modificar(){
         return;
 
     }
-
-
 
     _profesor = _archivo.leer(posicion);
 
@@ -1091,5 +1181,92 @@ void ProfesorManager::modificar(){
 
 }
 
+void ProfesorManager::baja(){
+    int idBaja;
+    int posicion;
+    std::string input;
 
+    std::cin.ignore();
+
+    while(true) {
+
+        system("cls");
+
+        std::cout <<"\nPara volveer al menu anterior ingrese 'salir', en cualquier momento.\n";
+        std::cout<<"Ingrese el ID del profesor al que desea dar de baja: \n";
+        std::getline(std::cin,input);
+
+        if ( _utilidades.esComandoSalir(input) ){
+            system("cls");
+            std::cout << "\nAlta de profesor cancelada.\n";
+            return;
+
+        }
+
+
+        if ( !_utilidades.esEnteroValido(input) ){
+            system("cls");
+            std::cout << "\nEl ID ingresado es incorrecto, debe ser mayor a cero.Intente nuevamente.\n";
+            system("pause");
+            continue;
+
+        }
+
+        idBaja = std::stoi(input);/// Convierto la cadena en un valor entero.
+
+        posicion = _archivo.buscar(idBaja);
+
+
+        if ( posicion < 0 ) {
+
+            system("cls");
+            std::cout<<"\nNo se ha encontrado profesor con el ID ingresado. Intente nuevamente.\n";
+            system("pause");
+            continue;
+
+
+        }
+
+        ///Filtrar la busqueda solo en profesores activos
+
+        _profesor = _archivo.leer(posicion);
+
+        if ( _profesor.getEstado() != true ){
+
+            system("cls");
+            std::cout<<"\nEl ID ingresado no corresponde a un profesor activo.Intente nuevamente.\n";
+            system("pause");
+            continue;
+        }
+
+        system("cls");
+
+        _profesor.mostrar();
+
+        std::cout<<"\nPara confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n";
+        std::getline(std::cin,input);
+
+        if( _utilidades.aMinusculas(input) == "si"){
+
+            system("cls");
+            _profesor.setEstado(false);
+            _archivo.alta(_profesor,posicion);
+
+            std::cout<<"\nRegistro de profesor eliminado exitosamente.\n";
+
+            return;
+
+        }else{
+
+            system("cls");
+            std::cout << "\nAlta de profesor cancelada.\n";
+            return;
+
+        }
+
+
+    }
+
+
+}
 
