@@ -1345,11 +1345,12 @@ void ProfesorManager::baja(){
         }
 
         if (input.empty()){
-            std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+            system("cls");
+            std::cout << "\nDebe completar este campo. Intente nuevamente.\n\n";
 
             system("pause");
-
-            return false;
+            continue;
 
         }
 
@@ -1391,7 +1392,7 @@ void ProfesorManager::baja(){
 
         _profesor.mostrar();
 
-        std::cout<<"\nPara confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n";
+        std::cout<<"\nPara confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
         std::getline(std::cin,input);
 
         if( _utilidades.aMinusculas(input) == "si"){
@@ -1400,7 +1401,7 @@ void ProfesorManager::baja(){
             _profesor.setEstado(false);
             _archivo.alta(_profesor,posicion);
 
-            std::cout<<"\nRegistro de profesor eliminado exitosamente.\n";
+            std::cout<<"\nRegistro de profesor eliminado exitosamente.\n\n";
 
             return;
 
