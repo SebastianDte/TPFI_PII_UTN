@@ -715,27 +715,66 @@ void ProfesorManager::listarInactivos(){
 void ProfesorManager::buscar(){
 
     int id, posicion;
+    std::string input;
 
-    std::cout << "========================================== \n";
-    std::cout << "         === BÚSQUEDA DE PROFESOR ===      \n";
-    std::cout << "==========================================\n";
+    std::cin.ignore();
 
-    std::cout<<"Ingrese el ID del profesor que desea buscar: \n";
-    std::cin>> id;
-
-    posicion = _archivo.buscar(id);
-
-    if ( posicion < 0 ){
+    while(true){
 
         system("cls");
 
-        std::cout<<"El ID del profesor ingresado no existe. \n";
+        std::cout << "========================================== \n";
+        std::cout << "         === BÚSQUEDA DE PROFESOR ===      \n";
+        std::cout << "==========================================\n";
 
-        return;
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
+        std::cout<<"Ingrese el ID del profesor que desea modificar: \n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+            system("cls");
+            std::cout << "\nBusqueda de profesor cancelada.\n\n";
+            return;
+
+        }
+
+        if ( !_utilidades.esEnteroValido(input) ){
+            system("cls");
+            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+        }
+
+        id = std::stoi(input);
+
+        posicion = _archivo.buscar(id);
+
+        if ( posicion < 0 ){
+
+            system("cls");
+
+            std::cout<<"\nEl ID ingresado no pertenece a un profesor registrado.\n\n";
+            system("pause");
+            continue;
+
+        }
+
+        _profesor = _archivo.leer(posicion);
+
+        if ( !_profesor.getEstado() ){
+
+            system("cls");
+
+            std::cout<<"\nEl ID ingresado no pertenece a un profesor activo.\n\n";
+
+            system("pause");
+            continue;
+
+        }
+
+       break;
 
     }
-
-    _profesor = _archivo.leer(posicion);
 
     _profesor.mostrar();
 
@@ -743,31 +782,69 @@ void ProfesorManager::buscar(){
 
 void ProfesorManager::modificar(){
 
-    Fecha fechaNac;
-    int id, posicion, opcion,diaN,mesN,anioN;
+    Fecha fechaNacimiento;
+    int id, posicion, opcion;
     std::string input;
 
-    std::cout << "=========================================\n";
-    std::cout << "         === MODIFICAR PROFESOR ===        \n";
-    std::cout << "=========================================\n";
+    std::cin.ignore();
 
-    std::cout<<"\nIngrese el ID del profesor que desea modificar: \n";
-    std::cin>> id;
-
-    posicion = _archivo.buscar(id);
-
-
-    if ( posicion < 0 ){
+    while(true){
 
         system("cls");
 
-        std::cout<<"El ID ingresado no pertenece a un profesor registrado.\n";
+        std::cout << "=========================================\n";
+        std::cout << "         === MODIFICAR PROFESOR ===      \n";
+        std::cout << "=========================================\n";
 
-        return;
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
+        std::cout<<"Ingrese el ID del profesor que desea modificar: \n";
+        std::getline(std::cin,input);
+
+
+        if (_utilidades.esComandoSalir(input)){
+            system("cls");
+            std::cout << "\nModificacion de profesor cancelada.\n\n";
+            return;
+
+        }
+
+        if ( !_utilidades.esEnteroValido(input) ){
+            system("cls");
+            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+        }
+
+        id = std::stoi(input);
+
+        posicion = _archivo.buscar(id);
+
+        if ( posicion < 0 ){
+
+            system("cls");
+
+            std::cout<<"\nEl ID ingresado no pertenece a un profesor registrado.Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+
+        }
+
+        _profesor = _archivo.leer(posicion);
+
+        if ( !_profesor.getEstado() ){
+
+            system("cls");
+
+            std::cout<<"\nEl ID ingresado no pertenece a un profesor activo.\n\n";
+
+            system("pause");
+            continue;
+
+        }
+
+       break;
 
     }
-
-    _profesor = _archivo.leer(posicion);
 
     system("cls");
 
@@ -807,34 +884,36 @@ void ProfesorManager::modificar(){
                 system("cls");
 
                 std::cout << "=========================================\n";
-                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "         === MODIFICAR PROFESOR ===      \n";
                 std::cout << "=========================================\n";
 
-                std::cout<<"Ingrese el nuevo DNI: \n";
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
+                std::cout<<"\nIngrese el nuevo DNI: \n\n";
                 std::getline(std::cin,input);
 
                 if (_utilidades.esComandoSalir(input)){
-
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
 
                 }
 
-                if( dniValidacion(input)) {
-
-                    _profesor.setDni(input);
-                    std::cout<<"Presione cualquier tecla para continuar... \n";
-                    break;
+                if( !dniValidacion(input)) {;
+                    continue;
 
 
                 }
-
+               break;
             }
+
+            _profesor.setDni(input);
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 system("pause");
 
@@ -863,31 +942,35 @@ void ProfesorManager::modificar(){
                 std::cout << "         === MODIFICAR PROFESOR ===        \n";
                 std::cout << "=========================================\n";
 
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
                 std::cout<<"Ingrese el nuevo nombre: \n";
                 std::getline(std::cin,input);
 
 
                 if (_utilidades.esComandoSalir(input)){
-
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
 
                 }
 
-                if( nombreValidacion(input)) {
 
-                    _profesor.setNombre(input);
-                    std::cout<<"Presione cualquier tecla para continuar... \n";
-                    break;
+                if( !nombreValidacion(input)) {;
+                    continue;
+
 
                 }
-
+               break;
             }
+
+            _profesor.setNombre(input);
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 std::cin.get();
 
@@ -917,31 +1000,33 @@ void ProfesorManager::modificar(){
                 std::cout << "         === MODIFICAR PROFESOR ===        \n";
                 std::cout << "=========================================\n";
 
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
                 std::cout<<"Ingrese el nuevo apellido: \n";
                 std::getline(std::cin,input);
 
                 if (_utilidades.esComandoSalir(input)){
-
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
 
                 }
 
-                if( apellidoValidacion(input)) {
-
-                    _profesor.setApellido(input);
-                    std::cout<<"Presione cualquier tecla para continuar... \n";
-                    break;
+                if( !apellidoValidacion(input)) {;
+                    continue;
 
 
                 }
-
+               break;
             }
+
+            _profesor.setApellido(input);
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 std::cin.get();
 
@@ -971,31 +1056,34 @@ void ProfesorManager::modificar(){
                 std::cout << "         === MODIFICAR PROFESOR ===        \n";
                 std::cout << "=========================================\n";
 
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
                 std::cout<<"Ingrese el nuevo numero de telefono: \n";
                 std::getline(std::cin,input);
 
 
                 if (_utilidades.esComandoSalir(input)){
-
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
 
                 }
 
-                if( telefonoValidacion(input)) {
+                if( !telefonoValidacion(input)) {;
+                    continue;
 
-                    _profesor.setTelefono(input);
-                    std::cout<<"Presione cualquier tecla para continuar... \n";
-                    break;
 
                 }
-
+               break;
             }
+
+            _profesor.setTelefono(input);
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 std::cin.get();
 
@@ -1025,31 +1113,35 @@ void ProfesorManager::modificar(){
                 std::cout << "         === MODIFICAR PROFESOR ===        \n";
                 std::cout << "=========================================\n";
 
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
                 std::cout<<"Ingrese el nuevo email: \n";
                 std::getline(std::cin,input);
 
 
                 if (_utilidades.esComandoSalir(input)){
-
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
 
                 }
 
-                if( emailValidacion(input)) {
 
-                    _profesor.setEmail(input);
-                    std::cout<<"Presione cualquier tecla para continuar... \n";
-                    break;
+                if( !emailValidacion(input)) {;
+                    continue;
+
 
                 }
-
+               break;
             }
+
+            _profesor.setEmail(input);
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 std::cin.get();
 
@@ -1080,31 +1172,34 @@ void ProfesorManager::modificar(){
                 std::cout << "         === MODIFICAR PROFESOR ===        \n";
                 std::cout << "=========================================\n";
 
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
                 std::cout<<"Ingrese la nueva direccion: \n";
                 std::getline(std::cin,input);
 
 
                 if (_utilidades.esComandoSalir(input)){
-
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
 
                 }
 
-                if( direccionValidacion(input)) {
+                if( !direccionValidacion(input)) {;
+                    continue;
 
-                    _profesor.setDireccion(input);
-                    std::cout<<"Presione cualquier tecla para continuar... \n";
-                    break;
 
                 }
-
+               break;
             }
+
+            _profesor.setDireccion(input);
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 std::cin.get();
 
@@ -1124,24 +1219,63 @@ void ProfesorManager::modificar(){
 
         case 7:
 
-            system("cls");
+            std::cin.ignore();
 
-            std::cout << "Ingrese dia de nacimiento.\n";
-            std::cin>> diaN;
-            std::cout << "Ingrese mes de nacimiento.\n";
-            std::cin>> mesN;
-            std::cout << "Ingrese año de nacimiento.\n";
-            std::cin>> anioN;
+            while(true){
 
-            fechaNac = Fecha(diaN,mesN,anioN);
 
-            _profesor.setFechaNacimiento( fechaNac);
+                system("cls");
+                std::cout << "=========================================\n";
+                std::cout << "         === MODIFICAR PROFESOR ===        \n";
+                std::cout << "=========================================\n";
+
+                std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
+                std::cout<<"Ingrese la fecha de nacimiento (DD/MM//AAAA): \n";
+                std::getline(std::cin,input);
+
+
+                if (_utilidades.esComandoSalir(input)){
+                    system("cls");
+                    std::cout << "\nModificacion de profesor cancelada.\n\n";
+                    return;
+
+                }
+
+                if (input.empty()){
+
+                    std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+                    system("pause");
+
+                    continue;
+                }
+
+
+
+                if( !fechaNacimiento.validarFechaStr(input) ) {
+
+                    std::cout << "La fecha ingresada no es valida. Intente nuevamente." << std::endl;
+
+                    system("pause");
+
+                    continue;
+
+                }else{
+
+                    _profesor.setFechaNacimiento(fechaNacimiento);
+                    std::cout<<"Presione cualquier tecla para continuar... \n";
+                    break;
+
+                }
+
+            }
 
             if ( _archivo.alta(_profesor,posicion) ){
 
                 system("cls");
 
-                std::cout<<"El registro se modifico correctamente. \n";
+                std::cout<<"\nEl registro se modifico correctamente. \n";
+                _profesor.mostrar();
 
                 std::cin.get();
 
@@ -1179,6 +1313,8 @@ void ProfesorManager::modificar(){
 
     }while( opcion !=0 );
 
+
+
 }
 
 void ProfesorManager::baja(){
@@ -1192,21 +1328,34 @@ void ProfesorManager::baja(){
 
         system("cls");
 
-        std::cout <<"\nPara volveer al menu anterior ingrese 'salir', en cualquier momento.\n";
-        std::cout<<"Ingrese el ID del profesor al que desea dar de baja: \n";
+
+        std::cout << "=========================================\n";
+        std::cout << "         === BAJA DE PROFESOR ===        \n";
+        std::cout << "=========================================\n";
+
+        std::cout <<"Para volveer al menu anterior ingrese 'salir', en cualquier momento.\n";
+        std::cout<<"\nIngrese el ID del profesor al que desea dar de baja: \n";
         std::getline(std::cin,input);
 
         if ( _utilidades.esComandoSalir(input) ){
             system("cls");
-            std::cout << "\nAlta de profesor cancelada.\n";
+            std::cout << "\nBaja de profesor cancelada.\n\n";
             return;
 
         }
 
+        if (input.empty()){
+            std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+
+            system("pause");
+
+            return false;
+
+        }
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
-            std::cout << "\nEl ID ingresado es incorrecto, debe ser mayor a cero.Intente nuevamente.\n";
+            std::cout << "\nEl ID ingresado es incorrecto, debe ser un numero entero.Intente nuevamente.\n\n";
             system("pause");
             continue;
 
@@ -1216,11 +1365,10 @@ void ProfesorManager::baja(){
 
         posicion = _archivo.buscar(idBaja);
 
-
         if ( posicion < 0 ) {
 
             system("cls");
-            std::cout<<"\nNo se ha encontrado profesor con el ID ingresado. Intente nuevamente.\n";
+            std::cout<<"\nEl ID ingresado no pertenece a un profesor registrado. Intente nuevamente.\n\n";
             system("pause");
             continue;
 
