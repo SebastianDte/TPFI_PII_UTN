@@ -728,7 +728,7 @@ void ProfesorManager::buscar(){
         std::cout << "==========================================\n";
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
-        std::cout<<"Ingrese el ID del profesor que desea modificar: \n";
+        std::cout<<"Ingrese el ID del profesor que desea buscar: \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
@@ -737,6 +737,16 @@ void ProfesorManager::buscar(){
             return;
 
         }
+
+        if (input.empty()){
+            system("cls");
+            std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+            system("pause");
+
+            continue;
+
+        }
+
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
@@ -775,6 +785,8 @@ void ProfesorManager::buscar(){
        break;
 
     }
+
+    system("cls");
 
     _profesor.mostrar();
 
