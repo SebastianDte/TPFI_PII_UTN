@@ -13,6 +13,7 @@ void MenuInscripcion::mostrarMenu() {
 		std::cout << "3. Modificar Inscripcion\n";
 		std::cout << "4. Listar Inscripciones Activas\n";
 		std::cout << "5. Listar Inscripciones Inactivas\n";
+		std::cout << "6. Listar Todas las Inscripciones\n";
 		std::cout << "0. Volver al Menu Principal\n";
 		std::cout << "===========================\n";
 		std::cout << "Ingrese una opcion: ";
@@ -34,6 +35,8 @@ void MenuInscripcion::mostrarMenu() {
 		case 5:
 			inscripcionManager.listarInscripcionesInactivas();
 			break;
+		case 6:
+			inscripcionManager.listarTodasInscripciones();
 		case 0:
 			std::cout << "Volviendo al menu principal...\n";
 			break;
