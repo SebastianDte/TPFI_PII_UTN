@@ -28,7 +28,7 @@ void MenuInscripcion::mostrarMenu() {
 			inscripcionManager.modificarInscripcion();
 			break;
 		case 4:
-			inscripcionManager.listarInscripciones();
+			inscripcionManager.listarInscripcionesActivas();
 			break;
 		case 0:
 			std::cout << "Volviendo al menu principal...\n";

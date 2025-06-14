@@ -300,7 +300,7 @@ void InscripcionManager::modificarInscripcion() {
 }
 
 // Método para listar todas las Inscripciones activas.
-void InscripcionManager::listarInscripciones() {
+void InscripcionManager::listarInscripcionesActivas() {
     InscripcionArchivo archivoInscripciones;
     AlumnoArchivo archivoAlumnos;
     CursoArchivo archivoCursos;

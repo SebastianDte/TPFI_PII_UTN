@@ -22,7 +22,7 @@ public:
 	void altaInscripcion();
 	void bajaInscripcion();
 	void modificarInscripcion();
-	void listarInscripciones();
+	void listarInscripcionesActivas();
 	void listarPorID(const Inscripcion& inscripcion);
 
 };
