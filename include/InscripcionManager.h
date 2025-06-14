@@ -23,6 +23,7 @@ public:
 	void bajaInscripcion();
 	void modificarInscripcion();
 	void listarInscripcionesActivas();
+	void listarInscripcionesInactivas();
 	void listarPorID(const Inscripcion& inscripcion);
 
 };

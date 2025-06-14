@@ -352,7 +352,57 @@ void InscripcionManager::listarInscripcionesActivas() {
     }
 }
 
+void InscripcionManager::listarInscripcionesInactivas() {
+    InscripcionArchivo archivoInscripciones;
+    AlumnoArchivo archivoAlumnos;
+    CursoArchivo archivoCursos;
+    int cantidad = archivoInscripciones.cantRegistros();
+    if (cantidad == 0) {
+        cout << "No hay inscripciones registradas." << endl;
+        return;
+    }
+    Inscripcion inscripcion;
+    for (int i = 0; i < cantidad; i++) {
+        if (archivoInscripciones.leer(i, inscripcion) && !inscripcion.getEstado()) {
+            // Obtener datos del alumno (buscar sin filtrar activos para mostrar aunque esté dado de baja)
+            int posAlumno = archivoAlumnos.buscar(inscripcion.getLegajoAlumno(), false);
+            Alumno alumno;
+            bool alumnoOk = false;
+            if (posAlumno != -1) {
+                alumno = archivoAlumnos.leer(posAlumno);
+                alumnoOk = true;
+            }
 
+            // Obtener datos del curso (no se filtra por estado)
+            int posCurso = archivoCursos.buscar(inscripcion.getIdCurso());
+            Curso curso;
+            bool cursoOk = false;
+            if (posCurso != -1) {
+                curso = archivoCursos.leer(posCurso);
+                cursoOk = true;
+            }
+
+            cout << "ID Inscripción: " << inscripcion.getIdInscripcion() << endl;
+            if (alumnoOk) {
+                cout << "Alumno: " << alumno.getNombre() << " " << alumno.getApellido() << endl;
+            }
+            else {
+                cout << "Alumno: (No encontrado)" << endl;
+            }
+            if (cursoOk) {
+                cout << "Curso: " << curso.getNombre() << endl;
+            }
+            else {
+                cout << "Curso: (No encontrado)" << endl;
+            }
+            cout << "Fecha: " << inscripcion.getFechaInscripcion().toString() << endl;
+            cout << std::fixed << std::setprecision(3);
+            cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
+            cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
+            cout << "------------------------" << endl;
+        }
+    }
+}
 
 //Metodos auxiliares
 bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
