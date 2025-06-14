@@ -18,6 +18,9 @@ public:
     void mostrarEncabezado(const std::string& subtitulo = "");
     void limpiarPantallaConEncabezado(const std::string& subtitulo = "");
 
+    void pausar();
+    void pausarYLimpiar();
+
 
 
 

@@ -40,7 +40,6 @@ bool CursoManager::aulaUnica(int& numeroAula, int idCursoExcluido)
     return true;
 }
 
-
 bool CursoManager::pedirNombreCurso(std::string& nombre)
 {
     std::string input;
@@ -168,9 +167,6 @@ bool CursoManager::pedirIdProfesor(int& idProfesor)
     }
 }
 
-
-
-
 void CursoManager::altaCurso()
 {
 
@@ -227,8 +223,6 @@ void CursoManager::altaCurso()
         std::cout << "Error al guardar el curso. Intente nuevamente m�s tarde.\n";
     }
 }
-
-
 
 void CursoManager::modificarCurso()
 {
@@ -397,8 +391,6 @@ void CursoManager::modificarCurso()
     while (opcion != 0);
 }
 
-
-
 void CursoManager::listar()
 {
     int total = _archivo.cantRegistros();
@@ -440,9 +432,6 @@ void CursoManager::listar()
     }
 
 }
-
-
-
 
 void CursoManager::listarPorProfesor()
 {
@@ -576,7 +565,6 @@ void CursoManager::listarSinCupo()
     }
 }
 
-
 void CursoManager::listarCursos()
 {
     std::string input;
@@ -626,7 +614,6 @@ void CursoManager::listarCursos()
     }
     while(opcion != 0);
 }
-
 
 void CursoManager::buscarCursoID()
 {
@@ -696,7 +683,6 @@ void CursoManager::buscarCursoID()
     std::cout << "---------------------------" << std::endl;
 
 }
-
 
 void CursoManager::bajaCurso()
 {
