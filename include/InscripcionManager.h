@@ -22,9 +22,17 @@ public:
 	void altaInscripcion();
 	void bajaInscripcion();
 	void modificarInscripcion();
+	void listarTodasInscripciones();
+
+	//Listas
 	void listarInscripcionesActivas();
 	void listarInscripcionesInactivas();
-	void listarTodasInscripciones();
 	void mostrarUnaInscripcion(const Inscripcion& inscripcion);
 
+	//Metodo auxiliares.
+	bool existeAlumnoActivo(int legajo);
+	bool existeCursoActivo(int idCurso);
+
+	void bajaInscripcionesPorCurso(int idCurso);
+	void bajaInscripcionesPorAlumno(int legajo);
 };

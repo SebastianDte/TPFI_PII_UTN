@@ -484,8 +484,7 @@ bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
         }
 
         legajo = std::stoi(entrada);
-        if (archivoAlumnos.buscar(legajo, true) != -1) return true;
-
+        if (existeAlumnoActivo(legajo)) return;
         std::cout << "\nLegajo no encontrado. Intente nuevamente.\n\n";
     }
 }
@@ -506,7 +505,7 @@ bool InscripcionManager::pedirIdCurso(int& idCurso) {
         }
 
         idCurso = std::stoi(entrada);
-        if (archivoCursos.buscar(idCurso) != -1) return true;
+		if (existeCursoActivo(idCurso)) return true;
 
         std::cout << "\nID de curso no encontrado. Intente nuevamente.\n\n";
     }
@@ -544,4 +543,43 @@ bool InscripcionManager::verificarInscripcionExistente(int legajo, int idCurso) 
         }
     }
     return false;
+}
+
+bool InscripcionManager::existeAlumnoActivo(int legajo) {
+    AlumnoArchivo archivo;
+    int pos = archivo.buscar(legajo, true);
+    return pos != -1;
+}
+
+bool InscripcionManager::existeCursoActivo(int idCurso) {
+    CursoArchivo archivo;
+    int pos = archivo.buscar(idCurso);
+    if (pos == -1) return false;
+
+    Curso curso = archivo.leer(pos);
+    return curso.getEstado();
+}
+
+
+
+void InscripcionManager::bajaInscripcionesPorCurso(int idCurso) {
+    InscripcionArchivo archivoInscripciones;
+    Inscripcion inscripcion;
+
+    for (int i = 0; i < archivoInscripciones.cantRegistros(); i++) {
+        if (archivoInscripciones.leer(i, inscripcion) && inscripcion.getEstado() && inscripcion.getIdCurso() == idCurso) {
+            archivoInscripciones.baja(inscripcion.getIdInscripcion());
+        }
+    }
+}
+
+void InscripcionManager::bajaInscripcionesPorAlumno(int legajo) {
+    InscripcionArchivo archivoInscripciones;
+    Inscripcion inscripcion;
+
+    for (int i = 0; i < archivoInscripciones.cantRegistros(); i++) {
+        if (archivoInscripciones.leer(i, inscripcion) && inscripcion.getEstado() && inscripcion.getLegajoAlumno() == legajo) {
+            archivoInscripciones.baja(inscripcion.getIdInscripcion());
+        }
+    }
 }
