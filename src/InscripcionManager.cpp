@@ -80,7 +80,7 @@ void InscripcionManager::altaInscripcion() {
     if (archivoInscripciones.alta(nueva)) {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
         std::cout << "\nInscripción realizada con éxito.\n";
-        listarPorID(nueva);
+        mostrarUnaInscripcion(nueva);
     }
     else {
         std::cout << "\nError al guardar la inscripción.\n";
@@ -127,7 +127,7 @@ void InscripcionManager::bajaInscripcion() {
         Inscripcion insc;
         archivoInscripciones.leer(posicion, insc);
         _utilidades.limpiarPantallaConEncabezado("DATOS DE LA INSCRIPCION");
-        listarPorID(insc);  // método que ya tenés
+        mostrarUnaInscripcion(insc);  
         
 
         while (true) {
@@ -138,7 +138,6 @@ void InscripcionManager::bajaInscripcion() {
             respuesta = _utilidades.aMinusculas(respuesta);
 
             if (respuesta == "s") {
-                // Confirmó la baja, salimos del loop
                 break;
             }
             else if (respuesta == "n") {
@@ -212,7 +211,7 @@ void InscripcionManager::modificarInscripcion() {
     while (true) {
         utilidades.limpiarPantallaConEncabezado("MODIFICAR INSCRIPCION");
         cout << "Datos de la inscripción a modificar:" << endl;
-        listarPorID(original);
+        mostrarUnaInscripcion(original);
         cout << "\n¿Qué desea modificar?\n";
         cout << "1. Importe abonado\n";
         cout << "2. ID de curso\n";
@@ -290,7 +289,7 @@ void InscripcionManager::modificarInscripcion() {
     if (archivoInscripciones.modificar(modificado, posicion)) {
         utilidades.limpiarPantallaConEncabezado("MODIFICAR INSCRIPCION");
         cout << "Inscripción modificada con éxito." << endl;
-		listarPorID(modificado);
+        mostrarUnaInscripcion(modificado);
         utilidades.pausarYLimpiar();
     }
     else {
@@ -299,7 +298,7 @@ void InscripcionManager::modificarInscripcion() {
     return;
 }
 
-// Método para listar todas las Inscripciones activas.
+// Métodos para listar.
 void InscripcionManager::listarInscripcionesActivas() {
     InscripcionArchivo archivoInscripciones;
     AlumnoArchivo archivoAlumnos;
@@ -456,6 +455,18 @@ void InscripcionManager::listarTodasInscripciones() {
     }
 }
 
+void InscripcionManager::mostrarUnaInscripcion(const Inscripcion& inscripcion) {
+    cout << "ID Inscripción: " << inscripcion.getIdInscripcion() << endl;
+    cout << "Legajo Alumno: " << inscripcion.getLegajoAlumno() << endl;
+    cout << "ID Curso: " << inscripcion.getIdCurso() << endl;
+    cout << "Fecha Inscripción: " << inscripcion.getFechaInscripcion().toString() << endl;
+    cout << std::fixed << std::setprecision(3);
+    cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
+    cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
+    cout << "------------------------" << endl;
+
+}
+
 //Metodos auxiliares
 bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
     AlumnoArchivo archivoAlumnos;
@@ -533,16 +544,4 @@ bool InscripcionManager::verificarInscripcionExistente(int legajo, int idCurso) 
         }
     }
     return false;
-}
-
-void InscripcionManager::listarPorID(const Inscripcion& inscripcion) {
-    cout << "ID Inscripción: " << inscripcion.getIdInscripcion() << endl;
-    cout << "Legajo Alumno: " << inscripcion.getLegajoAlumno() << endl;
-    cout << "ID Curso: " << inscripcion.getIdCurso() << endl;
-    cout << "Fecha Inscripción: " << inscripcion.getFechaInscripcion().toString() << endl;
-    cout << std::fixed << std::setprecision(3);
-    cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
-    cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
-    cout << "------------------------" << endl;
-
 }

@@ -25,6 +25,6 @@ public:
 	void listarInscripcionesActivas();
 	void listarInscripcionesInactivas();
 	void listarTodasInscripciones();
-	void listarPorID(const Inscripcion& inscripcion);
+	void mostrarUnaInscripcion(const Inscripcion& inscripcion);
 
 };
