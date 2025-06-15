@@ -140,3 +140,13 @@ bool Utilidades::soloLetras(std::string& input){
     return true;
 
 }
+
+void Utilidades::pausar() {
+    std::cout << "\nPresione ENTER para continuar...";
+    std::cin.get(); 
+}
+
+void Utilidades::pausarYLimpiar() {
+    pausar();
+    system("cls"); 
+}
