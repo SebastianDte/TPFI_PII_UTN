@@ -5,27 +5,38 @@
 
 
 void MenuProfesor::mostrarMenuProfesor(){
+    std::string input;
     int opcion;
-    Utilidades _utilidades = Utilidades();
+    Utilidades _utilidades;
 
+    std::cin.ignore();
 
-    do{
+    while(true)
+    {
 
         _utilidades.limpiarPantallaConEncabezado("=== MENU PROFESOR ===");
         std::cout << "1. Agregar profesor.\n";
-        std::cout << "2. Borrar profesor.\n";
+        std::cout << "2. Baja de profesor.\n";
         std::cout << "3. Modificar profersor.\n";
         std::cout << "4. Listar profesores.\n";
         std::cout << "5. Buscar profesor por ID.\n";
         std::cout << "0. Volver al menu principal.\n";
-         std::cout << "=========================================\n";
+        std::cout << "=========================================\n";
         std::cout << "Ingrese una opcion.\n";
-        std::cin >> opcion;
+        std::getline(std::cin,input);
+
+        if ( !_utilidades.esEnteroValido(input) ){
+
+            std::cout << "\nEl valor ingresado es incorrecto, debe ser un numero entero.Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+        }
+
+        opcion = std::stoi(input);
 
         switch(opcion){
 
         case 1:
-            system("cls");
 
             _manager.alta();
 
@@ -35,8 +46,6 @@ void MenuProfesor::mostrarMenuProfesor(){
 
         case 2:
 
-            system("cls");
-
             _manager.baja();
 
             system("pause");
@@ -44,8 +53,6 @@ void MenuProfesor::mostrarMenuProfesor(){
             break;
 
         case 3:
-
-            system("cls");
 
             _manager.modificar();
 
@@ -55,8 +62,6 @@ void MenuProfesor::mostrarMenuProfesor(){
 
         case 4:
 
-            system("cls");
-
             _manager.listar();
 
             system("pause");
@@ -65,7 +70,6 @@ void MenuProfesor::mostrarMenuProfesor(){
 
         case 5:
 
-            system("cls");
 
             _manager.buscar();
 
@@ -74,13 +78,10 @@ void MenuProfesor::mostrarMenuProfesor(){
             break;
 
         case 0:
-            system("cls");
 
             return;
 
         default:
-
-            system("cls");
 
             std::cout<<"La opcion ingresada es incorrecta, intente nuevamente.\n";
 
@@ -92,9 +93,9 @@ void MenuProfesor::mostrarMenuProfesor(){
         }
 
 
-    }while( opcion !=0 );
-
-
-
     }
+
+
+
+}
 
