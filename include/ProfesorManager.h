@@ -29,6 +29,7 @@ public:
     void listar();
     void listarActivos();
     void listarInactivos();
+    void listarPorApellido();
     void buscar();
     int contCursosProfesor(int idProfesor);
     void baja();

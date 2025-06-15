@@ -616,6 +616,7 @@ void ProfesorManager::listar(){
         _utilidades.limpiarPantallaConEncabezado("=== SUBMENÚ - LISTADO DE PROFESORES ===");
         std::cout << "1. Listar profesores activos\n";
         std::cout << "2. Listar profesores inactivos\n";
+        std::cout << "3. Listar por apellido\n";
         std::cout << "0. Volver al menú anterior\n";
         std::cout << "=========================================\n";
         std::cout << "Seleccione una opción: ";
@@ -640,6 +641,11 @@ void ProfesorManager::listar(){
         case 2:
             system("cls");
             listarInactivos();
+            system("pause");
+            break;
+        case 3:
+            system("cls");
+            listarPorApellido();
             system("pause");
             break;
         case 0:
@@ -717,8 +723,98 @@ void ProfesorManager::listarInactivos(){
     }
 
 
+}
+
+void ProfesorManager::listarPorApellido(){
+    int cantRegistros,cantActivos = 0;
+    std::string apellido1;
+    std::string apellido2;
+
+    ///Declaro el puntero que va a contener los registros de los profesores
+    Profesor *vecProfesores;
+    Profesor aux;
+
+    cantRegistros = _archivo.cantRegistros();
+
+    ///El vector solo almacenara a los profesores activos
+
+    for ( int i = 0; i < cantRegistros; i++ ){
+
+        _profesor = _archivo.leer(i);
+
+        if ( _profesor.getEstado()  ){
+
+            cantActivos ++;
+
+        }
+
+    }
+
+    if ( cantActivos == 0 ){
+
+        std::cout<<"No hay registros de profesores activos.\n";
+        return;
+
+    }
+
+    ///Inicializo el puntero
+
+    vecProfesores = new Profesor [cantActivos];
+
+    ///Verifico si se asigno memoria dinamica
+
+    if ( vecProfesores == nullptr ){
+
+        std::cout<<"No se asigno memoria\n";
+
+        return;
+    }
+
+    ///Cargo el vector
+
+    for ( int i = 0; i < cantActivos; i++ ){
+
+        _profesor = _archivo.leer(i);
+
+        vecProfesores[i] = _profesor;
+    }
+
+    for( int i = 0; i < cantActivos - 1; i++ ){
+
+        for ( int j = 0; j < cantActivos -i -1; j++ ){
+
+
+            apellido1 = _utilidades.aMinusculas(vecProfesores[j].getApellido());
+            apellido2 = _utilidades.aMinusculas(vecProfesores[j+1].getApellido());
+            if ( apellido1 > apellido2 ){
+
+                aux = vecProfesores[j];
+                vecProfesores[j] = vecProfesores[j+1];
+                vecProfesores[j+1] = aux;
+
+            }
+
+        }
+    }
+
+    for ( int i = 0; i < cantActivos; i++ ){
+
+        std::cout<<"Apellido: "<<vecProfesores[i].getApellido()<<"\n";
+        std::cout<<"Nombre: "<<vecProfesores[i].getNombre()<<"\n";
+        std::cout<<"DNI: "<<vecProfesores[i].getDni()<<"\n";
+        std::cout<<"ID: "<<vecProfesores[i].getId()<<"\n";
+        std::cout<<"--------------------\n";
+
+    }
+
+
+   delete [] vecProfesores;
+
+   return;
 
 }
+
+
 
 void ProfesorManager::buscar(){
 
@@ -805,12 +901,13 @@ int ProfesorManager::contCursosProfesor(int idProfesor){
     int cantCursos;
 
     cantCursos = archiCurso.cantRegistros() ;
-    /// id del profesor en los archivos de curso es igual a 0 siempre
+
     for ( int i = 0; i< cantCursos; i++ ){
 
-        if ( cursoProf.getEstado() == true /*&& cursoProf.getIdProfesor() == idProfesor*/ ){
+        cursoProf = archiCurso.leer(i);
 
-            std::cout<<"id profesor en curso: "<<cursoProf.getIdProfesor()<<"\n";
+        if ( cursoProf.getEstado() && cursoProf.getIdProfesor() == idProfesor ){
+
             contCursos ++;
 
         }
@@ -1365,7 +1462,6 @@ void ProfesorManager::modificar(){
 }
 
 
-
 void ProfesorManager::baja(){
     int idBaja;
     int posicion;
@@ -1436,19 +1532,19 @@ void ProfesorManager::baja(){
 
         system("cls");
 
-
-
         _profesor.mostrar();
 
-        std::cout<<"CANTIDAD CURSO: "<<contCursosProfesor(idBaja)<<"\n";
+        ///Buscar si el profesor tiene asignados cursos antes de darle de baja.
+
         if ( contCursosProfesor(idBaja) > 0 ){
 
-           std::cout<<"\nEl profesor que desea dar de baja, tiene asignado/s: "<< contCursosProfesor(idBaja)<<" curso/s\n\n";
-           std::cout<<"\nDebe reasignar/buscar profesores para dichos cursos.\n";
+            ///Responsabilidad de Cursos.
+           std::cout<<"\nEl profesor que desea dar de baja, tiene asignado/s: "<< contCursosProfesor(idBaja)<<" curso/s.\n";
+           std::cout<<"\nDebe reasignar/buscar profesores para dicho/s curso/s.\n\n";
            return;
         }
 
-        std::cout<<"\nPara confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
+        std::cout<<"Para confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
         std::getline(std::cin,input);
 
         if( _utilidades.aMinusculas(input) == "si"){

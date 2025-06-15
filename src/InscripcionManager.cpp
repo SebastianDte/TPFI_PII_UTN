@@ -20,7 +20,7 @@ void InscripcionManager::altaInscripcion() {
     int legajo = 0, idCurso = 0;
     float importe = 0.0f;
     bool cancelar = false;
-
+ /*
     // Paso 1: Legajo del alumno
     while (true) {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
@@ -33,7 +33,7 @@ void InscripcionManager::altaInscripcion() {
 
         break;
     }
-
+ */
     // Paso 2: ID del curso
     while (true) {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
@@ -127,14 +127,14 @@ void InscripcionManager::bajaInscripcion() {
         Inscripcion insc;
         archivoInscripciones.leer(posicion, insc);
         _utilidades.limpiarPantallaConEncabezado("DATOS DE LA INSCRIPCION");
-        mostrarUnaInscripcion(insc);  
-        
+        mostrarUnaInscripcion(insc);
+
 
         while (true) {
             std::cout << "\n¿Desea dar de baja esta inscripción? (s/n): ";
             std::getline(std::cin, entrada);
             std::string respuesta = _utilidades.aMinusculas(entrada);
-    
+
             respuesta = _utilidades.aMinusculas(respuesta);
 
             if (respuesta == "s") {
@@ -191,7 +191,7 @@ void InscripcionManager::modificarInscripcion() {
             continue;
         }
 
-        break; 
+        break;
     }
 
     // 2. Leer la inscripción original
@@ -200,7 +200,7 @@ void InscripcionManager::modificarInscripcion() {
         cout << "Error al leer la inscripción." << endl;
         return;
     }
-	
+
 
     // 3. Menú de opciones
     float nuevoImporte = original.getImporteAbonado();
@@ -466,7 +466,7 @@ void InscripcionManager::mostrarUnaInscripcion(const Inscripcion& inscripcion) {
     cout << "------------------------" << endl;
 
 }
-
+/*
 //Metodos auxiliares
 bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
     AlumnoArchivo archivoAlumnos;
@@ -488,7 +488,7 @@ bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
         std::cout << "\nLegajo no encontrado. Intente nuevamente.\n\n";
     }
 }
-
+*/
 bool InscripcionManager::pedirIdCurso(int& idCurso) {
     CursoArchivo archivoCursos;
     std::string entrada;
