@@ -57,6 +57,12 @@ bool CursoManager::pedirNombreCurso(std::string& nombre)
             continue;
         }
 
+        if (input.length() < 3)
+        {
+            std::cout << "\nEl nombre debe tener al menos 3 caracteres. Intente nuevamente.\n\n";
+            continue;
+        }
+
         if (input.length() > 49)
         {
             std::cout << "\nEl nombre solo puede tener m�ximo 49 caracteres. Intente nuevamente.\n\n";
@@ -89,6 +95,12 @@ bool CursoManager::pedirCantidadMaximaAlumnos(int& cantidad)
         if (cantidad <= 0)
         {
             std::cout << "\nLa cantidad debe ser mayor que cero. Intente nuevamente.\n\n";
+            continue;
+        }
+
+        if (cantidad > 500)
+        {
+            std::cout << "\nLa cantidad máxima permitida es 500. Intente nuevamente.\n\n";
             continue;
         }
 
