@@ -24,4 +24,5 @@ class ReportesManager
         void inscripcionesEntreFechas();
         void cursosConAulaOcupada();
         void profesoresConCursosAsignados();
+        bool pedirAnioValido(int& anio);
 };

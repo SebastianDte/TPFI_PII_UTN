@@ -484,7 +484,7 @@ bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
         }
 
         legajo = std::stoi(entrada);
-        if (existeAlumnoActivo(legajo)) return;
+        if (existeAlumnoActivo(legajo)) return true;
         std::cout << "\nLegajo no encontrado. Intente nuevamente.\n\n";
     }
 }
