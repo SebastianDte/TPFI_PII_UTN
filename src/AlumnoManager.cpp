@@ -4,13 +4,208 @@
 #include "AlumnoArchivo.h"
 #include "Utilidades.h"
 #include "Fecha.h"
-
+#include <regex> /// LIBRERIA PARA VALIDACIONES
 AlumnoManager::AlumnoManager()
 {
     _archivo = AlumnoArchivo("alumnos.dat");
     _utilidades = Utilidades();
 }
 
+///VALIDACIONES
+bool AlumnoManager::pedirDNI(std::string& dni)
+{
+    std::string input;
+    while (true)
+    {
+        std::cout << "\nIngrese DNI (7 u 8 dígitos, sin puntos): ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false;
+        }
+
+        if (input.empty() || !_utilidades.soloNumeros(input) || (input.length() < 7 || input.length() > 8))
+        {
+            std::cout << "Formato de DNI inválido. Deben ser 7 u 8 dígitos numéricos. Intente nuevamente.\n";
+            continue;
+        }
+
+
+        if (_archivo.existeDNI(input))
+        {
+            std::cout << "Error: El DNI ingresado ya pertenece a otro alumno. Intente nuevamente.\n";
+            continue;
+        }
+
+        dni = input;
+        return true;
+    }
+}
+
+bool AlumnoManager::pedirNombre(std::string& nombre)
+{
+    std::string input;
+    while (true)
+    {
+        std::cout << "\nIngrese nombre del alumno (mínimo 2, máximo 29 caracteres): ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false;
+        }
+
+        if (input.empty())
+        {
+            std::cout << "El nombre no puede estar vacío. Intente nuevamente.\n";
+            continue;
+        }
+
+
+        if (input.length() > 29 || input.length() < 2)
+        {
+            std::cout << "El nombre debe tener entre 2 y 29 caracteres. Intente nuevamente.\n";
+            continue;
+        }
+
+
+        std::string temp_input = _utilidades.aMinusculas(input);
+        if (!_utilidades.soloLetras(temp_input))
+        {
+            std::cout << "El nombre solo debe contener letras y espacios internos. Intente nuevamente.\n";
+            continue;
+        }
+
+        nombre = input;
+        return true;
+    }
+}
+
+bool AlumnoManager::pedirApellido(std::string& apellido)
+{
+    std::string input;
+    while (true)
+    {
+        std::cout << "\nIngrese apellido del alumno (mínimo 2, máximo 29 caracteres): ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false;
+        }
+
+        if (input.empty())
+        {
+            std::cout << "El apellido no puede estar vacío. Intente nuevamente.\n";
+            continue;
+        }
+
+        if (input.length() > 29 || input.length() < 2)
+        {
+            std::cout << "El apellido debe tener entre 2 y 29 caracteres. Intente nuevamente.\n";
+            continue;
+        }
+
+        std::string temp_input = _utilidades.aMinusculas(input);
+        if (!_utilidades.soloLetras(temp_input))
+        {
+            std::cout << "El apellido solo debe contener letras y espacios internos. Intente nuevamente.\n";
+            continue;
+        }
+
+        apellido = input;
+        return true;
+    }
+}
+bool AlumnoManager::pedirEmail(std::string& email)
+{
+    std::string input;
+    while (true)
+    {
+        std::cout << "\nIngrese email (máximo 49 caracteres): ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false;
+        }
+
+
+        const int maximoEmail = 49;
+        const int minimoEmail = 5;
+        int tamanioEmail = input.length();
+        int contArroba = 0;
+        int contPuntos = 0;
+
+        if (input.empty())
+        {
+            std::cout << "El email no puede estar vacío. Intente nuevamente.\n";
+            continue; // Vuelve a pedir el dato
+        }
+
+        if (tamanioEmail < minimoEmail || tamanioEmail > maximoEmail)
+        {
+            std::cout << "La longitud del email no es válida. Intente nuevamente.\n";
+            continue;
+        }
+
+        for (int i = 0; i < tamanioEmail; i++)
+        {
+            if (input[i] == '@')
+            {
+                contArroba++;
+            }
+            if (input[i] == '.')
+            {
+                contPuntos++;
+            }
+        }
+
+        if (contArroba != 1 || contPuntos == 0)
+        {
+            std::cout << "El formato del email no es válido (debe tener un '@' y al menos un '.'). Intente nuevamente.\n";
+            continue;
+        }
+
+        // Si todas las validaciones pasan, asignamos el valor y salimos.
+        email = input;
+        return true; // Éxito
+    }
+}
+
+
+
+
+bool AlumnoManager::pedirDireccion(std::string& direccion)
+{
+
+    std::regex patronDireccion(R"(^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ.\s]+ \d{1,5}$)");
+    std::string input;
+
+    while (true)
+    {
+        std::cout << "\nIngrese dirección: ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false; // El usuario canceló
+        }
+
+        // La validación:
+        if (std::regex_match(input, patronDireccion))
+        {
+            direccion = input;
+            return true;
+        }
+        else
+        {
+            std::cout << "Formato inválido. Use 'NOMBRE CALLE' seguido de 'NUMERO' (máximo 5 dígitos). Intente nuevamente.\n";
+
+        }
+    }
+}
 void AlumnoManager::mostrarAlumno(const Alumno& alumno)
 {
     std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
@@ -32,68 +227,36 @@ void AlumnoManager::altaAlumno()
     int nuevoLegajo = _archivo.cantRegistros() + 1;  // Asigna un legajo secuencial
     nuevoAlumno.setLegajo(nuevoLegajo);
 
-    std::cout << "=== Alta de Alumno ===\n";
+    _utilidades.limpiarPantallaConEncabezado("=== ALTA DE ALUMNO ===");
     std::cout << "Para cancelar, escribe 'salir' en cualquier momento.\n\n";
 
     std::cin.clear();
     std::cin.ignore();
 
     // Ingreso y validación del DNI
-    while (true)
+    if (!pedirDNI(inputUsuario))
     {
-        std::cout << "Ingrese DNI (máximo 9 caracteres): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        if (inputUsuario.empty() || inputUsuario.length() > 20)
-        {
-            std::cout << "El DNI no puede estar vacío y debe tener como máximo 9 caracteres. Intente nuevamente.\n";
-            continue;
-        }
-        nuevoAlumno.setDni(inputUsuario);
-        break;
+        std::cout << "Alta de alumno cancelada." << std::endl;
+        return;
     }
+    nuevoAlumno.setDni(inputUsuario);
 
-    // Ingreso y validación del Nombre
-    while (true)
+    // Ingreso y validación del nombre
+    if (!pedirNombre(inputUsuario))
     {
-        std::cout << "\nIngrese nombre del alumno (máximo 29 caracteres): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        if (inputUsuario.empty() || inputUsuario.length() > 29)
-        {
-            std::cout << "El nombre no puede estar vacío y debe tener como máximo 29 caracteres. Intente nuevamente.\n";
-            continue;
-        }
-        nuevoAlumno.setNombre(inputUsuario);
-        break;
+        std::cout << "Alta de alumno cancelada." << std::endl;
+        return;
     }
+    nuevoAlumno.setNombre(inputUsuario);
+
 
     // Ingreso y validación del Apellido
-    while (true)
+    if (!pedirApellido(inputUsuario))
     {
-        std::cout << "\nIngrese apellido del alumno (máximo 29 caracteres): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        if (inputUsuario.empty() || inputUsuario.length() > 29)
-        {
-            std::cout << "El apellido no puede estar vacío y debe tener como máximo 29 caracteres. Intente nuevamente.\n";
-            continue;
-        }
-        nuevoAlumno.setApellido(inputUsuario);
-        break;
+        std::cout << "Alta de alumno cancelada." << std::endl;
+        return;
     }
+    nuevoAlumno.setApellido(inputUsuario);
 
     // Ingreso y validación del Teléfono
     while (true)
@@ -115,45 +278,24 @@ void AlumnoManager::altaAlumno()
     }
 
     // Ingreso y validación del Email
-    while (true)
+    if (!pedirEmail(inputUsuario))
     {
-        std::cout << "\nIngrese email (máximo 49 caracteres): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        if (inputUsuario.empty() || inputUsuario.length() > 49)
-        {
-            std::cout << "El email no puede estar vacío y debe tener como máximo 49 caracteres. Intente nuevamente.\n";
-            continue;
-        }
-        nuevoAlumno.setEmail(inputUsuario);
-        break;
+        std::cout << "Alta cancelada.\n";
+        return;
     }
+    nuevoAlumno.setEmail(inputUsuario); // Asigna el email validado
 
     // Ingreso y validación de la Dirección
-    while (true)
+    if(!pedirDireccion(inputUsuario))
     {
-        std::cout << "\nIngrese dirección (máximo 49 caracteres): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        if (inputUsuario.empty() || inputUsuario.length() > 49)
-        {
-            std::cout << "La dirección no puede estar vacía y debe tener como máximo 49 caracteres. Intente nuevamente.\n";
-            continue;
-        }
-        nuevoAlumno.setDireccion(inputUsuario);
-        break;
+        std::cout << "Alta cancelada." << std::endl;
+        return;
     }
+    nuevoAlumno.setDireccion(inputUsuario);
 
-    // Ingreso de la Fecha de Nacimiento
-    // Aquí asumo que la clase Fecha posee un método "setFromString" que reciba el formato "DD/MM/AAAA".
+
+
+    // Fecha nacimiento
     while (true)
     {
         std::cout << "\nIngrese la fecha de nacimiento (DD/MM/AAAA): ";
@@ -164,7 +306,8 @@ void AlumnoManager::altaAlumno()
             return;
         }
         Fecha fechaNacimiento = Fecha();
-        if (!fechaNacimiento.validarFechaStr(inputUsuario)) {
+        if (!fechaNacimiento.validarFechaStr(inputUsuario))
+        {
             std::cout << "Formato de fecha incorrecto. Intente nuevamente." << std::endl;
             continue;
         }
@@ -193,9 +336,7 @@ void AlumnoManager::bajaAlumno()
     int posicion;
     Alumno alumno;
 
-    std::cout << "=========================================\n";
-    std::cout << "         === BAJA DE ALUMNOS ===       \n";
-    std::cout << "=========================================\n";
+    _utilidades.limpiarPantallaConEncabezado("=== BAJA DE ALUMNOS ===");
 
     while (true)
     {
@@ -244,7 +385,7 @@ void AlumnoManager::bajaAlumno()
         break;
     }
 
-    // Opcional: Se puede mostrar la información del alumno y solicitar confirmación.
+
     std::cout << "\nAlumno encontrado:" << std::endl;
     std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
     std::cout << "Nombre: " << alumno.getNombre() << std::endl;
@@ -286,9 +427,7 @@ void AlumnoManager::buscarAlumnoLegajo()
     std::string inputUsuario;
     int Legajo;
 
-    std::cout << "========================================== \n";
-    std::cout << "         === BÚSQUEDA DE ALUMNOS ===      \n";
-    std::cout << "==========================================\n";
+    _utilidades.limpiarPantallaConEncabezado("=== BUSQUEDA DE ALUMNOS ===");
 
     while (true)
     {
@@ -394,7 +533,7 @@ void AlumnoManager::modificarAlumno()
 
         alumno = _archivo.leer(posicion);
 
-        // Si el alumno está inactivo, notificar y salir.
+
         if (!alumno.getActivo())
         {
             std::cout << "El alumno se encuentra dado de baja.\n";
@@ -571,7 +710,7 @@ void AlumnoManager::listarActivos()
 
         if(alumno.getActivo())
         {
-           mostrarAlumno(alumno);
+            mostrarAlumno(alumno);
 
 
         }
@@ -617,7 +756,8 @@ void AlumnoManager::listarPorApellido()
         return;
     }
     Alumno* alumnos = new Alumno[total];
-    if (alumnos == nullptr) {
+    if (alumnos == nullptr)
+    {
         std::cout << "Error al asignar memoria." << std::endl;
         return;
     }

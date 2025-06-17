@@ -88,7 +88,7 @@ bool Utilidades::soloNumeros(const std::string& input){
 
     for ( int i = 0; i<tamanio; i++ ){
 
-       if ( input[0] < '0' || input[0] > '9' ){
+       if ( input[i] < '0' || input[i] > '9' ){
 
             return false;
 
@@ -143,10 +143,10 @@ bool Utilidades::soloLetras(std::string& input){
 
 void Utilidades::pausar() {
     std::cout << "\nPresione ENTER para continuar...";
-    std::cin.get(); 
+    std::cin.get();
 }
 
 void Utilidades::pausarYLimpiar() {
     pausar();
-    system("cls"); 
+    system("cls");
 }
