@@ -726,7 +726,7 @@ void ProfesorManager::listarInactivos(){
 }
 
 void ProfesorManager::listarPorApellido(){
-    int cantRegistros,cantActivos = 0;
+    int cantRegistros,cantActivos = 0, indice = 0;
     std::string apellido1;
     std::string apellido2;
 
@@ -770,14 +770,24 @@ void ProfesorManager::listarPorApellido(){
         return;
     }
 
-    ///Cargo el vector
+    ///Cargo el vector de prof activos,no va a haber desbordamiento gracias a la asignacion de memoria dinamica
 
-    for ( int i = 0; i < cantActivos; i++ ){
+
+    for (int i = 0; i < cantRegistros; i++){
 
         _profesor = _archivo.leer(i);
 
-        vecProfesores[i] = _profesor;
+        if ( _profesor.getEstado()== true){
+
+            vecProfesores[indice] = _profesor;
+            indice ++;
+        }
+
     }
+
+
+
+   ///El ordenamiento utiliza la sobrecarga de operadores de la clase string que hace una comparacion usando el codigo ASCII
 
     for( int i = 0; i < cantActivos - 1; i++ ){
 
@@ -813,7 +823,6 @@ void ProfesorManager::listarPorApellido(){
    return;
 
 }
-
 
 
 void ProfesorManager::buscar(){

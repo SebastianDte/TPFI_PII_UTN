@@ -137,7 +137,168 @@ void ReportesManager::cursosConAulaOcupada()
 
 void ReportesManager::profesoresConCursosAsignados()
 {
-    std::cout << "Profesores con cursos asignados" << std::endl;
+
+    std::cout << "==================================================\n";
+    std::cout << "     REPORTE DE PROFESORES CON CURSOS ASIGNADOS   \n";
+    std::cout << "==================================================\n\n";
+
+    int cantRegCursos;
+    int cantRegProfesores;
+    int cantProfActivos = 0;
+    int cantCursosActivos = 0;
+    int indiceCursos = 0;
+    int indiceProfesor = 0;
+
+    Curso _regCurso;
+    Profesor _regProfesor;
+
+
+    Curso *vecCursos;
+    Profesor *vecProfesor;
+
+    cantRegCursos = _cursoArchivo.cantRegistros();
+
+/// Cusrsos
+    if( cantRegCursos == 0 ){
+
+       std::cout<<"No hay registros de cursos.\n";
+       return;
+    }
+
+    for ( int i = 0; i< cantRegCursos; i++ ){
+
+        _regCurso = _cursoArchivo.leer(i);
+
+        if ( _regCurso.getEstado() == true ){
+
+            cantCursosActivos ++;
+
+        }
+
+    }
+
+    if( cantCursosActivos == 0 ){
+
+       std::cout<<"No hay registros de cursos activos.\n";
+       return;
+    }
+
+    vecCursos = new Curso [cantCursosActivos];
+
+    if ( vecCursos == nullptr ){
+
+        std::cout<<"No se pudo asignar memoria.\n";
+
+        return;
+    }
+
+    ///Cargo el vector
+
+    for (int i = 0; i < cantRegCursos; i++ ){
+
+       _regCurso = _cursoArchivo.leer(i);
+
+        if ( _regCurso.getEstado() == true ){
+
+            vecCursos[indiceCursos] = _regCurso;
+
+            indiceCursos ++;
+
+        }
+
+    }
+
+/// Profesores
+
+    cantRegProfesores = _profesorArchivo.cantRegistros();
+
+    if ( cantRegProfesores == 0 ){
+
+        std::cout<<"No hay registros de profesores.\n";
+
+        return;
+    }
+
+
+    for ( int i = 0; i < cantRegProfesores; i++ ){
+
+        _regProfesor = _profesorArchivo.leer(i);
+
+        if ( _regProfesor.getEstado() == true ) {
+
+            cantProfActivos ++;
+        }
+
+    }
+
+    if ( cantProfActivos == 0 ){
+
+        std::cout<<"No hay registros de profesores activos.\n";
+
+        return;
+    }
+
+    vecProfesor = new Profesor [ cantProfActivos ];
+
+    if ( vecProfesor == nullptr ){
+
+        std::cout<<"No se pudo asignar memoria.\n";
+
+        return;
+    }
+
+
+    for ( int i = 0; i < cantRegProfesores; i++ ){
+
+        _regProfesor = _profesorArchivo.leer(i);
+
+        if ( _regProfesor.getEstado() ){
+
+            vecProfesor[ indiceProfesor ] = _regProfesor;
+
+            indiceProfesor ++;
+
+        }
+
+    }
+
+
+
+    for (int p = 0; p < cantProfActivos ; p++ ){
+
+        std::cout<<"-------------------------------------------\n";
+        std::cout<<"Profesor: " << vecProfesor[p].getApellido()<<", "<<vecProfesor[p].getNombre()<<".\n";
+        std::cout<<"ID profesor : "<<vecProfesor[p].getId()<<".\n";
+
+        bool tieneCursos = false;
+
+        for ( int c = 0; c < cantCursosActivos ; c++ ){
+
+            if ( vecCursos[c].getIdProfesor() == vecProfesor[p].getId() ) {
+
+                std::cout<<"\nCurso: " << vecCursos[c].getNombre()<<".\n";
+                std::cout<<"ID curso: " << vecCursos[c].getId()<<".\n";
+                std::cout<<"Aula: " << vecCursos[c].getNumeroAula()<<".\n";
+
+                tieneCursos = true;
+            }
+
+
+        }
+
+        if ( !tieneCursos){
+
+            std::cout<<"\nNo posee cursos asignados.\n";
+
+        }
+
+
+    }
+
+    delete [] vecProfesor;
+    delete [] vecCursos;
+
+
 }
 
 
