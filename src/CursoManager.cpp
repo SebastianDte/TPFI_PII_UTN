@@ -173,9 +173,12 @@ bool CursoManager::pedirIdProfesor(int& idProfesor)
         {
             std::cout << "\nNo se encontr� un profesor con ese ID. Intente nuevamente.\n\n";
             continue;
-        } else {
+        }
+        else
+        {
             Profesor profesor = archivoProfesor.leer(pos);
-            if (!profesor.getEstado()){
+            if (!profesor.getEstado())
+            {
                 std::cout << "\nEl profesor se encuentra inactivo. Intente nuevamente.\n\n";
                 continue;
             }
@@ -426,22 +429,26 @@ void CursoManager::listar()
     for(int i = 0; i < total; i++)
     {
         Curso curso = _archivo.leer(i);
+        if (curso.getEstado())
+        {
 
-        registrosEncontrados++;
-        ProfesorArchivo profeArchivo;
-        int idProfesor = curso.getIdProfesor();
-        int posicionRegProfesor = profeArchivo.buscar(idProfesor);
-        Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+            registrosEncontrados++;
+            ProfesorArchivo profeArchivo;
+            int idProfesor = curso.getIdProfesor();
+            int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+            Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
 
 
-        std::cout << "ID: " << curso.getId() << std::endl;
-        std::cout << "Nombre: " << curso.getNombre() << std::endl;
-        std::cout << "Cantidad m�xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
-        std::cout << "N�mero de aula: " << curso.getNumeroAula() << std::endl;
-        std::cout << "Profesor Asignado:\n";
-        std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
-        std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
-        std::cout << "---------------------------" << std::endl;
+            std::cout << "ID: " << curso.getId() << std::endl;
+            std::cout << "Nombre: " << curso.getNombre() << std::endl;
+            std::cout << "Cantidad m�xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+            std::cout << "N�mero de aula: " << curso.getNumeroAula() << std::endl;
+            std::cout << "Profesor Asignado:\n";
+            std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+            std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
+            std::cout << "Estado: " << (curso.getEstado() ? "ACTIVO" : "INACTIVO") << "\n";
+            std::cout << "---------------------------" << std::endl;
+        }
     }
 
     if (registrosEncontrados == 0)
@@ -496,7 +503,7 @@ void CursoManager::listarPorProfesor()
     {
         Curso curso = _archivo.leer(i);
 
-        if(curso.getIdProfesor() == idProfesor)
+        if(curso.getIdProfesor() == idProfesor && curso.getEstado() )
         {
             registrosEncontrados++;
             ProfesorArchivo profeArchivo;
@@ -512,6 +519,7 @@ void CursoManager::listarPorProfesor()
             std::cout << "Profesor Asignado:\n";
             std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
             std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
+            std::cout << "Estado: " << (curso.getEstado() ? "ACTIVO" : "INACTIVO") << "\n";
             std::cout << "---------------------------" << std::endl;
         }
     }
@@ -528,7 +536,7 @@ void CursoManager::listarSinCupo()
     int total = _archivo.cantRegistros();
     int registrosEncontrados = 0;
 
-    if(total <= 0)
+    if (total <= 0)
     {
         std::cout << "No hay cursos registrados." << std::endl;
         return;
@@ -537,17 +545,18 @@ void CursoManager::listarSinCupo()
     InscripcionArchivo archivoInscripciones;
     _utilidades.limpiarPantallaConEncabezado("=== LISTADO DE CURSOS SIN CUPO ===");
 
-    // contar todas las inscripciones que tiene cada curso
-    for(int i = 0; i < total; i++)
+    for (int i = 0; i < total; i++)
     {
         Curso curso = _archivo.leer(i);
-        int cantidadInscriptos = 0;
+        if (!curso.getEstado()) continue;
 
+        int cantidadInscriptos = 0;
         int totalInscripciones = archivoInscripciones.cantRegistros();
-        for(int j = 0; j < totalInscripciones; j++)
+
+        for (int j = 0; j < totalInscripciones; j++)
         {
             Inscripcion inscripcion;
-            if(archivoInscripciones.leer(j, inscripcion) &&
+            if (archivoInscripciones.leer(j, inscripcion) &&
                     inscripcion.getEstado() &&
                     inscripcion.getIdCurso() == curso.getId())
             {
@@ -555,8 +564,7 @@ void CursoManager::listarSinCupo()
             }
         }
 
-        // valido si el curso esta lleno
-        if(cantidadInscriptos >= curso.getCantMaximaAlumnos())
+        if (cantidadInscriptos >= curso.getCantMaximaAlumnos())
         {
             registrosEncontrados++;
             ProfesorArchivo profeArchivo;
@@ -583,6 +591,53 @@ void CursoManager::listarSinCupo()
     }
 }
 
+
+void CursoManager::listarInactivos()
+{
+    int total = _archivo.cantRegistros();
+    int registrosEncontrados = 0;
+    if(total <= 0)
+    {
+        std::cout << "No hay cursos registrados." << std::endl;
+        return;
+    }
+    system("cls");
+    std::cout << "=========================================\n";
+    std::cout << "   === LISTADO DE CURSOS INACTIVOS ===   \n";
+    std::cout << "=========================================\n";
+
+    for(int i = 0; i < total; i++)
+    {
+        Curso curso = _archivo.leer(i);
+        if (!curso.getEstado())
+        {
+
+            registrosEncontrados++;
+            ProfesorArchivo profeArchivo;
+            int idProfesor = curso.getIdProfesor();
+            int posicionRegProfesor = profeArchivo.buscar(idProfesor);
+            Profesor profesorCurso = profeArchivo.leer(posicionRegProfesor);
+
+
+            std::cout << "ID: " << curso.getId() << std::endl;
+            std::cout << "Nombre: " << curso.getNombre() << std::endl;
+            std::cout << "Cantidad m�xima de alumnos: " << curso.getCantMaximaAlumnos() << std::endl;
+            std::cout << "N�mero de aula: " << curso.getNumeroAula() << std::endl;
+            std::cout << "Profesor Asignado:\n";
+            std::cout << "ID Profesor: " << curso.getIdProfesor() << "\n";
+            std::cout << "Nombre Profesor: " << profesorCurso.getNombre() << " " << profesorCurso.getApellido() << "\n";
+            std::cout << "Estado: " << (curso.getEstado() ? "ACTIVO" : "INACTIVO") << "\n";
+            std::cout << "---------------------------" << std::endl;
+        }
+    }
+
+    if (registrosEncontrados == 0)
+    {
+        std::cout << "No hay cursos inactivos para mostrar." << std::endl;
+    }
+
+}
+
 void CursoManager::listarCursos()
 {
     std::string input;
@@ -594,6 +649,7 @@ void CursoManager::listarCursos()
         std::cout << "1. Listar cursos\n";
         std::cout << "2. Listar cursos sin cupo disponible\n";
         std::cout << "3. Listar cursos por profesor asignado\n";
+        std::cout << "4. Listar cursos inactivos\n";
         std::cout << "0. Volver al men� anterior\n";
         std::cout << "=========================================\n";
         std::cout << "Seleccione una opci�n: ";
@@ -619,6 +675,10 @@ void CursoManager::listarCursos()
             break;
         case 3:
             listarPorProfesor();
+            system("pause");
+            break;
+        case 4:
+            listarInactivos();
             system("pause");
             break;
         case 0:
@@ -786,4 +846,241 @@ void CursoManager::bajaCurso()
         std::cout << "No se encontró un curso con ese ID.\n";
     }
 
+}
+
+
+void CursoManager::reactivarCurso()
+{
+    int total = _archivo.cantRegistros();
+    if (total <= 0)
+    {
+        std::cout << "\nNo hay cursos registrados.\n";
+        return;
+    }
+
+    std::string input;
+    int idCurso;
+    Curso curso;
+    int posicion = -1;
+
+    _utilidades.limpiarPantallaConEncabezado("=== REACTIVAR CURSO ===");
+
+    while (true)
+    {
+        std::cout << "Ingrese el ID del curso a reactivar (o escriba 'salir' para cancelar): ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            std::cout << "\nOperación cancelada.\n";
+            return;
+        }
+
+        if (!_utilidades.esEnteroValido(input))
+        {
+            std::cout << "Debe ingresar un número entero válido.\n";
+            continue;
+        }
+
+        idCurso = std::stoi(input);
+        if (idCurso <= 0)
+        {
+            std::cout << "El ID debe ser mayor que 0.\n";
+            continue;
+        }
+
+        posicion = _archivo.buscar(idCurso);
+        if (posicion == -1)
+        {
+            std::cout << "No se encontró un curso con ese ID.\n";
+            continue;
+        }
+
+        curso = _archivo.leer(posicion);
+
+        if (curso.getEstado())
+        {
+            std::cout << "El curso ya está activo.\n";
+            return;
+        }
+
+        break;
+    }
+
+    // valido el profe
+    ProfesorArchivo archivoProfesor;
+    Profesor profesor;
+    int posProfe = archivoProfesor.buscar(curso.getIdProfesor());
+    bool cambiarProfesor = false;
+
+    if (posProfe < 0)
+    {
+        std::cout << "\nEl profesor asignado originalmente no existe. Debe seleccionar uno nuevo.\n";
+        cambiarProfesor = true;
+    }
+    else
+    {
+        profesor = archivoProfesor.leer(posProfe);
+        if (!profesor.getEstado())
+        {
+            std::cout << "\nEl profesor asignado originalmente está inactivo. Debe seleccionar uno nuevo.\n";
+            cambiarProfesor = true;
+        }
+        else
+        {
+            std::cout << "\nProfesor actual: " << profesor.getNombre() << " " << profesor.getApellido() << "\n";
+            std::cout << "¿Desea cambiar el profesor asignado? (s/n): ";
+            std::getline(std::cin, input);
+
+            if (_utilidades.aMinusculas(input) == "s")
+            {
+                cambiarProfesor = true;
+            }
+        }
+    }
+
+    if (cambiarProfesor)
+    {
+        int nuevoIdProfesor;
+        if (!pedirIdProfesor(nuevoIdProfesor)) return;
+        posProfe = archivoProfesor.buscar(nuevoIdProfesor);
+        profesor = archivoProfesor.leer(posProfe);
+        curso.setIdProfesor(nuevoIdProfesor);
+    }
+
+    // verificar si el aula sigue disponible
+    int aula = curso.getNumeroAula();
+    if (!aulaUnica(aula, curso.getId()))
+    {
+        std::cout << "\nAdvertencia: El aula " << aula << " ya está asignada a otro curso activo.\n";
+        std::cout << "Debe cambiar el número de aula antes de reactivar el curso.\n";
+
+        int nuevaAula;
+        if (!pedirNumeroAula(nuevaAula, curso.getId())) return;
+        curso.setNumeroAula(nuevaAula);
+    }
+
+
+    std::cout << "\nCurso listo para ser reactivado:\n";
+    std::cout << "ID: " << curso.getId() << "\n";
+    std::cout << "Nombre: " << curso.getNombre() << "\n";
+    std::cout << "Aula: " << curso.getNumeroAula() << "\n";
+    std::cout << "Profesor ID: " << curso.getIdProfesor() << "\n";
+    std::cout << "Nombre Profesor: " << profesor.getNombre() << " " << profesor.getApellido() << "\n";
+    std::cout << "\n¿Desea confirmar la reactivación? (s/n): ";
+    std::getline(std::cin, input);
+
+    if (_utilidades.aMinusculas(input) == "s")
+    {
+        curso.setEstado(true);
+        if (_archivo.modificar(curso, posicion))
+        {
+            std::cout << "\nCurso reactivado exitosamente.\n";
+        }
+        else
+        {
+            std::cout << "\nError al modificar el curso.\n";
+        }
+    }
+    else
+    {
+        std::cout << "\nReactivación cancelada.\n";
+    }
+}
+
+void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
+{
+    CursoArchivo _archivo = CursoArchivo();
+    int totalCursos = _archivo.cantRegistros();
+
+    if (totalCursos <= 0)
+    {
+        std::cout << "No hay cursos registrados." << std::endl;
+        return;
+    }
+
+    ProfesorArchivo profeArchivo;
+    bool huboCambio = false;
+
+    for (int i = 0; i < totalCursos; i++)
+    {
+        Curso curso = _archivo.leer(i);
+
+        // muestro solo los cursos asignados al profe que queremos reasignar
+        if (curso.getIdProfesor() == idProfesorActual)
+        {
+            std::cout << "Curso ID: " << curso.getId() << " - " << curso.getNombre() << std::endl;
+            std::cout << "Profesor actual: " << idProfesorActual << std::endl;
+
+
+            int totalProfes = profeArchivo.cantRegistros();
+            // mostrar los profes disponibles
+            std::cout << "Profesores disponibles para reasignar:" << std::endl;
+            for (int j = 0; j < totalProfes; j++)
+            {
+                Profesor profe = profeArchivo.leer(j);
+                if (profe.getEstado())
+                {
+                    std::cout << "ID: " << profe.getId() << " - " << profe.getNombre() << " " << profe.getApellido() << std::endl;
+                }
+            }
+
+            int nuevoIdProfe = 0;
+            bool valido = false;
+            do
+            {
+                std::cout << "Ingrese ID del nuevo profesor para este curso (0 para omitir reasignación): ";
+                std::cin >> nuevoIdProfe;
+
+                if (nuevoIdProfe == 0)
+                {
+                    std::cout << "Se omite reasignar este curso." << std::endl;
+                    valido = true;
+                }
+                else
+                {
+                    int posProfe = profeArchivo.buscar(nuevoIdProfe);
+                    if (posProfe == -1)
+                    {
+                        std::cout << "Profesor no encontrado. Intente nuevamente." << std::endl;
+                    }
+                    else
+                    {
+                        Profesor profeSeleccionado = profeArchivo.leer(posProfe);
+                        if (!profeSeleccionado.getEstado())
+                        {
+                            std::cout << "Profesor está dado de baja. Intente con otro." << std::endl;
+                        }
+                        else if (nuevoIdProfe == idProfesorActual)
+                        {
+                            std::cout << "El nuevo profesor no puede ser el mismo que el actual. Intente otro." << std::endl;
+                        }
+                        else
+                        {
+
+                            curso.setIdProfesor(nuevoIdProfe);
+                            if (_archivo.modificar(curso, i))
+                            {
+                                std::cout << "Curso reasignado correctamente." << std::endl;
+                                huboCambio = true;
+                            }
+                            else
+                            {
+                                std::cout << "Error al modificar el curso." << std::endl;
+                            }
+                            valido = true;
+                        }
+                    }
+                }
+            }
+            while (!valido);
+
+            std::cout << "-------------------------" << std::endl;
+        }
+    }
+
+    if (!huboCambio)
+    {
+        std::cout << "No se realizaron cambios en la reasignación de cursos." << std::endl;
+    }
 }
