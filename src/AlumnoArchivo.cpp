@@ -21,16 +21,20 @@ bool AlumnoArchivo::alta(const Alumno& regAlumno)
     return escribio;
 }
 
-int AlumnoArchivo::buscar(int legajo, bool filtrarActivos = true) const {
+int AlumnoArchivo::buscar(int legajo, bool filtrarActivos = true) const
+{
     FILE* pArchivo = fopen(_nombreArchivo, "rb");
     if (pArchivo == nullptr)
-         return -1;
+        return -1;
 
     Alumno regAlumno;
     int posicion = 0;
-    while (fread(&regAlumno, _tamanioRegistro, 1, pArchivo) == 1) {
-        if (regAlumno.getLegajo() == legajo) {
-            if (!filtrarActivos || regAlumno.getActivo()) {
+    while (fread(&regAlumno, _tamanioRegistro, 1, pArchivo) == 1)
+    {
+        if (regAlumno.getLegajo() == legajo)
+        {
+            if (!filtrarActivos || regAlumno.getActivo())
+            {
                 fclose(pArchivo);
                 return posicion;
             }
@@ -43,11 +47,12 @@ int AlumnoArchivo::buscar(int legajo, bool filtrarActivos = true) const {
 
 bool AlumnoArchivo::modificar(const Alumno& regAlumno, int posicion)
 {
-  FILE* pArchivo = fopen(_nombreArchivo, "rb+");
+    FILE* pArchivo = fopen(_nombreArchivo, "rb+");
     if (pArchivo == nullptr) return false;
 
 
-    if (fseek(pArchivo, posicion * _tamanioRegistro, SEEK_SET) != 0) {
+    if (fseek(pArchivo, posicion * _tamanioRegistro, SEEK_SET) != 0)
+    {
         fclose(pArchivo);
         return false;
     }
@@ -59,7 +64,7 @@ bool AlumnoArchivo::modificar(const Alumno& regAlumno, int posicion)
     return resultado;
 }
 
-Alumno AlumnoArchivo::leer(int posicion)
+Alumno AlumnoArchivo::leer(int posicion) const
 {
     Alumno registro;
     registro.setLegajo(0);
@@ -98,4 +103,18 @@ int AlumnoArchivo::cantRegistros() const
 
     fclose(pAlumno);
     return cantidadBytes / _tamanioRegistro;
+}
+
+bool AlumnoArchivo::existeDNI(const std::string& dni) const
+{
+    int total = cantRegistros();
+    for (int i = 0; i < total; i++)
+    {
+        Alumno alumno = leer(i);
+        if (alumno.getDni() == dni)
+        {
+            return true; // Lo encontró, ya existe
+        }
+    }
+    return false; // No lo encontró, está disponible
 }

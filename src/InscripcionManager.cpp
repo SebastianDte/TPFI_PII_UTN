@@ -126,14 +126,14 @@ void InscripcionManager::bajaInscripcion() {
         Inscripcion insc;
         archivoInscripciones.leer(posicion, insc);
         _utilidades.limpiarPantallaConEncabezado("DATOS DE LA INSCRIPCION");
-        mostrarUnaInscripcion(insc);  
-        
+        mostrarUnaInscripcion(insc);
+
 
         while (true) {
             std::cout << "\n¿Desea dar de baja esta inscripción? (s/n): ";
             std::getline(std::cin, entrada);
             std::string respuesta = _utilidades.aMinusculas(entrada);
-    
+
             respuesta = _utilidades.aMinusculas(respuesta);
 
             if (respuesta == "s") {
@@ -190,7 +190,7 @@ void InscripcionManager::modificarInscripcion() {
             continue;
         }
 
-        break; 
+        break;
     }
 
     // 2. Leer la inscripción original
@@ -199,7 +199,7 @@ void InscripcionManager::modificarInscripcion() {
         cout << "Error al leer la inscripción." << endl;
         return;
     }
-	
+
 
     // 3. Menú de opciones
     float nuevoImporte = original.getImporteAbonado();

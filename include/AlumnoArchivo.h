@@ -13,7 +13,9 @@ public:
     bool alta(const Alumno& regAlumno);
     int buscar(int legajo,bool filtrarActivos) const;
     bool modificar(const Alumno& regAlumno, int posicion);
-    Alumno leer(int posicion);
+    Alumno leer(int posicion) const;
+
+    bool existeDNI(const std::string& dni) const;
 
     int cantRegistros() const;
 };

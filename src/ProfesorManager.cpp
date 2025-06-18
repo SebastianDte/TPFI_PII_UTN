@@ -1,6 +1,5 @@
 #include "ProfesorManager.h"
 #include <iostream>
-#include "Profesor.h"
 #include "string"
 #include <regex>
 
@@ -277,7 +276,6 @@ int id,cantidadRegistros;
     Fecha fechaNacimiento;
     std::string input;
 
-    std::cin.ignore();
 
 ///DNI
     while(true){
@@ -609,18 +607,30 @@ int id,cantidadRegistros;
 
 void ProfesorManager::listar(){
 
+    std::string input;
     int opcion;
+    Utilidades _utilidades;
 
-    do
+    while(true)
     {
         _utilidades.limpiarPantallaConEncabezado("=== SUBMENÚ - LISTADO DE PROFESORES ===");
         std::cout << "1. Listar profesores activos\n";
         std::cout << "2. Listar profesores inactivos\n";
+        std::cout << "3. Listar por apellido\n";
         std::cout << "0. Volver al menú anterior\n";
         std::cout << "=========================================\n";
         std::cout << "Seleccione una opción: ";
-        std::cin >> opcion;
-        std::cin.ignore();
+        std::getline(std::cin,input);
+
+        if ( !_utilidades.esEnteroValido(input) ){
+
+            std::cout << "\nEl valor ingresado es incorrecto, debe ser un numero entero.Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+        }
+
+        opcion = std::stoi(input);
+
         switch(opcion)
         {
         case 1:
@@ -633,6 +643,11 @@ void ProfesorManager::listar(){
             listarInactivos();
             system("pause");
             break;
+        case 3:
+            system("cls");
+            listarPorApellido();
+            system("pause");
+            break;
         case 0:
             return;
         default:
@@ -641,7 +656,6 @@ void ProfesorManager::listar(){
             break;
         }
     }
-    while(opcion != 0);
 }
 
 void ProfesorManager::listarActivos(){
@@ -709,15 +723,112 @@ void ProfesorManager::listarInactivos(){
     }
 
 
+}
+
+void ProfesorManager::listarPorApellido(){
+    int cantRegistros,cantActivos = 0, indice = 0;
+    std::string apellido1;
+    std::string apellido2;
+
+    ///Declaro el puntero que va a contener los registros de los profesores
+    Profesor *vecProfesores;
+    Profesor aux;
+
+    cantRegistros = _archivo.cantRegistros();
+
+    ///El vector solo almacenara a los profesores activos
+
+    for ( int i = 0; i < cantRegistros; i++ ){
+
+        _profesor = _archivo.leer(i);
+
+        if ( _profesor.getEstado()  ){
+
+            cantActivos ++;
+
+        }
+
+    }
+
+    if ( cantActivos == 0 ){
+
+        std::cout<<"No hay registros de profesores activos.\n";
+        return;
+
+    }
+
+    ///Inicializo el puntero
+
+    vecProfesores = new Profesor [cantActivos];
+
+    ///Verifico si se asigno memoria dinamica
+
+    if ( vecProfesores == nullptr ){
+
+        std::cout<<"No se asigno memoria\n";
+
+        return;
+    }
+
+    ///Cargo el vector de prof activos,no va a haber desbordamiento gracias a la asignacion de memoria dinamica
+
+
+    for (int i = 0; i < cantRegistros; i++){
+
+        _profesor = _archivo.leer(i);
+
+        if ( _profesor.getEstado()== true){
+
+            vecProfesores[indice] = _profesor;
+            indice ++;
+        }
+
+    }
+
+
+
+   ///El ordenamiento utiliza la sobrecarga de operadores de la clase string que hace una comparacion usando el codigo ASCII
+
+    for( int i = 0; i < cantActivos - 1; i++ ){
+
+        for ( int j = 0; j < cantActivos -i -1; j++ ){
+
+
+            apellido1 = _utilidades.aMinusculas(vecProfesores[j].getApellido());
+            apellido2 = _utilidades.aMinusculas(vecProfesores[j+1].getApellido());
+            if ( apellido1 > apellido2 ){
+
+                aux = vecProfesores[j];
+                vecProfesores[j] = vecProfesores[j+1];
+                vecProfesores[j+1] = aux;
+
+            }
+
+        }
+    }
+
+    for ( int i = 0; i < cantActivos; i++ ){
+
+        std::cout<<"Apellido: "<<vecProfesores[i].getApellido()<<"\n";
+        std::cout<<"Nombre: "<<vecProfesores[i].getNombre()<<"\n";
+        std::cout<<"DNI: "<<vecProfesores[i].getDni()<<"\n";
+        std::cout<<"ID: "<<vecProfesores[i].getId()<<"\n";
+        std::cout<<"--------------------\n";
+
+    }
+
+
+   delete [] vecProfesores;
+
+   return;
 
 }
+
 
 void ProfesorManager::buscar(){
 
     int id, posicion;
     std::string input;
-
-    std::cin.ignore();
 
     while(true){
 
@@ -792,13 +903,36 @@ void ProfesorManager::buscar(){
 
 }
 
+int ProfesorManager::contCursosProfesor(int idProfesor){
+    Curso cursoProf;
+    CursoArchivo archiCurso;
+    int contCursos = 0;
+    int cantCursos;
+
+    cantCursos = archiCurso.cantRegistros() ;
+
+    for ( int i = 0; i< cantCursos; i++ ){
+
+        cursoProf = archiCurso.leer(i);
+
+        if ( cursoProf.getEstado() && cursoProf.getIdProfesor() == idProfesor ){
+
+            contCursos ++;
+
+        }
+
+    }
+
+   return contCursos;
+
+}
+
 void ProfesorManager::modificar(){
 
     Fecha fechaNacimiento;
     int id, posicion, opcion;
     std::string input;
 
-    std::cin.ignore();
 
     while(true){
 
@@ -817,6 +951,16 @@ void ProfesorManager::modificar(){
             system("cls");
             std::cout << "\nModificacion de profesor cancelada.\n\n";
             return;
+
+        }
+
+        if (input.empty()){
+
+            system("cls");
+            std::cout << "\nDebe completar este campo. Intente nuevamente.\n\n";
+
+            system("pause");
+            continue;
 
         }
 
@@ -1245,13 +1389,12 @@ void ProfesorManager::modificar(){
                 std::cout<<"Ingrese la fecha de nacimiento (DD/MM//AAAA): \n";
                 std::getline(std::cin,input);
 
-
                 if (_utilidades.esComandoSalir(input)){
                     system("cls");
                     std::cout << "\nModificacion de profesor cancelada.\n\n";
                     return;
-
                 }
+
 
                 if (input.empty()){
 
@@ -1325,21 +1468,17 @@ void ProfesorManager::modificar(){
 
     }while( opcion !=0 );
 
-
-
 }
+
 
 void ProfesorManager::baja(){
     int idBaja;
     int posicion;
     std::string input;
 
-    std::cin.ignore();
-
     while(true) {
 
         system("cls");
-
 
         std::cout << "=========================================\n";
         std::cout << "         === BAJA DE PROFESOR ===        \n";
@@ -1392,7 +1531,7 @@ void ProfesorManager::baja(){
 
         _profesor = _archivo.leer(posicion);
 
-        if ( _profesor.getEstado() != true ){
+        if ( !_profesor.getEstado() ){
 
             system("cls");
             std::cout<<"\nEl ID ingresado no corresponde a un profesor activo.Intente nuevamente.\n";
@@ -1404,7 +1543,17 @@ void ProfesorManager::baja(){
 
         _profesor.mostrar();
 
-        std::cout<<"\nPara confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
+        ///Buscar si el profesor tiene asignados cursos antes de darle de baja.
+
+        if ( contCursosProfesor(idBaja) > 0 ){
+
+            ///Responsabilidad de Cursos.
+           std::cout<<"\nEl profesor que desea dar de baja, tiene asignado/s: "<< contCursosProfesor(idBaja)<<" curso/s.\n";
+           std::cout<<"\nDebe reasignar/buscar profesores para dicho/s curso/s.\n\n";
+           return;
+        }
+
+        std::cout<<"Para confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
         std::getline(std::cin,input);
 
         if( _utilidades.aMinusculas(input) == "si"){
@@ -1420,7 +1569,7 @@ void ProfesorManager::baja(){
         }else{
 
             system("cls");
-            std::cout << "\nAlta de profesor cancelada.\n";
+            std::cout << "\nBaja de profesor cancelada.\n";
             return;
 
         }
