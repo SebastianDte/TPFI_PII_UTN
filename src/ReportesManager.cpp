@@ -178,8 +178,6 @@ void ReportesManager::totalInscriptosPorCurso()
     delete [] vecInscripciones;
 
 
-
-
 }
 
 void ReportesManager::alumnosInscriptosEnCurso()
@@ -407,7 +405,7 @@ void ReportesManager::cursosConAulaOcupada()
 
 void ReportesManager::profesoresConCursosAsignados()
 {
-    int cantRegCursos, id, posicion;;
+    int cantRegCursos, cantRegProfesores, idProfesor, posicion;;
     int cantCursosActivos = 0;
     int indiceCursos = 0;
     std::string input;
@@ -418,27 +416,18 @@ void ReportesManager::profesoresConCursosAsignados()
 ///Cuento la cantidad de registros en el archivo cursos.dat
 
     cantRegCursos = _cursoArchivo.cantRegistros();
+    cantRegProfesores = _profesorArchivo.cantRegistros();
 
-<<<<<<< HEAD
-    if( cantRegCursos <= 0 ){
-=======
-/// Cusrsos
-    if( cantRegCursos == 0 )
-    {
->>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
+/// Cursos
+    if( cantRegCursos == 0 ){
 
         std::cout<<"No hay registros de cursos.\n";
         return;
     }
 
-<<<<<<< HEAD
 ///Filtro los activos
 
     for ( int i = 0; i< cantRegCursos; i++ ){
-=======
-    for ( int i = 0; i< cantRegCursos; i++ )
-    {
->>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
         _regCurso = _cursoArchivo.leer(i);
 
@@ -451,8 +440,7 @@ void ReportesManager::profesoresConCursosAsignados()
 
     }
 
-    if( cantCursosActivos == 0 )
-    {
+    if( cantCursosActivos == 0 ){
 
         std::cout<<"No hay registros de cursos activos.\n";
         return;
@@ -488,25 +476,27 @@ void ReportesManager::profesoresConCursosAsignados()
 
     }
 
+    if ( cantRegProfesores <= 0 ){
+
+        std::cout<<"No hay registros de profesores activos.\n";
+        return;
+    }
+
+
     ///Validacion del ingreso del ID profesor
+
     while(true){
 
         system("cls");
 
-<<<<<<< HEAD
         std::cout << "==================================================\n";
         std::cout << "     REPORTE DE PROFESORES CON CURSOS ASIGNADOS   \n";
         std::cout << "==================================================\n\n";
-=======
-    if ( cantRegProfesores == 0 )
-    {
->>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
-
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese el ID del profesor: \n";
         std::getline(std::cin,input);
 
-<<<<<<< HEAD
+
         if (_utilidades.esComandoSalir(input)){
             system("cls");
             std::cout << "\nReporte cancelado.\n\n";
@@ -518,93 +508,8 @@ void ReportesManager::profesoresConCursosAsignados()
             system("cls");
             std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
             system("pause");
-=======
-        return;
-    }
-
-
-    for ( int i = 0; i < cantRegProfesores; i++ )
-    {
-
-        _regProfesor = _profesorArchivo.leer(i);
-
-        if ( _regProfesor.getEstado() == true )
-        {
-
-            cantProfActivos ++;
+            return;
         }
-
-    }
-
-    if ( cantProfActivos == 0 )
-    {
-
-        std::cout<<"No hay registros de profesores activos.\n";
-
-        return;
-    }
-
-    vecProfesor = new Profesor [ cantProfActivos ];
-
-    if ( vecProfesor == nullptr )
-    {
-
-        std::cout<<"No se pudo asignar memoria.\n";
-
-        return;
-    }
-
-
-    for ( int i = 0; i < cantRegProfesores; i++ )
-    {
-
-        _regProfesor = _profesorArchivo.leer(i);
-
-        if ( _regProfesor.getEstado() )
-        {
-
-            vecProfesor[ indiceProfesor ] = _regProfesor;
-
-            indiceProfesor ++;
-
-        }
-
-    }
-
-
-
-    for (int p = 0; p < cantProfActivos ; p++ )
-    {
-
-        std::cout<<"-------------------------------------------\n";
-        std::cout<<"Profesor: " << vecProfesor[p].getApellido()<<", "<<vecProfesor[p].getNombre()<<".\n";
-        std::cout<<"ID profesor : "<<vecProfesor[p].getId()<<".\n";
-
-        bool tieneCursos = false;
-
-        for ( int c = 0; c < cantCursosActivos ; c++ )
-        {
-
-            if ( vecCursos[c].getIdProfesor() == vecProfesor[p].getId() )
-            {
-
-                std::cout<<"\nCurso: " << vecCursos[c].getNombre()<<".\n";
-                std::cout<<"ID curso: " << vecCursos[c].getId()<<".\n";
-                std::cout<<"Aula: " << vecCursos[c].getNumeroAula()<<".\n";
-
-                tieneCursos = true;
-            }
->>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
-
-            continue;
-
-        }
-
-<<<<<<< HEAD
-=======
-        if ( !tieneCursos)
-        {
->>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
@@ -613,9 +518,9 @@ void ReportesManager::profesoresConCursosAsignados()
             continue;
         }
 
-        id = std::stoi(input);
+        idProfesor = std::stoi(input);
 
-        posicion = _profesorArchivo.buscar(id);
+        posicion = _profesorArchivo.buscar(idProfesor);
 
         if ( posicion < 0 ){
 
