@@ -20,7 +20,7 @@ void InscripcionManager::altaInscripcion() {
     int legajo = 0, idCurso = 0;
     float importe = 0.0f;
     bool cancelar = false;
- /*
+
     // Paso 1: Legajo del alumno
     while (true) {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
@@ -33,7 +33,7 @@ void InscripcionManager::altaInscripcion() {
 
         break;
     }
- */
+
     // Paso 2: ID del curso
     while (true) {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
@@ -466,7 +466,7 @@ void InscripcionManager::mostrarUnaInscripcion(const Inscripcion& inscripcion) {
     cout << "------------------------" << endl;
 
 }
-/*
+
 //Metodos auxiliares
 bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
     AlumnoArchivo archivoAlumnos;
@@ -488,7 +488,7 @@ bool InscripcionManager::pedirLegajoAlumno(int& legajo) {
         std::cout << "\nLegajo no encontrado. Intente nuevamente.\n\n";
     }
 }
-*/
+
 bool InscripcionManager::pedirIdCurso(int& idCurso) {
     CursoArchivo archivoCursos;
     std::string entrada;

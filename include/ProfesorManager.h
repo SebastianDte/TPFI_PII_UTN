@@ -16,6 +16,7 @@ private:
 
 public:
 
+    ///Validaciones
     bool dniValidacion(const std::string& input);
     bool nombreValidacion(const std::string& input);
     bool apellidoValidacion(const std::string& input);
