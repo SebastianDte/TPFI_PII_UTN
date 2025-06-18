@@ -184,7 +184,116 @@ void ReportesManager::totalInscriptosPorCurso()
 
 void ReportesManager::alumnosInscriptosEnCurso()
 {
-    std::cout << "Alumnos inscriptos en un curso" << std::endl;
+    Utilidades utilidades;
+    CursoArchivo archivoCursos;
+    std::string inputUsuario;
+    int idCursoSeleccionado;
+    int posCurso;
+
+    while (true)
+    {
+        utilidades.limpiarPantallaConEncabezado("=== REPORTE - ALUMNOS POR CURSO ===");
+        std::cout << "Ingrese el ID del curso para ver los inscriptos (o 'salir' para cancelar): ";
+        std::getline(std::cin, inputUsuario);
+
+        if (utilidades.esComandoSalir(inputUsuario))
+        {
+            std::cout << "Reporte cancelado.\n";
+            return;
+        }
+
+        if (!utilidades.esEnteroValido(inputUsuario))
+        {
+            std::cout << "Debe ingresar un número entero válido. Intente nuevamente.\n";
+            utilidades.pausar();
+            continue;
+        }
+
+        idCursoSeleccionado = std::stoi(inputUsuario);
+        posCurso = archivoCursos.buscar(idCursoSeleccionado);
+
+        if (posCurso == -1)
+        {
+            std::cout << "No se encontró un curso con el ID " << idCursoSeleccionado << ". Intente nuevamente.\n";
+            utilidades.pausar();
+            continue;
+        }
+
+        break;
+    }
+
+    InscripcionArchivo archivoInscripciones;
+    AlumnoArchivo archivoAlumnos;
+
+    int totalInscripciones = archivoInscripciones.cantRegistros();
+    int totalAlumnos = archivoAlumnos.cantRegistros();
+
+    if (totalInscripciones == 0)
+    {
+        std::cout << "No hay ninguna inscripción registrada en el sistema.\n";
+        return;
+    }
+
+    Inscripcion* inscripciones = new Inscripcion[totalInscripciones];
+
+    if (inscripciones == nullptr)
+    {
+        std::cout << "Error: No se pudo asignar memoria para las inscripciones.\n";
+        return;
+    }
+
+    Alumno* alumnos = new Alumno[totalAlumnos];
+
+    if (alumnos == nullptr)
+    {
+        std::cout << "Error: No se pudo asignar memoria para los alumnos.\n";
+        return;
+    }
+
+    for(int i = 0; i < totalInscripciones; i++)
+    {
+        archivoInscripciones.leer(i, inscripciones[i]);
+    }
+    for(int i = 0; i < totalAlumnos; i++)
+    {
+        alumnos[i] = archivoAlumnos.leer(i);
+    }
+
+    Curso cursoSeleccionado = archivoCursos.leer(posCurso);
+    std::cout << "\n--- Alumnos Inscriptos en: " << cursoSeleccionado.getNombre() << " ---\n";
+
+    int alumnosEncontrados = 0;
+
+    for (int i = 0; i < totalInscripciones; i++)
+    {
+        if (inscripciones[i].getIdCurso() == idCursoSeleccionado && inscripciones[i].getEstado() == true)
+        {
+            int legajoBuscado = inscripciones[i].getLegajoAlumno();
+            for (int j = 0; j < totalAlumnos; j++)
+            {
+                if (alumnos[j].getLegajo() == legajoBuscado)
+                {
+                    std::cout << "----------------------------------\n";
+                    std::cout << "Legajo: " << alumnos[j].getLegajo() << std::endl;
+                    std::cout << "DNI: " << alumnos[j].getDni() << std::endl;
+                    std::cout << "Nombre: " << alumnos[j].getNombre() << std::endl;
+                    std::cout << "Apellido: " << alumnos[j].getApellido() << std::endl;
+
+                    alumnosEncontrados++;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (alumnosEncontrados == 0)
+    {
+        std::cout << "\nNo se encontraron alumnos inscriptos en este curso.\n";
+    }
+    std::cout << "----------------------------------\n";
+
+    delete[] inscripciones;
+    delete[] alumnos;
 }
 
 void ReportesManager::importeTotalRecaudadoPorAlumno()
@@ -310,19 +419,31 @@ void ReportesManager::profesoresConCursosAsignados()
 
     cantRegCursos = _cursoArchivo.cantRegistros();
 
+<<<<<<< HEAD
     if( cantRegCursos <= 0 ){
+=======
+/// Cusrsos
+    if( cantRegCursos == 0 )
+    {
+>>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
-       std::cout<<"No hay registros de cursos.\n";
-       return;
+        std::cout<<"No hay registros de cursos.\n";
+        return;
     }
 
+<<<<<<< HEAD
 ///Filtro los activos
 
     for ( int i = 0; i< cantRegCursos; i++ ){
+=======
+    for ( int i = 0; i< cantRegCursos; i++ )
+    {
+>>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
         _regCurso = _cursoArchivo.leer(i);
 
-        if ( _regCurso.getEstado() == true ){
+        if ( _regCurso.getEstado() == true )
+        {
 
             cantCursosActivos ++;
 
@@ -330,17 +451,19 @@ void ReportesManager::profesoresConCursosAsignados()
 
     }
 
-    if( cantCursosActivos == 0 ){
+    if( cantCursosActivos == 0 )
+    {
 
-       std::cout<<"No hay registros de cursos activos.\n";
-       return;
+        std::cout<<"No hay registros de cursos activos.\n";
+        return;
     }
 
 ///Solicito memoria dinamica para el vector de Cursos activos
 
     vecCursos = new Curso [cantCursosActivos];
 
-    if ( vecCursos == nullptr ){
+    if ( vecCursos == nullptr )
+    {
 
         std::cout<<"No se pudo asignar memoria.\n";
 
@@ -349,11 +472,13 @@ void ReportesManager::profesoresConCursosAsignados()
 
     ///Cargo el vector
 
-    for (int i = 0; i < cantRegCursos; i++ ){
+    for (int i = 0; i < cantRegCursos; i++ )
+    {
 
-       _regCurso = _cursoArchivo.leer(i);
+        _regCurso = _cursoArchivo.leer(i);
 
-        if ( _regCurso.getEstado() == true ){
+        if ( _regCurso.getEstado() == true )
+        {
 
             vecCursos[indiceCursos] = _regCurso;
 
@@ -368,14 +493,20 @@ void ReportesManager::profesoresConCursosAsignados()
 
         system("cls");
 
+<<<<<<< HEAD
         std::cout << "==================================================\n";
         std::cout << "     REPORTE DE PROFESORES CON CURSOS ASIGNADOS   \n";
         std::cout << "==================================================\n\n";
+=======
+    if ( cantRegProfesores == 0 )
+    {
+>>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"Ingrese el ID del profesor: \n";
         std::getline(std::cin,input);
 
+<<<<<<< HEAD
         if (_utilidades.esComandoSalir(input)){
             system("cls");
             std::cout << "\nReporte cancelado.\n\n";
@@ -387,11 +518,93 @@ void ReportesManager::profesoresConCursosAsignados()
             system("cls");
             std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
             system("pause");
+=======
+        return;
+    }
+
+
+    for ( int i = 0; i < cantRegProfesores; i++ )
+    {
+
+        _regProfesor = _profesorArchivo.leer(i);
+
+        if ( _regProfesor.getEstado() == true )
+        {
+
+            cantProfActivos ++;
+        }
+
+    }
+
+    if ( cantProfActivos == 0 )
+    {
+
+        std::cout<<"No hay registros de profesores activos.\n";
+
+        return;
+    }
+
+    vecProfesor = new Profesor [ cantProfActivos ];
+
+    if ( vecProfesor == nullptr )
+    {
+
+        std::cout<<"No se pudo asignar memoria.\n";
+
+        return;
+    }
+
+
+    for ( int i = 0; i < cantRegProfesores; i++ )
+    {
+
+        _regProfesor = _profesorArchivo.leer(i);
+
+        if ( _regProfesor.getEstado() )
+        {
+
+            vecProfesor[ indiceProfesor ] = _regProfesor;
+
+            indiceProfesor ++;
+
+        }
+
+    }
+
+
+
+    for (int p = 0; p < cantProfActivos ; p++ )
+    {
+
+        std::cout<<"-------------------------------------------\n";
+        std::cout<<"Profesor: " << vecProfesor[p].getApellido()<<", "<<vecProfesor[p].getNombre()<<".\n";
+        std::cout<<"ID profesor : "<<vecProfesor[p].getId()<<".\n";
+
+        bool tieneCursos = false;
+
+        for ( int c = 0; c < cantCursosActivos ; c++ )
+        {
+
+            if ( vecCursos[c].getIdProfesor() == vecProfesor[p].getId() )
+            {
+
+                std::cout<<"\nCurso: " << vecCursos[c].getNombre()<<".\n";
+                std::cout<<"ID curso: " << vecCursos[c].getId()<<".\n";
+                std::cout<<"Aula: " << vecCursos[c].getNumeroAula()<<".\n";
+
+                tieneCursos = true;
+            }
+>>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
             continue;
 
         }
 
+<<<<<<< HEAD
+=======
+        if ( !tieneCursos)
+        {
+>>>>>>> 1dd2661f257baf7255307d4efee62e722a6f2a5b
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
