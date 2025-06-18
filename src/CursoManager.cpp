@@ -173,6 +173,12 @@ bool CursoManager::pedirIdProfesor(int& idProfesor)
         {
             std::cout << "\nNo se encontr� un profesor con ese ID. Intente nuevamente.\n\n";
             continue;
+        } else {
+            Profesor profesor = archivoProfesor.leer(pos);
+            if (!profesor.getEstado()){
+                std::cout << "\nEl profesor se encuentra inactivo. Intente nuevamente.\n\n";
+                continue;
+            }
         }
 
         return true;
