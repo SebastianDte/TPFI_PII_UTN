@@ -16,25 +16,18 @@ using namespace std;
 //Método para dar de alta una Inscripción.
 void InscripcionManager::altaInscripcion() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
     int legajo = 0, idCurso = 0;
     float importe = 0.0f;
-    bool cancelar = false;
-
+    _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
+    std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
+    
     // Paso 1: Legajo del alumno
-    while (true) {
-        _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
-        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
-
         if (!pedirLegajoAlumno(legajo)) {
             std::cout << "\nAlta de inscripción cancelada.\n";
             return;
         }
 
-        break;
-    }
-
-    // Paso 2: ID del curso
+    // Paso 2: ID del curso + Control de cupo
     while (true) {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
@@ -51,7 +44,12 @@ void InscripcionManager::altaInscripcion() {
             continue;
         }
 
-        break;
+		if (controlCupo(idCurso)) break; 
+		else {
+			std::cout << "\nNo se pudo inscribir al curso por falta de cupo.\n";
+			_utilidades.pausarYLimpiar();
+			return;
+		} 
     }
 
     // Paso 3: Importe abonado
@@ -70,10 +68,10 @@ void InscripcionManager::altaInscripcion() {
     }
 
     // Paso final: Guardar la inscripción
-    Fecha fecha = Fecha::fechaActual();
+    Fecha fecha = Fecha::fechaActual(); //Fecha actual del sistema.
     InscripcionArchivo archivoInscripciones;
-    int id = archivoInscripciones.obtenerProximoId();
-    bool estado = true;
+	int id = archivoInscripciones.obtenerProximoId(); //ID único para la inscripción.
+	bool estado = true; // Inscripción activa por defecto.
 
     Inscripcion nueva(id, legajo, idCurso, fecha, importe, estado);
 
@@ -81,12 +79,13 @@ void InscripcionManager::altaInscripcion() {
         _utilidades.limpiarPantallaConEncabezado("ALTA DE INSCRIPCION");
         std::cout << "\nInscripción realizada con éxito.\n";
         mostrarUnaInscripcion(nueva);
+        return;
     }
     else {
         std::cout << "\nError al guardar la inscripción.\n";
-    }
-
-    _utilidades.pausarYLimpiar();
+        _utilidades.pausarYLimpiar();
+        return;
+    }   
 }
 
 //Método para dar de baja una Inscripción.
@@ -266,13 +265,13 @@ void InscripcionManager::modificarInscripcion() {
 
             nuevoIdCurso = stoi(entrada);
 
-            // Verificar que el curso exista
+            // Verifica que el curso exista
             if (archivoCursos.buscar(nuevoIdCurso) == -1) {
                 cout << "ID de curso no encontrado. Intente nuevamente." << endl;
                 utilidades.pausarYLimpiar();
                 continue;
             }
-            //Verificar que no esté intentando inscribirse al mismo curso actual.
+            //Verifica que no esté intentando inscribirse al mismo curso actual.
             if (nuevoIdCurso == original.getIdCurso()) {
                 cout << "Ya está inscripto en ese curso." << endl;
                 utilidades.pausarYLimpiar();
@@ -464,7 +463,22 @@ void InscripcionManager::mostrarUnaInscripcion(const Inscripcion& inscripcion) {
     cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
     cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
     cout << "------------------------" << endl;
+}
 
+void InscripcionManager::mostrarInscripcionPorId(int idInscripcion) {
+    InscripcionArchivo archivoInscripciones;
+    int pos = archivoInscripciones.buscar(idInscripcion);
+    if (pos == -1) {
+        std::cout << "No se encontró una inscripción con ese ID." << std::endl;
+        return;
+    }
+    Inscripcion insc;
+    if (archivoInscripciones.leer(pos, insc)) {
+        mostrarUnaInscripcion(insc);
+    }
+    else {
+        std::cout << "Error al leer la inscripción." << std::endl;
+    }
 }
 
 //Metodos auxiliares
@@ -560,7 +574,29 @@ bool InscripcionManager::existeCursoActivo(int idCurso) {
     return curso.getEstado();
 }
 
+bool InscripcionManager::controlCupo(int idCurso) {
+    InscripcionArchivo archivoInscripciones;
+	Utilidades _utilidades;
+    int inscriptos = 0;
+    int total = archivoInscripciones.cantRegistros();
+    Inscripcion inscTemp;
+    for (int i = 0; i < total; i++) {
+        if (archivoInscripciones.leer(i, inscTemp) &&
+            inscTemp.getIdCurso() == idCurso &&
+            inscTemp.getEstado()) {
+            inscriptos++;
+        }
+    }
 
+    CursoArchivo archivoCursos;
+    int posCurso = archivoCursos.buscar(idCurso);
+    Curso curso = archivoCursos.leer(posCurso);
+    int capacidadMaxima = curso.getCantMaximaAlumnos();
+
+    if (inscriptos >= capacidadMaxima) return false;
+
+    return true;
+}
 
 void InscripcionManager::bajaInscripcionesPorCurso(int idCurso) {
     InscripcionArchivo archivoInscripciones;

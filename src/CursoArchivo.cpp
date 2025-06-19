@@ -25,9 +25,6 @@ bool CursoArchivo::alta(const Curso& regCurso)
     return ok;
 }
 
-
-
-
 int CursoArchivo::buscar(int idCurso) const
 {
     FILE* pCurso = fopen(_nombreArchivo, "rb");
@@ -50,7 +47,6 @@ int CursoArchivo::buscar(int idCurso) const
     return -1;
 }
 
-
 bool CursoArchivo::modificar(const Curso& regCurso, int posicion)
 {
     FILE* pCurso = fopen(_nombreArchivo, "rb+");
@@ -68,7 +64,6 @@ bool CursoArchivo::modificar(const Curso& regCurso, int posicion)
 
     return escritos == 1;
 }
-
 
 bool CursoArchivo::tieneInscripcionesActivas(int idCurso) const {
     InscripcionArchivo archivoInscripcion = InscripcionArchivo();
@@ -110,7 +105,6 @@ bool CursoArchivo::baja(int idCurso)
     registro.setEstado(false);
     return modificar(registro, posicion);
 }
-
 
 Curso CursoArchivo::leer(int posicion)
 {
