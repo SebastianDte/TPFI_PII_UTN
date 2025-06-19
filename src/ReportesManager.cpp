@@ -413,7 +413,7 @@ void ReportesManager::profesoresConCursosAsignados()
     Profesor _regProfesor;
     Curso *vecCursos;
 
-///Cuento la cantidad de registros en el archivo cursos.dat
+///Cuento la cantidad de registros en el archivo cursos.dat y prefesores.dat
 
     cantRegCursos = _cursoArchivo.cantRegistros();
     cantRegProfesores = _profesorArchivo.cantRegistros();
@@ -422,6 +422,12 @@ void ReportesManager::profesoresConCursosAsignados()
     if( cantRegCursos == 0 ){
 
         std::cout<<"No hay registros de cursos.\n";
+        return;
+    }
+
+    if ( cantRegProfesores <= 0 ){
+
+        std::cout<<"No hay registros de profesores activos.\n";
         return;
     }
 
