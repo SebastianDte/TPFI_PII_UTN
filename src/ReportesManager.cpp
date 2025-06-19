@@ -177,7 +177,6 @@ void ReportesManager::totalInscriptosPorCurso()
 
     delete [] vecInscripciones;
 
-
 }
 
 void ReportesManager::alumnosInscriptosEnCurso()
