@@ -161,7 +161,7 @@ void InscripcionManager::bajaInscripcion() {
     }
 }
 
-
+//Método para Modificar una Inscripción.
 void InscripcionManager::modificarInscripcion() {
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     _utilidades.limpiarPantallaConEncabezado("MODIFICAR INSCRIPCION");
@@ -263,151 +263,27 @@ void InscripcionManager::modificarInscripcion() {
     _utilidades.pausarYLimpiar();
 }
 
-
-int InscripcionManager::mostrarMenuModificacion(const Inscripcion& original) {
-    std::string entrada;
-
-    while (true) {
-        _utilidades.limpiarPantallaConEncabezado("MODIFICAR INSCRIPCION");
-        cout << "Datos actuales de la inscripción:\n";
-        mostrarUnaInscripcion(original);
-        cout << "\n¿Qué desea modificar?\n";
-        cout << "1. Importe abonado\n";
-        cout << "2. ID de curso\n";
-        cout << "3. Ambos campos\n";
-        cout << "0. Cancelar\n";
-        cout << "Seleccione una opción: ";
-
-        getline(cin, entrada);
-
-        if (_utilidades.esEnteroValido(entrada)) {
-            int opcion = stoi(entrada);
-            switch (opcion) {
-            case 0: case 1: case 2: case 3:
-                return opcion;
-            default:
-                cout << "\nOpción inválida. Intente nuevamente.\n\n";
-            }
-        }
-        else {
-            cout << "\nDebe ingresar un número válido.\n\n";
-        }
-    }
-}
-
-
-
-
 // Métodos para listar.
 void InscripcionManager::listarInscripcionesActivas() {
-    _utilidades.limpiarPantallaConEncabezado("Listado de inscripciónes activas");
-
-    InscripcionArchivo archivoInscripciones;
-    AlumnoArchivo archivoAlumnos;
-    CursoArchivo archivoCursos;
-    int cantidad = archivoInscripciones.cantRegistros();
-    if (cantidad == 0) {
-        cout << "No hay inscripciones registradas." << endl;
-        return;
-    }
-    Inscripcion inscripcion;
-    for (int i = 0; i < cantidad; i++) {
-        if (archivoInscripciones.leer(i, inscripcion) && inscripcion.getEstado()) {
-            // Obtener datos del alumno.
-            int posAlumno = archivoAlumnos.buscar(inscripcion.getLegajoAlumno(), false);
-            Alumno alumno;
-            bool alumnoOk = false;
-            if (posAlumno != -1) {
-                alumno = archivoAlumnos.leer(posAlumno);
-                alumnoOk = true;
-            }
-
-            // Obtener datos del curso.
-            int posCurso = archivoCursos.buscar(inscripcion.getIdCurso());
-            Curso curso;
-            bool cursoOk = false;
-            if (posCurso != -1) {
-                curso = archivoCursos.leer(posCurso);
-                cursoOk = true;
-            }
-
-            cout << "ID Inscripción: " << inscripcion.getIdInscripcion() << endl;
-            if (alumnoOk) {
-                cout << "Alumno: " << alumno.getNombre() << " " << alumno.getApellido() << endl;
-            }
-            else {
-                cout << "Alumno: (No encontrado)" << endl;
-            }
-            if (cursoOk) {
-                cout << "Curso: " << curso.getNombre() << endl;
-            }
-            else {
-                cout << "Curso: (No encontrado)" << endl;
-            }
-            cout << "Fecha: " << inscripcion.getFechaInscripcion().toString() << endl;
-            cout << std::fixed << std::setprecision(3);
-            cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
-            cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
-            cout << "------------------------" << endl;
-        }
-    }
+    mostrarListadoInscripciones(1);
 }
 
 void InscripcionManager::listarInscripcionesInactivas() {
-    _utilidades.limpiarPantallaConEncabezado("Listado de inscripciónes inactivas");
-    InscripcionArchivo archivoInscripciones;
-    AlumnoArchivo archivoAlumnos;
-    CursoArchivo archivoCursos;
-    int cantidad = archivoInscripciones.cantRegistros();
-    if (cantidad == 0) {
-        cout << "No hay inscripciones registradas." << endl;
-        return;
-    }
-    Inscripcion inscripcion;
-    for (int i = 0; i < cantidad; i++) {
-        if (archivoInscripciones.leer(i, inscripcion) && !inscripcion.getEstado()) {
-            // Obtener datos del alumno.
-            int posAlumno = archivoAlumnos.buscar(inscripcion.getLegajoAlumno(), false);
-            Alumno alumno;
-            bool alumnoOk = false;
-            if (posAlumno != -1) {
-                alumno = archivoAlumnos.leer(posAlumno);
-                alumnoOk = true;
-            }
-
-            // Obtener datos del curso.
-            int posCurso = archivoCursos.buscar(inscripcion.getIdCurso());
-            Curso curso;
-            bool cursoOk = false;
-            if (posCurso != -1) {
-                curso = archivoCursos.leer(posCurso);
-                cursoOk = true;
-            }
-
-            cout << "ID Inscripción: " << inscripcion.getIdInscripcion() << endl;
-            if (alumnoOk) {
-                cout << "Alumno: " << alumno.getNombre() << " " << alumno.getApellido() << endl;
-            }
-            else {
-                cout << "Alumno: (No encontrado)" << endl;
-            }
-            if (cursoOk) {
-                cout << "Curso: " << curso.getNombre() << endl;
-            }
-            else {
-                cout << "Curso: (No encontrado)" << endl;
-            }
-            cout << "Fecha: " << inscripcion.getFechaInscripcion().toString() << endl;
-            cout << std::fixed << std::setprecision(3);
-            cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
-            cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
-            cout << "------------------------" << endl;
-        }
-    }
+    mostrarListadoInscripciones(0);
 }
 
 void InscripcionManager::listarTodasInscripciones() {
-    _utilidades.limpiarPantallaConEncabezado("Listado de todas las Inscripciónes");
+    mostrarListadoInscripciones(-1);
+}
+
+
+// Parámetro: -1 = todas, 1 = solo activas, 0 = solo inactivas
+void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
+    string titulo = "Listado de inscripciones";
+    if (filtroEstado == 1) titulo += " activas";
+    else if (filtroEstado == 0) titulo += " inactivas";
+
+    _utilidades.limpiarPantallaConEncabezado(titulo);
 
     InscripcionArchivo archivoInscripciones;
     AlumnoArchivo archivoAlumnos;
@@ -417,46 +293,30 @@ void InscripcionManager::listarTodasInscripciones() {
         cout << "No hay inscripciones registradas." << endl;
         return;
     }
-    Inscripcion inscripcion;
+
+    Inscripcion insc;
     for (int i = 0; i < cantidad; i++) {
-        if (archivoInscripciones.leer(i, inscripcion)){
-            // Obtener datos del alumno
-            int posAlumno = archivoAlumnos.buscar(inscripcion.getLegajoAlumno(), false);
-            Alumno alumno;
-            bool alumnoOk = false;
-            if (posAlumno != -1) {
-                alumno = archivoAlumnos.leer(posAlumno);
-                alumnoOk = true;
-            }
+        if (!archivoInscripciones.leer(i, insc)) continue;
 
-            // Obtener datos del curso.
-            int posCurso = archivoCursos.buscar(inscripcion.getIdCurso());
-            Curso curso;
-            bool cursoOk = false;
-            if (posCurso != -1) {
-                curso = archivoCursos.leer(posCurso);
-                cursoOk = true;
-            }
+        // Filtrado por estado
+        if (filtroEstado != -1 && insc.getEstado() != (filtroEstado == 1)) continue;
 
-            cout << "ID Inscripción: " << inscripcion.getIdInscripcion() << endl;
-            if (alumnoOk) {
-                cout << "Alumno: " << alumno.getNombre() << " " << alumno.getApellido() << endl;
-            }
-            else {
-                cout << "Alumno: (No encontrado)" << endl;
-            }
-            if (cursoOk) {
-                cout << "Curso: " << curso.getNombre() << endl;
-            }
-            else {
-                cout << "Curso: (No encontrado)" << endl;
-            }
-            cout << "Fecha: " << inscripcion.getFechaInscripcion().toString() << endl;
-            cout << std::fixed << std::setprecision(3);
-            cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
-            cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
-            cout << "------------------------" << endl;
-        }
+        // Mostramos la info (podés encapsular esto también si querés)
+        int posAlumno = archivoAlumnos.buscar(insc.getLegajoAlumno(), false);
+        int posCurso = archivoCursos.buscar(insc.getIdCurso());
+        Alumno alumno;
+        Curso curso;
+        bool alumnoOk = (posAlumno != -1 && (alumno = archivoAlumnos.leer(posAlumno), true));
+        bool cursoOk = (posCurso != -1 && (curso = archivoCursos.leer(posCurso), true));
+
+        cout << "ID Inscripción: " << insc.getIdInscripcion() << endl;
+        cout << "Alumno: " << (alumnoOk ? alumno.getNombre() + " " + alumno.getApellido() : "(No encontrado)") << endl;
+        cout << "Curso: " << (cursoOk ? curso.getNombre() : "(No encontrado)") << endl;
+        cout << "Fecha: " << insc.getFechaInscripcion().toString() << endl;
+        cout << fixed << setprecision(3);
+        cout << "Importe Abonado: $" << insc.getImporteAbonado() << endl;
+        cout << "Estado: " << (insc.getEstado() ? "Activo" : "Inactivo") << endl;
+        cout << "------------------------" << endl;
     }
 }
 
@@ -632,6 +492,37 @@ bool InscripcionManager::controlCupo(int idCurso) {
     return true;
 }
 
+// Método para mostrar el menú de modificación de inscripción.
+int InscripcionManager::mostrarMenuModificacion(const Inscripcion& original) {
+    std::string entrada;
+
+    while (true) {
+        _utilidades.limpiarPantallaConEncabezado("MODIFICAR INSCRIPCION");
+        cout << "Datos actuales de la inscripción:\n";
+        mostrarUnaInscripcion(original);
+        cout << "\n¿Qué desea modificar?\n";
+        cout << "1. Importe abonado\n";
+        cout << "2. ID de curso\n";
+        cout << "3. Ambos campos\n";
+        cout << "0. Cancelar\n";
+        cout << "Seleccione una opción: ";
+
+        getline(cin, entrada);
+
+        if (_utilidades.esEnteroValido(entrada)) {
+            int opcion = stoi(entrada);
+            switch (opcion) {
+            case 0: case 1: case 2: case 3:
+                return opcion;
+            default:
+                cout << "\nOpción inválida. Intente nuevamente.\n\n";
+            }
+        }
+        else {
+            cout << "\nDebe ingresar un número válido.\n\n";
+        }
+    }
+}
 
 //Metodos que utilizan Curso y  alumno para la baja en cascada.
 void InscripcionManager::bajaInscripcionesPorCurso(int idCurso) {

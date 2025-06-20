@@ -36,9 +36,12 @@ int InscripcionArchivo::buscar(int idInscripcion) const {
 bool InscripcionArchivo::baja(int idInscripcion) {
 	int posicion = buscar(idInscripcion);
 	if (posicion == -1) return false;
+
 	Inscripcion inscripcion;
-	inscripcion.setEstado(false);
-	return modificar(inscripcion, posicion);
+	if (!leer(posicion, inscripcion)) return false; 
+
+	inscripcion.setEstado(false); 
+	return modificar(inscripcion, posicion); 
 }
 
 bool InscripcionArchivo::modificar(const Inscripcion& regInscripcion, int posicion) {
