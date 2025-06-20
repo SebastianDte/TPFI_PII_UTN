@@ -931,6 +931,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
     Curso cursoProf;
     CursoArchivo archiCurso;
     int cantRegCursos, opcion, posicion;
+    bool inscripActivas = false;
     std::string input;
 
     cantRegCursos = archiCurso.cantRegistros() ;
@@ -982,25 +983,51 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
         case 1:
 
+            ///Baja de/los curso/s;
+            system("cls");
+
+            for (int i = 0; i < cantRegCursos; i++ ){
+
+                cursoProf = archiCurso.leer(i);
+
+                if ( cursoProf.getEstado() && archiCurso.tieneInscripcionesActivas( cursoProf.getId() ) && cursoProf.getIdProfesor()== idProfesor ){
+
+                    inscripActivas = true;
+                    break;
+
+                }
+
+                if ( cursoProf.getEstado() && cursoProf.getIdProfesor()== idProfesor ){
+
+                    cursoProf.setEstado (false);
+                    archiCurso.alta(cursoProf);
+
+                }
+
+
+            }
+
+            if ( inscripActivas == true ){
+
+                std::cout<<"\nERROR.El profesor que desea dar de baja tiene cursos a su cargo con inscripciones activas.\n\n";
+                inscripActivas = false;
+                break;
+                return;
+
+            }
+
             ///Baja del profesor;
             _profesor.setEstado(false);
             _archivo.alta(_profesor,posicion);
 
+            std::cout<<"\nRegistro de profesor y curso/s eliminados exitosamente \n";
 
-          /*
-            ///Baja de/los curso/s;
-
-
-
-           */
-            return;
-
-
+            break;
 
         case 2:
-
             ///Baja del profesor;
 
+            system("cls");
             _cursoManager.reasignarCursosDeProfesor(idProfesor);
 
             _profesor.setEstado(false);
@@ -1008,7 +1035,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
             std::cout<<"\nRegistro de profesor eliminado y cursos reasignados exitosamente \n";
 
-           return;
+           break;
 
         default:
 
@@ -1018,7 +1045,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
             break;
         }
 
-
+       return;
     }
 
 }
