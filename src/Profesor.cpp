@@ -12,7 +12,7 @@ Profesor::Profesor()
 }
 
 
-Profesor::Profesor(const int &id,const bool &estado,const std::string& dni,const std::string& nombre,
+Profesor::Profesor(const int &id,const bool &estado, const std::string& dni,const std::string& nombre,
                    const std::string& apellido,const std::string& telefono,
                    const std::string& email,const std::string& direccion,const Fecha& fechaNacimiento)
 : Persona( dni, nombre, apellido, telefono, email, direccion, fechaNacimiento ){
@@ -52,7 +52,11 @@ void Profesor::mostrar(){
     std::cout<<"EMAIL: "<<getEmail()<<"\n";
     std::cout<<"DIRECCION: "<<getDireccion()<<".\n";
     std::cout<<"FECHA NAC: "<<getFechaNacimiento().getDia()<<"/"<<getFechaNacimiento().getMes()<<"/"<<getFechaNacimiento().getAnio()<<"\n";
-    std::cout<<"ESTADO: "<<getEstado()<<".\n";
+    if( getEstado()== true ){
+        std::cout<<"ESTADO: Activo\n";
+    }else{
+        std::cout<<"ESTADO: Inactivo\n";
+    }
 }
 
 

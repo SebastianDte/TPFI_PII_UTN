@@ -24,6 +24,7 @@ void MenuCurso::mostrarMenuCurso()
         std::cout << "3. Listar cursos\n";
         std::cout << "4. Buscar curso por ID\n";
         std::cout << "5. Baja de curso\n";
+        std::cout << "6. Reactivar curso\n";
         std::cout << "0. Volver al men� principal\n";
         std::cout << "=========================================\n";
         std::cout << "Seleccione una opci�n: ";
@@ -64,6 +65,11 @@ void MenuCurso::mostrarMenuCurso()
              case 5:
                 system("cls");
                 _manager.bajaCurso();
+                system("pause");
+                break;
+             case 6:
+                 system("cls");
+                _manager.reactivarCurso();
                 system("pause");
                 break;
             case 0:

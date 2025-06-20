@@ -34,5 +34,6 @@ public:
     void buscar();
     int contCursosProfesor(int idProfesor);
     void baja();
+    void bajaCursoProfesor(int idProfesor);
 
 };

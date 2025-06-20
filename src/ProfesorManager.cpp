@@ -927,6 +927,131 @@ int ProfesorManager::contCursosProfesor(int idProfesor){
 
 }
 
+void ProfesorManager::bajaCursoProfesor(int idProfesor){
+    Curso cursoProf;
+    CursoArchivo archiCurso;
+    int cantRegCursos, opcion, posicion;
+    bool inscripActivas = false;
+    std::string input;
+
+    cantRegCursos = archiCurso.cantRegistros() ;
+
+    while(true){
+
+        system("cls");
+        std::cout<<"\nProfesor: " << _profesor.getApellido()<<", "<<_profesor.getNombre()<<".\n";
+        std::cout<<"DNI: " << _profesor.getDni()<<".\n";
+        std::cout<<"\nEl profesor que desea dar de baja, tiene asignado/s: "<< contCursosProfesor(idProfesor)<<" curso/s.\n";
+        std::cout<<"\nElija una opcion:\n";
+        std::cout<<"1)Dar de baja al profesor y sus cursos asignados.\n";
+        std::cout<<"2)Dar de baja al profesor y reasignar el/los curso/s a otro profesor.\n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+
+            std::cout << "\nBaja de profesor cancelada.\n";
+            return;
+
+        }
+
+        if (input.empty()){
+
+            system("cls");
+            std::cout << "\nDebe completar este campo. Intente nuevamente.\n\n";
+
+            system("pause");
+            continue;
+
+        }
+
+        if ( !_utilidades.esEnteroValido(input) ){
+            system("cls");
+            std::cout << "\nEl ID ingresado es incorrecto, debe ser un numero entero.Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+
+        }
+
+        opcion = std::stoi(input);/// Convierto la cadena en un valor entero.
+
+        posicion = _archivo.buscar(idProfesor);
+
+        _profesor = _archivo.leer(posicion);
+
+        switch(opcion)
+        {
+
+        case 1:
+
+            ///Baja de/los curso/s;
+            system("cls");
+
+            for (int i = 0; i < cantRegCursos; i++ ){
+
+                cursoProf = archiCurso.leer(i);
+
+                if ( cursoProf.getEstado() && archiCurso.tieneInscripcionesActivas( cursoProf.getId() ) && cursoProf.getIdProfesor()== idProfesor ){
+
+                    inscripActivas = true;
+                    break;
+
+                }
+
+                if ( cursoProf.getEstado() && cursoProf.getIdProfesor()== idProfesor ){
+
+                    cursoProf.setEstado (false);
+                    archiCurso.alta(cursoProf);
+
+                }
+
+
+            }
+
+            if ( inscripActivas == true ){
+
+                std::cout<<"\nERROR.El profesor que desea dar de baja tiene cursos a su cargo con inscripciones activas.\n\n";
+                inscripActivas = false;
+                break;
+                return;
+
+            }
+
+            ///Baja del profesor;
+            _profesor.setEstado(false);
+            _archivo.alta(_profesor,posicion);
+
+            std::cout<<"\nRegistro de profesor y curso/s eliminados exitosamente \n";
+
+            break;
+
+        case 2:
+            ///Baja del profesor;
+
+            system("cls");
+            _cursoManager.reasignarCursosDeProfesor(idProfesor);
+
+            _profesor.setEstado(false);
+            _archivo.alta(_profesor,posicion);
+
+            std::cout<<"\nRegistro de profesor eliminado y cursos reasignados exitosamente \n";
+
+           break;
+
+        default:
+
+            std::cout<<"La opcion ingresada es incorrecta, intente nuevamente.\n";
+            system("pause");
+
+            break;
+        }
+
+       return;
+    }
+
+}
+
+
+
 void ProfesorManager::modificar(){
 
     Fecha fechaNacimiento;
@@ -1541,20 +1666,21 @@ void ProfesorManager::baja(){
 
         system("cls");
 
-        _profesor.mostrar();
+        std::cout<<"\nProfesor: " << _profesor.getApellido()<<", "<<_profesor.getNombre()<<".\n";
+        std::cout<<"DNI: " << _profesor.getDni()<<".\n";
 
         ///Buscar si el profesor tiene asignados cursos antes de darle de baja.
 
         if ( contCursosProfesor(idBaja) > 0 ){
 
-            ///Responsabilidad de Cursos.
-           std::cout<<"\nEl profesor que desea dar de baja, tiene asignado/s: "<< contCursosProfesor(idBaja)<<" curso/s.\n";
-           std::cout<<"\nDebe reasignar/buscar profesores para dicho/s curso/s.\n\n";
+           bajaCursoProfesor(idBaja); ///Baja de cursos desde profesormanager
+
            return;
         }
 
-        std::cout<<"Para confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
+        std::cout<<"\nPara confirmar la baja ingrese: 'SI'.Para cancelar ingrese: 'NO' \n\n";
         std::getline(std::cin,input);
+
 
         if( _utilidades.aMinusculas(input) == "si"){
 
@@ -1566,7 +1692,9 @@ void ProfesorManager::baja(){
 
             return;
 
-        }else{
+        }
+
+        if( _utilidades.aMinusculas(input) == "no"){
 
             system("cls");
             std::cout << "\nBaja de profesor cancelada.\n";
@@ -1575,8 +1703,18 @@ void ProfesorManager::baja(){
         }
 
 
-    }
+        if ( _utilidades.esComandoSalir(input) ){
+            system("cls");
+            std::cout << "\nBaja de profesor cancelada.\n\n";
+            return;
 
+        }
+
+        std::cout << "Debe ingresar una de las 2 opciones. Intente nuevamente.\n\n";
+        system("pause");
+        continue;
+
+    }
 
 }
 
