@@ -1064,7 +1064,6 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
             ///Baja del profesor;
 
             system("cls");
-          /*
             if ( _cursoManager.reasignarCursosDeProfesor(idProfesor) ){
 
                 _profesor.setEstado(false);
@@ -1073,8 +1072,6 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
                 std::cout<<"\nRegistro de profesor eliminado y cursos reasignados exitosamente \n";
 
             }
-          */
-
 
            break;
 

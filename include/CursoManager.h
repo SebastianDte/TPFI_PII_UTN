@@ -29,5 +29,5 @@ public:
     bool pedirNumeroAula(int& aula, int idCursoExcluido = -1);
     bool pedirIdProfesor(int& idProfesor);
     bool aulaUnica(int& numeroAula, int idCursoExcluido = -1);
-    void reasignarCursosDeProfesor(int idProfesorActual);
+    bool reasignarCursosDeProfesor(int idProfesorActual);
 };
