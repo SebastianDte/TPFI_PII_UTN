@@ -28,12 +28,14 @@ public:
 	void listarInscripcionesActivas();
 	void listarInscripcionesInactivas();
 	void mostrarUnaInscripcion(const Inscripcion& inscripcion);
-	void mostrarInscripcionPorId(int idInscripcion);
+	bool mostrarInscripcionPorId(int idInscripcion);
+	void mostrarInscripcionPorId();
+
 	//Metodo auxiliares.
 	bool existeAlumnoActivo(int legajo);
 	bool existeCursoActivo(int idCurso);
-
 	bool controlCupo(int idCurso);
+	int mostrarMenuModificacion(const Inscripcion& original);
 
 	void bajaInscripcionesPorCurso(int idCurso);
 	void bajaInscripcionesPorAlumno(int legajo);

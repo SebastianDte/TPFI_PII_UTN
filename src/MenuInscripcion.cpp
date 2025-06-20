@@ -41,12 +41,7 @@ void MenuInscripcion::mostrarMenu() {
 			inscripcionManager.listarTodasInscripciones();
 			break;
 		case 7:
-			int id;
-			std::cout << "Ingrese el ID de la inscripción a buscar: ";
-			std::cin >> id;
-			_utilidades.limpiarPantallaConEncabezado("MENÚ INSCRIPCION");
-			inscripcionManager.mostrarInscripcionPorId(id);
-			break;
+			inscripcionManager.mostrarInscripcionPorId();
 			break;
 		case 0:
 			std::cout << "Volviendo al menu principal...\n";
