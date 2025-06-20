@@ -55,7 +55,9 @@ void Profesor::mostrar(){
     if( getEstado()== true ){
         std::cout<<"ESTADO: Activo\n";
     }else{
-        std::cout<<"ESTADO: Inactivo\n";
+        if( getEstado()== false ){
+            std::cout<<"ESTADO: Inactivo\n";
+        }
     }
 }
 

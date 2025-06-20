@@ -9,7 +9,7 @@ class Profesor : public Persona {
 private:
 
     int _id;
-    bool _estado;
+    bool _estado = true;
 
 public:
 

@@ -612,24 +612,21 @@ void ReportesManager::profesoresConCursosAsignados()
         std::getline(std::cin,input);
 
 
-        if (_utilidades.esComandoSalir(input))
-        {
+        if (_utilidades.esComandoSalir(input)){
             system("cls");
             std::cout << "\nReporte cancelado.\n\n";
             return;
 
         }
 
-        if (input.empty())
-        {
+        if (input.empty()){
             system("cls");
             std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
             system("pause");
             return;
         }
 
-        if ( !_utilidades.esEnteroValido(input) )
-        {
+        if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
             std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
             system("pause");
@@ -671,7 +668,14 @@ void ReportesManager::profesoresConCursosAsignados()
 
     system("cls");
 
+    std::cout << "==================================================\n";
+    std::cout << "     REPORTE DE PROFESORES CON CURSOS ASIGNADOS   \n";
+    std::cout << "==================================================\n\n";
+
+
     std::cout<<"\nProfesor: " << _regProfesor.getApellido()<<", "<<_regProfesor.getNombre()<<".\n";
+    std::cout<<"DNI: "<<_regProfesor.getDni()<<".\n";
+    std::cout<<"ID: "<<_regProfesor.getId()<<".\n";
 
     bool tieneCursos = false;
 
@@ -694,7 +698,7 @@ void ReportesManager::profesoresConCursosAsignados()
     if ( !tieneCursos)
     {
 
-        std::cout<<"\nNo posee cursos asignados.\n";
+        std::cout<<"\nNo posee cursos asignados.\n\n";
 
     }
 
