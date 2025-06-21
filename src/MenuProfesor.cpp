@@ -20,6 +20,7 @@ void MenuProfesor::mostrarMenuProfesor(){
         std::cout << "3. Modificar profersor.\n";
         std::cout << "4. Listar profesores.\n";
         std::cout << "5. Buscar profesor por ID.\n";
+        std::cout << "6. Reactivar profesor por ID.\n";
         std::cout << "0. Volver al menu principal.\n";
         std::cout << "=========================================\n";
         std::cout << "Ingrese una opcion.\n";
@@ -70,8 +71,15 @@ void MenuProfesor::mostrarMenuProfesor(){
 
         case 5:
 
-
             _manager.buscar();
+
+            system("pause");
+
+            break;
+
+        case 6:
+
+            _manager.reactivarProfesor();
 
             system("pause");
 

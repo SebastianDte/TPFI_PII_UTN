@@ -604,8 +604,20 @@ int id,cantidadRegistros;
 void ProfesorManager::listar(){
 
     std::string input;
-    int opcion;
+    int opcion, cantRegistros;
     Utilidades _utilidades;
+
+    cantRegistros = _archivo.cantRegistros();
+
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+
+    }
+
+
 
     while(true)
     {
@@ -772,6 +784,14 @@ void ProfesorManager::listarPorApellido(){
 
     cantRegistros = _archivo.cantRegistros();
 
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+    }
+
+
     ///El vector solo almacenara a los profesores activos
 
     for ( int i = 0; i < cantRegistros; i++ ){
@@ -785,6 +805,9 @@ void ProfesorManager::listarPorApellido(){
         }
 
     }
+
+
+
 
     if ( cantActivos == 0 ){
 
@@ -863,8 +886,17 @@ void ProfesorManager::listarPorApellido(){
 
 void ProfesorManager::buscar(){
 
-    int id, posicion;
+    int id, posicion, cantRegistros;
     std::string input;
+
+    cantRegistros = _archivo.cantRegistros();
+
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+    }
 
     while(true){
 
@@ -947,6 +979,14 @@ int ProfesorManager::contCursosProfesor(int idProfesor){
 
     cantCursos = archiCurso.cantRegistros() ;
 
+    if(cantCursos <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return -1;
+    }
+
+
     for ( int i = 0; i< cantCursos; i++ ){
 
         cursoProf = archiCurso.leer(i);
@@ -966,7 +1006,7 @@ int ProfesorManager::contCursosProfesor(int idProfesor){
 void ProfesorManager::bajaCursoProfesor(int idProfesor){
     Curso cursoProf;
     CursoArchivo archiCurso;
-    int cantRegCursos, opcion, posicion;
+    int cantRegCursos,opcion, posicion;
     bool inscripActivas = false;
     std::string input;
 
@@ -1062,9 +1102,9 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
         case 2:
             ///Baja del profesor;
-
-            system("cls");
           /*
+            system("cls");
+
             if ( _cursoManager.reasignarCursosDeProfesor(idProfesor) ){
 
                 _profesor.setEstado(false);
@@ -1074,8 +1114,6 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
             }
           */
-
-
            break;
 
         default:
@@ -1091,14 +1129,136 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
 }
 
+void ProfesorManager::reactivarProfesor(){
 
+    int id, posicion, cantRegistros, cantRegInactivos = 0;
+    std::string input;
+
+
+    cantRegistros = _archivo.cantRegistros();
+
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+    }
+
+    for (int i = 0; i <cantRegistros; i++){
+
+        _profesor = _archivo.leer(i);
+
+        if ( !_profesor.getEstado() ){
+
+            cantRegInactivos ++;
+        }
+
+    }
+
+    if ( cantRegInactivos == 0 ){
+
+        std::cout << "\nNo hay profesores inactivos registrados.\n\n";
+
+        return;
+
+    }
+
+
+
+    while(true){
+
+        system("cls");
+
+        std::cout << "========================================== \n";
+        std::cout << "         === REACTIVACION DE PROFESOR ===      \n";
+        std::cout << "==========================================\n";
+
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
+        std::cout<<"Ingrese el ID del profesor que desea buscar: \n";
+        std::getline(std::cin,input);
+
+        if (_utilidades.esComandoSalir(input)){
+            system("cls");
+            std::cout << "\nReactivacion de profesor cancelada.\n\n";
+            return;
+
+        }
+
+        if (input.empty()){
+            system("cls");
+            std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
+            system("pause");
+
+            continue;
+
+        }
+
+
+        if ( !_utilidades.esEnteroValido(input) ){
+            system("cls");
+            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            system("pause");
+            continue;
+        }
+
+        id = std::stoi(input);
+        posicion = _archivo.buscar(id);
+
+        if ( posicion <= 0 ){
+
+            std::cout << "\nEl ID ingresado no pertenece a un registro de profesor. Intente nuevamente.\n\n";
+            system("pause") ;
+            continue;
+        }
+
+        _profesor = _archivo.leer(posicion);
+
+        if ( _profesor.getEstado() ){
+
+            system("cls");
+
+            std::cout<<"\nEl ID ingresado pertenece a un profesor activo.\n\n";
+
+            system("pause");
+            continue;
+
+        }
+
+        _profesor.mostrar();
+
+        _profesor.setEstado(true);
+
+        if( !_archivo.alta(_profesor,posicion) ){
+
+          std::cout<<"\nEl registro del profesor no se ha podido reactivar.\n\n";;
+
+          return;
+
+        }
+
+        std::cout<<"\nEl registro del profesor ha sido reactivado.\n\n";
+
+       break;
+
+    }
+
+
+}
 
 void ProfesorManager::modificar(){
 
     Fecha fechaNacimiento;
-    int id, posicion, opcion;
+    int id, posicion, opcion, cantRegistros;
     std::string input;
 
+    cantRegistros = _archivo.cantRegistros();
+
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+    }
 
     while(true){
 
@@ -1638,8 +1798,39 @@ void ProfesorManager::modificar(){
 
 
 void ProfesorManager::baja(){
-    int idBaja, posicion, opcion;
+    int idBaja, posicion, opcion,cantRegistros, cantRegistrosActivos = 0;
     std::string input;
+
+    cantRegistros = _archivo.cantRegistros();
+
+    if(cantRegistros <= 0){
+
+        std::cout << "No hay profesores registrados.\n";
+
+        return;
+
+    }
+
+    for (int i = 0; i <cantRegistros; i++){
+
+        _profesor = _archivo.leer(i);
+
+        if ( _profesor.getEstado() ){
+
+            cantRegistrosActivos ++;
+        }
+
+    }
+
+    if ( cantRegistrosActivos == 0 ){
+
+        std::cout << "\nNo hay profesores activos registrados.\n\n";
+
+        return;
+
+    }
+
+
 
     while(true) {
 
