@@ -30,11 +30,8 @@ public:
 	void altaInscripcion();
 	void bajaInscripcion();
 	void modificarInscripcion();
-	void listarTodasInscripciones();
 
 	//Listas
-	void listarInscripcionesActivas();
-	void listarInscripcionesInactivas();
 	void mostrarListadoInscripciones(int filtroEstado);
 	bool mostrarInscripcionPorId(int idInscripcion);
 	void mostrarInscripcionPorId();
