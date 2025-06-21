@@ -150,3 +150,20 @@ void Utilidades::pausarYLimpiar() {
     pausar();
     system("cls");
 }
+
+
+Profesor Utilidades::buscarProfesorEnArray(int idProfesor, Profesor* profesores, int cantidad)
+{
+    // funcion para buscar un profe en un array dado.
+    for (int i = 0; i < cantidad; i++)
+    {
+        if(profesores[i].getId() == idProfesor)
+        {
+            return profesores[i];
+        }
+    }
+    // si no se consigue se devuelve un objeto de tipo profesor que sea invalido para saber qu eno se encontro.
+    Profesor noEncontrado;
+    noEncontrado.setId(-1);
+    return noEncontrado;
+}

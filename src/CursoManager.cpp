@@ -430,24 +430,6 @@ void CursoManager::modificarCurso()
 }
 
 
-Profesor CursoManager::buscarProfesorEnArray(int idProfesor, Profesor* profesores, int cantidad)
-{
-    // funcion para buscar un profe en un array dado.
-    for (int i = 0; i < cantidad; i++)
-    {
-        if(profesores[i].getId() == idProfesor)
-        {
-            return profesores[i];
-        }
-    }
-    // si no se consigue se devuelve un objeto de tipo profesor que sea invalido para saber qu eno se encontro.
-    Profesor noEncontrado;
-    noEncontrado.setId(-1);
-    return noEncontrado;
-}
-
-
-
 void CursoManager::listar()
 {
     int total = _archivo.cantRegistros();
@@ -482,7 +464,7 @@ void CursoManager::listar()
 
             registrosEncontrados++;
 
-            Profesor profesorCurso = buscarProfesorEnArray(curso.getIdProfesor(), profesores, totalProfesores);
+            Profesor profesorCurso = _utilidades.buscarProfesorEnArray(curso.getIdProfesor(), profesores, totalProfesores);
 
             std::cout << "ID: " << curso.getId() << std::endl;
             std::cout << "Nombre: " << curso.getNombre() << std::endl;
@@ -655,7 +637,7 @@ void CursoManager::listarSinCupo()
         if (cantidadInscriptos >= curso.getCantMaximaAlumnos())
         {
             registrosEncontrados++;
-            Profesor profesorCurso = buscarProfesorEnArray(curso.getIdProfesor(), profesores, totalProfesores);
+            Profesor profesorCurso = _utilidades.buscarProfesorEnArray(curso.getIdProfesor(), profesores, totalProfesores);
 
             std::cout << "---------------------------" << std::endl;
             std::cout << "ID: " << curso.getId() << std::endl;
@@ -719,7 +701,7 @@ void CursoManager::listarInactivos()
         {
 
             registrosEncontrados++;
-            Profesor profesorCurso = buscarProfesorEnArray(curso.getIdProfesor(), profesores, totalProfesores);
+            Profesor profesorCurso = _utilidades.buscarProfesorEnArray(curso.getIdProfesor(), profesores, totalProfesores);
 
             std::cout << "ID: " << curso.getId() << std::endl;
             std::cout << "Nombre: " << curso.getNombre() << std::endl;
@@ -1227,15 +1209,15 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
             }
             else
             {
-                Profesor p = buscarProfesorEnArray(nuevoIdProfe, todosLosProfesores, totalProfesores);
-                if (p.getId() == -1 || !p.getEstado())
+                Profesor profe = _utilidades.buscarProfesorEnArray(nuevoIdProfe, todosLosProfesores, totalProfesores);
+                if (profe.getId() == -1 || !profe.getEstado())
                 {
                     std::cout << "El ID no corresponde a un profesor válido y activo. Intente nuevamente.\n";
                 }
                 else
                 {
                     curso.setIdProfesor(nuevoIdProfe);
-                    std::cout << "El curso será reasignado a: " << p.getNombre() << " " << p.getApellido() << std::endl;
+                    std::cout << "El curso será reasignado a: " << profe.getNombre() << " " << profe.getApellido() << std::endl;
                     contCursosReasignados++;
                     valido = true;
                 }

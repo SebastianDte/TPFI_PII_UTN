@@ -8,7 +8,6 @@ class CursoManager
 private:
     CursoArchivo _archivo;
     Utilidades _utilidades;
-    Profesor buscarProfesorEnArray(int idProfesor, Profesor* profesores, int cantidad);
 
 public:
     CursoManager();

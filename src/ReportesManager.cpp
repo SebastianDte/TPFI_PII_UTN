@@ -407,96 +407,102 @@ void ReportesManager::importeTotalRecaudadoPorAlumno()
 
 void ReportesManager::cursosConAulaOcupada()
 {
-    CursoArchivo archivoCursos;
-    ProfesorArchivo archivoProfesor;
-    Utilidades utilidades;
-    int totalCursos = archivoCursos.cantRegistros();
-
+    int totalCursos = _cursoArchivo.cantRegistros();
     if (totalCursos <= 0)
     {
         std::cout << "No hay cursos registrados en el sistema." << std::endl;
         return;
     }
 
-    utilidades.limpiarPantallaConEncabezado("=== REPORTE - CURSOS POR AULA ===");
-
     Curso* cursos = new Curso[totalCursos];
-    int* aulas = new int[totalCursos];
-    int cantidadAulasUnicas = 0;
+    if (cursos == nullptr)
+    {
+        std::cout << "Error: Error de memoria al cargar los cursos.\n";
+        return;
+    }
+    for (int i = 0; i < totalCursos; i++)
+    {
+        cursos[i] = _cursoArchivo.leer(i);
+    }
+
+    int totalProfesores = _profesorArchivo.cantRegistros();
+    Profesor* profesores = new Profesor[totalProfesores];
+    if (profesores == nullptr)
+    {
+        std::cout << "Error: Error de memoria al cargar los profesores.\n";
+        delete[] cursos;
+        return;
+    }
+    for (int i = 0; i < totalProfesores; i++)
+    {
+        profesores[i] = _profesorArchivo.leer(i);
+    }
+
+    // esto es para ordenar los cursos por numero de aula
+    for(int i = 0; i < totalCursos - 1; i++)
+    {
+        for (int j = 0; j < totalCursos - i - 1; j++)
+        {
+            if (cursos[j].getNumeroAula() > cursos[j + 1].getNumeroAula())
+            {
+                Curso temp = cursos[j];
+                cursos[j] = cursos[j + 1];
+                cursos[j + 1] = temp;
+            }
+        }
+    }
+
+    _utilidades.limpiarPantallaConEncabezado("=== REPORTE - CURSOS POR AULA ===");
+    int aulaActual = -1;
+    bool hayCursosActivos = false;
 
     for (int i = 0; i < totalCursos; i++)
     {
-        cursos[i] = archivoCursos.leer(i);
+        if (!cursos[i].getEstado()) continue;
+        hayCursosActivos = true;
+
+        if (cursos[i].getNumeroAula() != aulaActual)
+        {
+            aulaActual = cursos[i].getNumeroAula();
+            std::cout << "\n\n=== AULA " << aulaActual << " ===\n";
+            std::cout << "-------------------------------------------------------------------------------------\n";
+            std::cout << std::left
+                      << std::setw(10) << "ID CURSO"
+                      << std::setw(35) << "NOMBRE"
+                      << std::setw(30) << "PROFESOR"
+                      << "CAPACIDAD\n";
+            std::cout << "-------------------------------------------------------------------------------------\n";
+        }
+
+        Profesor profesorEncontrado = _utilidades.buscarProfesorEnArray(cursos[i].getIdProfesor(), profesores, totalProfesores);
+        std::string nombreProfesor;
+        if (profesorEncontrado.getId() != -1)
+        {
+            nombreProfesor = profesorEncontrado.getNombre() + " " + profesorEncontrado.getApellido();
+        }
+        else
+        {
+            nombreProfesor = "(ID " + std::to_string(cursos[i].getIdProfesor()) + " no encontrado)";
+        }
+
+        std::cout << std::left
+                  << std::setw(10) << cursos[i].getId()
+                  << std::setw(35) << cursos[i].getNombre()
+                  << std::setw(30) << nombreProfesor
+                  << cursos[i].getCantMaximaAlumnos() << "\n";
     }
 
-    // obtenemos las aulas unicas de los cursos
-    for (int i = 0; i < totalCursos; i++)
+    if (!hayCursosActivos)
     {
-        bool aulaExiste = false;
-        for (int j = 0; j < cantidadAulasUnicas; j++)
-        {
-            if (aulas[j] == cursos[i].getNumeroAula())
-            {
-                aulaExiste = true;
-                break;
-            }
-        }
-        if (!aulaExiste)
-        {
-            aulas[cantidadAulasUnicas] = cursos[i].getNumeroAula();
-            cantidadAulasUnicas++;
-        }
+        std::cout << "No hay cursos activos para mostrar.\n";
     }
-
-    // las ordenamos para que se puedan ver mas facil
-    for (int i = 0; i < cantidadAulasUnicas - 1; i++)
+    else
     {
-        for (int j = 0; j < cantidadAulasUnicas - i - 1; j++)
-        {
-            if (aulas[j] > aulas[j + 1])
-            {
-                int temp = aulas[j];
-                aulas[j] = aulas[j + 1];
-                aulas[j + 1] = temp;
-            }
-        }
+        std::cout << "-------------------------------------------------------------------------------------\n";
     }
 
-
-    for (int i = 0; i < cantidadAulasUnicas; i++)
-    {
-        int aulaActual = aulas[i];
-        int cursosEnAula = 0;
-
-        for (int j = 0; j < totalCursos; j++)
-        {
-            if (cursos[j].getNumeroAula() == aulaActual)
-            {
-                cursosEnAula++;
-            }
-        }
-
-        std::cout << "\n=== AULA " << aulaActual << " ===\n";
-        std::cout << "Cantidad de cursos asignados: " << cursosEnAula << "\n";
-        std::cout << "---------------------------\n";
-
-        for (int j = 0; j < totalCursos; j++)
-        {
-            if (cursos[j].getNumeroAula() == aulaActual)
-            {
-                int posicionProfesor = archivoProfesor.buscar(cursos[j].getIdProfesor());
-                Profesor profesor = archivoProfesor.leer(posicionProfesor);
-
-                std::cout << "ID Curso: " << cursos[j].getId() << "\n";
-                std::cout << "Nombre: " << cursos[j].getNombre() << "\n";
-                std::cout << "Profesor: " << profesor.getNombre() << " " << profesor.getApellido() << "\n";
-                std::cout << "Capacidad: " << cursos[j].getCantMaximaAlumnos() << " alumnos\n";
-                std::cout << "---------------------------\n";
-            }
-        }
-    }
     delete[] cursos;
-    delete[] aulas;
+    delete[] profesores;
 }
 
 void ReportesManager::profesoresConCursosAsignados()
@@ -522,7 +528,8 @@ void ReportesManager::profesoresConCursosAsignados()
         return;
     }
 
-    if ( cantRegProfesores <= 0 ){
+    if ( cantRegProfesores <= 0 )
+    {
 
         std::cout<<"No hay registros de profesores activos.\n";
         return;
@@ -604,21 +611,24 @@ void ReportesManager::profesoresConCursosAsignados()
         std::getline(std::cin,input);
 
 
-        if (_utilidades.esComandoSalir(input)){
+        if (_utilidades.esComandoSalir(input))
+        {
             system("cls");
             std::cout << "\nReporte cancelado.\n\n";
             return;
 
         }
 
-        if (input.empty()){
+        if (input.empty())
+        {
             system("cls");
             std::cout << "Debe completar este campo. Intente nuevamente.\n\n";
             system("pause");
             return;
         }
 
-        if ( !_utilidades.esEnteroValido(input) ){
+        if ( !_utilidades.esEnteroValido(input) )
+        {
             system("cls");
             std::cout << "\nDebe ingresar un n�mero entero. Intente nuevamente.\n\n";
             system("pause");
@@ -763,7 +773,8 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
 
     // pedimos memoria
     Curso* cursos = new Curso[totalCursos];
-    if (cursos == nullptr){
+    if (cursos == nullptr)
+    {
         std::cout << "Error: No se pudo asignar memoria para los cursos.\n";
         return;
     }
@@ -781,24 +792,27 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
     }
 
     Inscripcion* inscripciones = new Inscripcion[totalInscripciones];
-    if (inscripciones == nullptr){
+    if (inscripciones == nullptr)
+    {
         delete[] cursos;
         return;
     }
 
     for (int i = 0; i < totalInscripciones; i++)
     {
-        if(!_inscripcionArchivo.leer(i, inscripciones[i])){
+        if(!_inscripcionArchivo.leer(i, inscripciones[i]))
+        {
             std::cout << "Error al leer el registro de inscripcion " << i << ".\n";
-             delete[] cursos;
-             delete[] inscripciones;
-             return;
+            delete[] cursos;
+            delete[] inscripciones;
+            return;
         }
     }
 
     // pedimos memoria para almacenar los datos del recaudo y cantidad inscriptos para cada curso
     float* totalRecaudado = new float[totalCursos];
-    if (totalRecaudado == nullptr) {
+    if (totalRecaudado == nullptr)
+    {
         std::cout << "Error: No se pudo asignar memoria para los totales.\n";
         delete[] cursos;
         delete[] inscripciones;
@@ -806,7 +820,8 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
     }
 
     int* cantidadInscriptos = new int[totalCursos];
-    if (cantidadInscriptos == nullptr) {
+    if (cantidadInscriptos == nullptr)
+    {
         std::cout << "Error: No se pudo asignar memoria para los contadores.\n";
         delete[] cursos;
         delete[] inscripciones;
@@ -881,70 +896,81 @@ void ReportesManager::promedioImportePorCurso()
     int totalCursos = _cursoArchivo.cantRegistros();
     int totalInscripciones = _inscripcionArchivo.cantRegistros();
 
-    if (totalCursos == 0) {
+    if (totalCursos == 0)
+    {
         std::cout << "No hay cursos registrados en el sistema.\n";
         return;
     }
-    if (totalInscripciones == 0) {
+    if (totalInscripciones == 0)
+    {
         std::cout << "No hay inscripciones registradas en el sistema.\n";
         return;
     }
 
     std::cout << std::left << std::setw(10) << "ID"
-        << std::setw(30) << "NOMBRE CURSO"
-        << std::setw(15) << "PROMEDIO"
-        << "INSCRIPCIONES\n";
+              << std::setw(30) << "NOMBRE CURSO"
+              << std::setw(15) << "PROMEDIO"
+              << "INSCRIPCIONES\n";
     std::cout << "-------------------------------------------------------------------\n";
 
     bool hayDatos = false;
 
-    for (int i = 0; i < totalCursos; i++) {
+    for (int i = 0; i < totalCursos; i++)
+    {
         Curso curso = _cursoArchivo.leer(i);
         if (!curso.getEstado()) continue;
 
         float sumaImportes = 0.0f;
         int cantidadInscriptos = 0;
 
-        for (int j = 0; j < totalInscripciones; j++) {
+        for (int j = 0; j < totalInscripciones; j++)
+        {
             Inscripcion insc;
             _inscripcionArchivo.leer(j, insc);
-            if (insc.getEstado() && insc.getIdCurso() == curso.getId()) {
+            if (insc.getEstado() && insc.getIdCurso() == curso.getId())
+            {
                 sumaImportes += insc.getImporteAbonado();
                 cantidadInscriptos++;
             }
         }
 
-        if (cantidadInscriptos > 0) {
+        if (cantidadInscriptos > 0)
+        {
             float promedio = sumaImportes / cantidadInscriptos;
             std::cout << std::left << std::setw(10) << curso.getId()
-                << std::setw(30) << curso.getNombre()
-                << "$" << std::setw(14) << std::fixed << std::setprecision(2) << promedio
-                << cantidadInscriptos << "\n";
+                      << std::setw(30) << curso.getNombre()
+                      << "$" << std::setw(14) << std::fixed << std::setprecision(2) << promedio
+                      << cantidadInscriptos << "\n";
             hayDatos = true;
         }
     }
 
-    if (!hayDatos) {
+    if (!hayDatos)
+    {
         std::cout << "No hay datos de inscripciones activas para mostrar.\n";
     }
 
     std::cout << "-------------------------------------------------------------------\n";
 }
 
-bool ReportesManager::pedirFecha(Fecha& fecha, const std::string& mensaje) {
+bool ReportesManager::pedirFecha(Fecha& fecha, const std::string& mensaje)
+{
     Utilidades utilidades;
     std::string input;
 
-    while (true) {
+    while (true)
+    {
         utilidades.limpiarPantallaConEncabezado("=== REPORTE - INSCRIPCIONES ENTRE FECHAS ===");
         std::cout << mensaje << " (dd/mm/aaaa) o 'salir' para cancelar: ";
         std::getline(std::cin, input);
 
-        if (utilidades.esComandoSalir(input)) {
+        if (utilidades.esComandoSalir(input))
+        {
             return false; // usuario cancela
         }
 
-        if (fecha.validarFechaStr(input)) {
+        if (fecha.validarFechaStr(input))
+        {
             return true; // fecha v�lida y seteada en el objeto fecha
         }
 
@@ -961,13 +987,15 @@ void ReportesManager::inscripcionesEntreFechas()
     CursoArchivo archivoCursos;
 
     int totalInscripciones = archivoInscripciones.cantRegistros();
-    if (totalInscripciones == 0) {
+    if (totalInscripciones == 0)
+    {
         std::cout << "No hay inscripciones registradas en el sistema.\n";
         return;
     }
 
     int filtroEstado = -1;
-    while (true) {
+    while (true)
+    {
         utilidades.limpiarPantallaConEncabezado("=== REPORTE - FILTRO DE ESTADO ===");
         std::cout << "Seleccione el tipo de inscripciones a mostrar:\n";
         std::cout << "1. Activas\n";
@@ -975,15 +1003,18 @@ void ReportesManager::inscripcionesEntreFechas()
         std::cout << "Ingrese opci�n (1 o 2): ";
         std::string opcion;
         std::getline(std::cin, opcion);
-        if (opcion == "1") {
+        if (opcion == "1")
+        {
             filtroEstado = 1;
             break;
         }
-        else if (opcion == "2") {
+        else if (opcion == "2")
+        {
             filtroEstado = 0;
             break;
         }
-        else {
+        else
+        {
             std::cout << "Opci�n inv�lida. Intente nuevamente.\n";
             utilidades.pausar();
         }
@@ -991,16 +1022,19 @@ void ReportesManager::inscripcionesEntreFechas()
 
     Fecha fechaInicio, fechaFin;
 
-    if (!pedirFecha(fechaInicio, "Ingrese la fecha de inicio")) {
+    if (!pedirFecha(fechaInicio, "Ingrese la fecha de inicio"))
+    {
         std::cout << "Reporte cancelado.\n";
         return;
     }
-    if (!pedirFecha(fechaFin, "Ingrese la fecha de fin")) {
+    if (!pedirFecha(fechaFin, "Ingrese la fecha de fin"))
+    {
         std::cout << "Reporte cancelado.\n";
         return;
     }
 
-    if (fechaInicio.esMayorQue(fechaFin)) {
+    if (fechaInicio.esMayorQue(fechaFin))
+    {
         std::cout << "La fecha de inicio no puede ser mayor que la fecha de fin.\n";
         utilidades.pausar();
         return;
@@ -1009,7 +1043,8 @@ void ReportesManager::inscripcionesEntreFechas()
     bool hayResultados = false;
     utilidades.limpiarPantallaConEncabezado("=== INSCRIPCIONES ENTRE FECHAS ===");
 
-    for (int i = 0; i < totalInscripciones; i++) {
+    for (int i = 0; i < totalInscripciones; i++)
+    {
         Inscripcion insc;
         if (!archivoInscripciones.leer(i, insc)) continue;
 
@@ -1019,18 +1054,21 @@ void ReportesManager::inscripcionesEntreFechas()
         Fecha f = insc.getFechaInscripcion();
 
         if ((f.esMayorQue(fechaInicio) || f.esIgualA(fechaInicio)) &&
-            (fechaFin.esMayorQue(f) || fechaFin.esIgualA(f))) {
+                (fechaFin.esMayorQue(f) || fechaFin.esIgualA(f)))
+        {
 
             int posAlumno = archivoAlumnos.buscar(insc.getLegajoAlumno(), false);
             int posCurso = archivoCursos.buscar(insc.getIdCurso());
             Alumno alumno;
             Curso curso;
             bool alumnoOk = false, cursoOk = false;
-            if (posAlumno != -1) {
+            if (posAlumno != -1)
+            {
                 alumno = archivoAlumnos.leer(posAlumno);
                 alumnoOk = true;
             }
-            if (posCurso != -1) {
+            if (posCurso != -1)
+            {
                 curso = archivoCursos.leer(posCurso);
                 cursoOk = true;
             }
@@ -1047,7 +1085,8 @@ void ReportesManager::inscripcionesEntreFechas()
         }
     }
 
-    if (!hayResultados) {
+    if (!hayResultados)
+    {
         std::cout << "No se encontraron inscripciones en ese rango de fechas con ese estado.\n";
     }
     std::cout << "----------------------------------\n";
