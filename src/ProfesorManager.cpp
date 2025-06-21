@@ -1075,9 +1075,8 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
             std::cin.ignore();
             return;
         }
-
         case 2:
-            ///Baja del profesor;
+        {
 
             system("cls");
 
@@ -1090,8 +1089,11 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
                 return;
             }
 
-            break;
 
+            std::cin.ignore();
+            return;
+
+        }
         default:
             std::cout << "La opcion ingresada es incorrecta, intente nuevamente.\n";
             system("pause");
