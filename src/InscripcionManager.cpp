@@ -264,19 +264,6 @@ void InscripcionManager::modificarInscripcion() {
 }
 
 // Métodos para listar.
-void InscripcionManager::listarInscripcionesActivas() {
-    mostrarListadoInscripciones(1);
-}
-
-void InscripcionManager::listarInscripcionesInactivas() {
-    mostrarListadoInscripciones(0);
-}
-
-void InscripcionManager::listarTodasInscripciones() {
-    mostrarListadoInscripciones(-1);
-}
-
-
 // Parámetro: -1 = todas, 1 = solo activas, 0 = solo inactivas
 void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
     string titulo = "Listado de inscripciones";
@@ -301,7 +288,7 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
         // Filtrado por estado
         if (filtroEstado != -1 && insc.getEstado() != (filtroEstado == 1)) continue;
 
-        // Mostramos la info (podés encapsular esto también si querés)
+        // Mostramos la información.
         int posAlumno = archivoAlumnos.buscar(insc.getLegajoAlumno(), false);
         int posCurso = archivoCursos.buscar(insc.getIdCurso());
         Alumno alumno;
