@@ -288,7 +288,7 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
         // Filtrado por estado
         if (filtroEstado != -1 && insc.getEstado() != (filtroEstado == 1)) continue;
 
-        // Mostramos la información.
+        // Mostrar la información.
         int posAlumno = archivoAlumnos.buscar(insc.getLegajoAlumno(), false);
         int posCurso = archivoCursos.buscar(insc.getIdCurso());
         Alumno alumno;

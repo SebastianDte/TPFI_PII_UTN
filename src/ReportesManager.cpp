@@ -403,10 +403,6 @@ void ReportesManager::importeTotalRecaudadoPorAlumno()
     delete[] totalRecaudado;
 }
 
-void ReportesManager::promedioImportePorCurso()
-{
-    std::cout << "Promedio de importe por curso" << std::endl;
-}
 
 
 void ReportesManager::cursosConAulaOcupada()
@@ -704,7 +700,6 @@ void ReportesManager::profesoresConCursosAsignados()
 
 }
 
-
 bool ReportesManager::pedirAnioValido(int& anio)
 {
     std::string input;
@@ -747,7 +742,6 @@ bool ReportesManager::pedirAnioValido(int& anio)
         return true;
     }
 }
-
 
 void ReportesManager::importeTotalRecaudadoPorCurso()
 {
@@ -851,8 +845,62 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
 }
 
 
+void ReportesManager::promedioImportePorCurso()
+{
+    _utilidades.limpiarPantallaConEncabezado("=== REPORTE - PROMEDIO DE IMPORTE POR CURSO ===");
 
+    int totalCursos = _cursoArchivo.cantRegistros();
+    int totalInscripciones = _inscripcionArchivo.cantRegistros();
 
+    if (totalCursos == 0) {
+        std::cout << "No hay cursos registrados en el sistema.\n";
+        return;
+    }
+    if (totalInscripciones == 0) {
+        std::cout << "No hay inscripciones registradas en el sistema.\n";
+        return;
+    }
+
+    std::cout << std::left << std::setw(10) << "ID"
+        << std::setw(30) << "NOMBRE CURSO"
+        << std::setw(15) << "PROMEDIO"
+        << "INSCRIPCIONES\n";
+    std::cout << "-------------------------------------------------------------------\n";
+
+    bool hayDatos = false;
+
+    for (int i = 0; i < totalCursos; i++) {
+        Curso curso = _cursoArchivo.leer(i);
+        if (!curso.getEstado()) continue;
+
+        float sumaImportes = 0.0f;
+        int cantidadInscriptos = 0;
+
+        for (int j = 0; j < totalInscripciones; j++) {
+            Inscripcion insc;
+            _inscripcionArchivo.leer(j, insc);
+            if (insc.getEstado() && insc.getIdCurso() == curso.getId()) {
+                sumaImportes += insc.getImporteAbonado();
+                cantidadInscriptos++;
+            }
+        }
+
+        if (cantidadInscriptos > 0) {
+            float promedio = sumaImportes / cantidadInscriptos;
+            std::cout << std::left << std::setw(10) << curso.getId()
+                << std::setw(30) << curso.getNombre()
+                << "$" << std::setw(14) << std::fixed << std::setprecision(2) << promedio
+                << cantidadInscriptos << "\n";
+            hayDatos = true;
+        }
+    }
+
+    if (!hayDatos) {
+        std::cout << "No hay datos de inscripciones activas para mostrar.\n";
+    }
+
+    std::cout << "-------------------------------------------------------------------\n";
+}
 
 bool ReportesManager::pedirFecha(Fecha& fecha, const std::string& mensaje) {
     Utilidades utilidades;
@@ -889,6 +937,29 @@ void ReportesManager::inscripcionesEntreFechas()
         return;
     }
 
+    int filtroEstado = -1;
+    while (true) {
+        utilidades.limpiarPantallaConEncabezado("=== REPORTE - FILTRO DE ESTADO ===");
+        std::cout << "Seleccione el tipo de inscripciones a mostrar:\n";
+        std::cout << "1. Activas\n";
+        std::cout << "2. Inactivas\n";
+        std::cout << "Ingrese opción (1 o 2): ";
+        std::string opcion;
+        std::getline(std::cin, opcion);
+        if (opcion == "1") {
+            filtroEstado = 1;
+            break;
+        }
+        else if (opcion == "2") {
+            filtroEstado = 0;
+            break;
+        }
+        else {
+            std::cout << "Opción inválida. Intente nuevamente.\n";
+            utilidades.pausar();
+        }
+    }
+
     Fecha fechaInicio, fechaFin;
 
     if (!pedirFecha(fechaInicio, "Ingrese la fecha de inicio")) {
@@ -912,7 +983,9 @@ void ReportesManager::inscripcionesEntreFechas()
     for (int i = 0; i < totalInscripciones; i++) {
         Inscripcion insc;
         if (!archivoInscripciones.leer(i, insc)) continue;
-        if (!insc.getEstado()) continue;
+
+        if (filtroEstado == 1 && !insc.getEstado()) continue;
+        if (filtroEstado == 0 && insc.getEstado()) continue;
 
         Fecha f = insc.getFechaInscripcion();
 
@@ -938,14 +1011,15 @@ void ReportesManager::inscripcionesEntreFechas()
             std::cout << "Fecha: " << f.toString() << "\n";
             std::cout << "Alumno: " << (alumnoOk ? alumno.getNombre() + " " + alumno.getApellido() : "(No encontrado)") << "\n";
             std::cout << "Curso: " << (cursoOk ? curso.getNombre() : "(No encontrado)") << "\n";
+            std::cout << std::fixed << std::setprecision(3);
             std::cout << "Importe: $" << insc.getImporteAbonado() << "\n";
+            std::cout << "Estado: " << (insc.getEstado() ? "Activo" : "Inactivo") << "\n";
             hayResultados = true;
         }
     }
 
     if (!hayResultados) {
-        std::cout << "No se encontraron inscripciones en ese rango de fechas.\n";
+        std::cout << "No se encontraron inscripciones en ese rango de fechas con ese estado.\n";
     }
     std::cout << "----------------------------------\n";
-    utilidades.pausar();
 }
