@@ -988,7 +988,7 @@ void CursoManager::reactivarCurso()
     }
 }
 
-void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
+bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
 {
     CursoArchivo _archivo = CursoArchivo();
     int totalCursos = _archivo.cantRegistros();
@@ -996,7 +996,7 @@ void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
     if (totalCursos <= 0)
     {
         std::cout << "No hay cursos registrados." << std::endl;
-        return;
+        return false;
     }
 
     ProfesorArchivo profeArchivo;
@@ -1011,7 +1011,6 @@ void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
         {
             std::cout << "Curso ID: " << curso.getId() << " - " << curso.getNombre() << std::endl;
             std::cout << "Profesor actual: " << idProfesorActual << std::endl;
-
 
             int totalProfes = profeArchivo.cantRegistros();
             // mostrar los profes disponibles
@@ -1057,7 +1056,6 @@ void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
                         }
                         else
                         {
-
                             curso.setIdProfesor(nuevoIdProfe);
                             if (_archivo.modificar(curso, i))
                             {
@@ -1072,8 +1070,7 @@ void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
                         }
                     }
                 }
-            }
-            while (!valido);
+            } while (!valido);
 
             std::cout << "-------------------------" << std::endl;
         }
@@ -1082,5 +1079,8 @@ void CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
     if (!huboCambio)
     {
         std::cout << "No se realizaron cambios en la reasignación de cursos." << std::endl;
+        return false;
     }
+
+    return true;
 }
