@@ -1075,14 +1075,9 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
             std::cin.ignore();
             return;
         }
-
-<<<<<<< HEAD
         case 2:
-            ///Baja del profesor;
+        {
 
-=======
-        case 2: {
->>>>>>> e245b39d070cbf918a7090373df6063af70c8da2
             system("cls");
 
             if (_cursoManager.reasignarCursosDeProfesor(idProfesor)) {
@@ -1093,20 +1088,12 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
                 std::cin.ignore();
                 return;
             }
-<<<<<<< HEAD
-=======
-            else {
-                std::cout << "\nNo se pudieron reasignar los cursos. Intente nuevamente.\n";
-                system("pause");
-            }
->>>>>>> e245b39d070cbf918a7090373df6063af70c8da2
 
-            break;
-<<<<<<< HEAD
-=======
+
+            std::cin.ignore();
+            return;
+
         }
->>>>>>> e245b39d070cbf918a7090373df6063af70c8da2
-
         default:
             std::cout << "La opcion ingresada es incorrecta, intente nuevamente.\n";
             system("pause");
