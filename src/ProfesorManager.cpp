@@ -1104,11 +1104,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
         case 2:
             ///Baja del profesor;
-<<<<<<< HEAD
-//<<<<<<< HEAD
-          /*
-=======
->>>>>>> 38c4f921bdd04b0662f1d450208bb0f1db0fc1e8
+
             system("cls");
 
             if ( _cursoManager.reasignarCursosDeProfesor(idProfesor) ){
@@ -1122,19 +1118,10 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
                 return;
                 break;
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-          */
-//=======
-//
-//>>>>>>> d44df611d7a39a07829ff6f9d72eb1ae177ea5aa
-           break;
-=======
 
             std::cin.ignore();
             return;
             break;
->>>>>>> 38c4f921bdd04b0662f1d450208bb0f1db0fc1e8
 
         default:
 

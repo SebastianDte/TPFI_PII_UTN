@@ -1006,7 +1006,7 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
         Curso curso = _archivo.leer(i);
 
         // cuento solo los cursos asignados al profe que queremos reasignar
-        if (curso.getIdProfesor() == idProfesorActual){
+        if (curso.getIdProfesor() == idProfesorActual && curso.getEstado()){
 
             contCursosProf ++;
 
@@ -1022,7 +1022,7 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
         Curso curso = _archivo.leer(i);
 
         // muestro solo los cursos asignados al profe que queremos reasignar
-        if (curso.getIdProfesor() == idProfesorActual)
+        if (curso.getIdProfesor() == idProfesorActual && curso.getEstado())
         {
             std::cout << "Curso ID: " << curso.getId() << " - " << curso.getNombre() << std::endl;
             std::cout << "Profesor actual: " << idProfesorActual << std::endl;
