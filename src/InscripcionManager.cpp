@@ -457,7 +457,6 @@ bool InscripcionManager::existeCursoActivo(int idCurso) {
 
 bool InscripcionManager::controlCupo(int idCurso) {
     InscripcionArchivo archivoInscripciones;
-	Utilidades _utilidades;
     int inscriptos = 0;
     int total = archivoInscripciones.cantRegistros();
     Inscripcion inscTemp;

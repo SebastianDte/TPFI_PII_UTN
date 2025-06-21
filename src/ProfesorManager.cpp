@@ -1102,7 +1102,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
         case 2:
             ///Baja del profesor;
-<<<<<<< HEAD
+//<<<<<<< HEAD
           /*
             system("cls");
 
@@ -1120,9 +1120,9 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
             }
 <<<<<<< HEAD
           */
-=======
-
->>>>>>> d44df611d7a39a07829ff6f9d72eb1ae177ea5aa
+//=======
+//
+//>>>>>>> d44df611d7a39a07829ff6f9d72eb1ae177ea5aa
            break;
 
         default:

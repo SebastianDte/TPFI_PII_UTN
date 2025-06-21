@@ -32,13 +32,13 @@ void MenuInscripcion::mostrarMenu() {
 			inscripcionManager.modificarInscripcion();
 			break;
 		case 4:
-			inscripcionManager.listarInscripcionesActivas();
+			inscripcionManager.mostrarListadoInscripciones(1);
 			break;
 		case 5:
-			inscripcionManager.listarInscripcionesInactivas();
+			inscripcionManager.mostrarListadoInscripciones(0);
 			break;
 		case 6:
-			inscripcionManager.listarTodasInscripciones();
+			inscripcionManager.mostrarListadoInscripciones(-1);
 			break;
 		case 7:
 			inscripcionManager.mostrarInscripcionPorId();

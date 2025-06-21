@@ -408,10 +408,6 @@ void ReportesManager::promedioImportePorCurso()
     std::cout << "Promedio de importe por curso" << std::endl;
 }
 
-void ReportesManager::inscripcionesEntreFechas()
-{
-    std::cout << "Inscripciones entre fechas" << std::endl;
-}
 
 void ReportesManager::cursosConAulaOcupada()
 {
@@ -852,4 +848,104 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
     delete[] inscripciones;
     delete[] totalRecaudado;
     delete[] cantidadInscriptos;
+}
+
+
+
+
+
+bool ReportesManager::pedirFecha(Fecha& fecha, const std::string& mensaje) {
+    Utilidades utilidades;
+    std::string input;
+
+    while (true) {
+        utilidades.limpiarPantallaConEncabezado("=== REPORTE - INSCRIPCIONES ENTRE FECHAS ===");
+        std::cout << mensaje << " (dd/mm/aaaa) o 'salir' para cancelar: ";
+        std::getline(std::cin, input);
+
+        if (utilidades.esComandoSalir(input)) {
+            return false; // usuario cancela
+        }
+
+        if (fecha.validarFechaStr(input)) {
+            return true; // fecha válida y seteada en el objeto fecha
+        }
+
+        std::cout << "Fecha inválida. Intente nuevamente.\n";
+        utilidades.pausar();
+    }
+}
+
+void ReportesManager::inscripcionesEntreFechas()
+{
+    Utilidades utilidades;
+    InscripcionArchivo archivoInscripciones;
+    AlumnoArchivo archivoAlumnos;
+    CursoArchivo archivoCursos;
+
+    int totalInscripciones = archivoInscripciones.cantRegistros();
+    if (totalInscripciones == 0) {
+        std::cout << "No hay inscripciones registradas en el sistema.\n";
+        return;
+    }
+
+    Fecha fechaInicio, fechaFin;
+
+    if (!pedirFecha(fechaInicio, "Ingrese la fecha de inicio")) {
+        std::cout << "Reporte cancelado.\n";
+        return;
+    }
+    if (!pedirFecha(fechaFin, "Ingrese la fecha de fin")) {
+        std::cout << "Reporte cancelado.\n";
+        return;
+    }
+
+    if (fechaInicio.esMayorQue(fechaFin)) {
+        std::cout << "La fecha de inicio no puede ser mayor que la fecha de fin.\n";
+        utilidades.pausar();
+        return;
+    }
+
+    bool hayResultados = false;
+    utilidades.limpiarPantallaConEncabezado("=== INSCRIPCIONES ENTRE FECHAS ===");
+
+    for (int i = 0; i < totalInscripciones; i++) {
+        Inscripcion insc;
+        if (!archivoInscripciones.leer(i, insc)) continue;
+        if (!insc.getEstado()) continue;
+
+        Fecha f = insc.getFechaInscripcion();
+
+        if ((f.esMayorQue(fechaInicio) || f.esIgualA(fechaInicio)) &&
+            (fechaFin.esMayorQue(f) || fechaFin.esIgualA(f))) {
+
+            int posAlumno = archivoAlumnos.buscar(insc.getLegajoAlumno(), false);
+            int posCurso = archivoCursos.buscar(insc.getIdCurso());
+            Alumno alumno;
+            Curso curso;
+            bool alumnoOk = false, cursoOk = false;
+            if (posAlumno != -1) {
+                alumno = archivoAlumnos.leer(posAlumno);
+                alumnoOk = true;
+            }
+            if (posCurso != -1) {
+                curso = archivoCursos.leer(posCurso);
+                cursoOk = true;
+            }
+
+            std::cout << "----------------------------------\n";
+            std::cout << "ID Inscripción: " << insc.getIdInscripcion() << "\n";
+            std::cout << "Fecha: " << f.toString() << "\n";
+            std::cout << "Alumno: " << (alumnoOk ? alumno.getNombre() + " " + alumno.getApellido() : "(No encontrado)") << "\n";
+            std::cout << "Curso: " << (cursoOk ? curso.getNombre() : "(No encontrado)") << "\n";
+            std::cout << "Importe: $" << insc.getImporteAbonado() << "\n";
+            hayResultados = true;
+        }
+    }
+
+    if (!hayResultados) {
+        std::cout << "No se encontraron inscripciones en ese rango de fechas.\n";
+    }
+    std::cout << "----------------------------------\n";
+    utilidades.pausar();
 }

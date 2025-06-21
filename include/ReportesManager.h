@@ -25,4 +25,5 @@ class ReportesManager
         void cursosConAulaOcupada();
         void profesoresConCursosAsignados();
         bool pedirAnioValido(int& anio);
+        bool pedirFecha(Fecha& fecha, const std::string& mensaje);
 };
