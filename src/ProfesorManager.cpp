@@ -1089,8 +1089,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
                 std::cin.ignore();
                 return;
             }
-            std::cin.ignore();
-            return;
+
             break;
 
         default:
