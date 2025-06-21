@@ -18,4 +18,5 @@ public:
 	int cantRegistros() const;
 	int obtenerProximoId();
 
+    int contarInscriptosActivosPorCurso(int idCurso) const;
 };

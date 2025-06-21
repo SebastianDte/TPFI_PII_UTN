@@ -38,10 +38,10 @@ bool InscripcionArchivo::baja(int idInscripcion) {
 	if (posicion == -1) return false;
 
 	Inscripcion inscripcion;
-	if (!leer(posicion, inscripcion)) return false; 
+	if (!leer(posicion, inscripcion)) return false;
 
-	inscripcion.setEstado(false); 
-	return modificar(inscripcion, posicion); 
+	inscripcion.setEstado(false);
+	return modificar(inscripcion, posicion);
 }
 
 bool InscripcionArchivo::modificar(const Inscripcion& regInscripcion, int posicion) {
@@ -83,4 +83,19 @@ int InscripcionArchivo::obtenerProximoId() {
 		}
 	}
 	return maxId + 1;
+}
+
+int InscripcionArchivo::contarInscriptosActivosPorCurso(int idCurso) const {
+    int contador = 0;
+    int totalRegistros = cantRegistros();
+
+    for (int i = 0; i < totalRegistros; i++){
+        Inscripcion insc;
+        if(leer(i, insc)){
+            if(insc.getIdCurso() == idCurso && insc.getEstado()){
+                contador++;
+            }
+        }
+    }
+    return contador;
 }

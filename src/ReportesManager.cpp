@@ -80,7 +80,7 @@ void ReportesManager::totalInscriptosPorCurso()
         if ( !_utilidades.esEnteroValido(input) )
         {
             system("cls");
-            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nï¿½mero entero. Intente nuevamente.\n\n";
             system("pause");
             continue;
         }
@@ -217,7 +217,7 @@ void ReportesManager::alumnosInscriptosEnCurso()
 
         if (!utilidades.esEnteroValido(inputUsuario))
         {
-            std::cout << "Debe ingresar un número entero válido. Intente nuevamente.\n";
+            std::cout << "Debe ingresar un nï¿½mero entero vï¿½lido. Intente nuevamente.\n";
             utilidades.pausar();
             continue;
         }
@@ -227,7 +227,7 @@ void ReportesManager::alumnosInscriptosEnCurso()
 
         if (posCurso == -1)
         {
-            std::cout << "No se encontró un curso con el ID " << idCursoSeleccionado << ". Intente nuevamente.\n";
+            std::cout << "No se encontrï¿½ un curso con el ID " << idCursoSeleccionado << ". Intente nuevamente.\n";
             utilidades.pausar();
             continue;
         }
@@ -243,7 +243,7 @@ void ReportesManager::alumnosInscriptosEnCurso()
 
     if (totalInscripciones == 0)
     {
-        std::cout << "No hay ninguna inscripción registrada en el sistema.\n";
+        std::cout << "No hay ninguna inscripciï¿½n registrada en el sistema.\n";
         return;
     }
 
@@ -342,7 +342,7 @@ void ReportesManager::importeTotalRecaudadoPorAlumno()
     float* totalRecaudado = new float[totalAlumnos];
     if (totalRecaudado == nullptr)
     {
-        std::cout << "Error: No se pudo asignar memoria para los cálculos.\n";
+        std::cout << "Error: No se pudo asignar memoria para los cï¿½lculos.\n";
         delete[] alumnos;
         delete[] inscripciones;
         return;
@@ -394,7 +394,7 @@ void ReportesManager::importeTotalRecaudadoPorAlumno()
 
     if (alumnosMostrados == 0)
     {
-        std::cout << "No se encontraron datos de recaudación para mostrar.\n";
+        std::cout << "No se encontraron datos de recaudaciï¿½n para mostrar.\n";
     }
     std::cout << "----------------------------------\n";
 
@@ -620,7 +620,7 @@ void ReportesManager::profesoresConCursosAsignados()
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
-            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nï¿½mero entero. Intente nuevamente.\n\n";
             system("pause");
             continue;
         }
@@ -707,7 +707,7 @@ bool ReportesManager::pedirAnioValido(int& anio)
 
     while (true)
     {
-        std::cout << "Ingrese el año para filtrar inscripciones (0 = año actual, 'salir' para cancelar): ";
+        std::cout << "Ingrese el aï¿½o para filtrar inscripciones (0 = aï¿½o actual, 'salir' para cancelar): ";
         std::getline(std::cin, input);
 
         if (_utilidades.esComandoSalir(input))
@@ -715,7 +715,7 @@ bool ReportesManager::pedirAnioValido(int& anio)
 
         if (!_utilidades.esEnteroValido(input))
         {
-            std::cout << "Entrada inválida. Intente nuevamente.\n\n";
+            std::cout << "Entrada invï¿½lida. Intente nuevamente.\n\n";
             continue;
         }
 
@@ -729,13 +729,13 @@ bool ReportesManager::pedirAnioValido(int& anio)
 
         if (anio < 0)
         {
-            std::cout << "El año no puede ser negativo. Intente nuevamente.\n\n";
+            std::cout << "El aï¿½o no puede ser negativo. Intente nuevamente.\n\n";
             continue;
         }
 
         if (anio > anioActual)
         {
-            std::cout << "El año no puede ser mayor al actual (" << anioActual << "). Intente nuevamente.\n\n";
+            std::cout << "El aï¿½o no puede ser mayor al actual (" << anioActual << "). Intente nuevamente.\n\n";
             continue;
         }
 
@@ -745,7 +745,7 @@ bool ReportesManager::pedirAnioValido(int& anio)
 
 void ReportesManager::importeTotalRecaudadoPorCurso()
 {
-    _utilidades.limpiarPantallaConEncabezado("=== REPORTE - RECAUDACIÓN POR CURSO ===");
+    _utilidades.limpiarPantallaConEncabezado("=== REPORTE - RECAUDACIï¿½N POR CURSO ===");
 
     int anioFiltro;
     if (!pedirAnioValido(anioFiltro))
@@ -763,6 +763,10 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
 
     // pedimos memoria
     Curso* cursos = new Curso[totalCursos];
+    if (cursos == nullptr){
+        std::cout << "Error: No se pudo asignar memoria para los cursos.\n";
+        return;
+    }
     for (int i = 0; i < totalCursos; i++)
     {
         cursos[i] = _cursoArchivo.leer(i);
@@ -777,14 +781,39 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
     }
 
     Inscripcion* inscripciones = new Inscripcion[totalInscripciones];
+    if (inscripciones == nullptr){
+        delete[] cursos;
+        return;
+    }
+
     for (int i = 0; i < totalInscripciones; i++)
     {
-        _inscripcionArchivo.leer(i, inscripciones[i]);
+        if(!_inscripcionArchivo.leer(i, inscripciones[i])){
+            std::cout << "Error al leer el registro de inscripcion " << i << ".\n";
+             delete[] cursos;
+             delete[] inscripciones;
+             return;
+        }
     }
 
     // pedimos memoria para almacenar los datos del recaudo y cantidad inscriptos para cada curso
     float* totalRecaudado = new float[totalCursos];
+    if (totalRecaudado == nullptr) {
+        std::cout << "Error: No se pudo asignar memoria para los totales.\n";
+        delete[] cursos;
+        delete[] inscripciones;
+        return;
+    }
+
     int* cantidadInscriptos = new int[totalCursos];
+    if (cantidadInscriptos == nullptr) {
+        std::cout << "Error: No se pudo asignar memoria para los contadores.\n";
+        delete[] cursos;
+        delete[] inscripciones;
+        delete[] totalRecaudado;
+        return;
+    }
+
     for (int i = 0; i < totalCursos; i++)
     {
         totalRecaudado[i] = 0;
@@ -808,7 +837,7 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
         }
     }
 
-    std::cout << "\nRECAUDACIÓN POR CURSO EN EL AÑO " << anioFiltro << "\n";
+    std::cout << "\nRECAUDACIï¿½N POR CURSO EN EL Aï¿½O " << anioFiltro << "\n";
     std::cout << "-------------------------------------------------------------------\n";
     std::cout << std::left << std::setw(10) << "ID"
               << std::setw(30) << "NOMBRE CURSO"
@@ -833,7 +862,7 @@ void ReportesManager::importeTotalRecaudadoPorCurso()
 
     if (!hayDatos)
     {
-        std::cout << "No hay datos de inscripciones para ese año.\n";
+        std::cout << "No hay datos de inscripciones para ese aï¿½o.\n";
     }
 
     std::cout << "-------------------------------------------------------------------\n";
@@ -916,10 +945,10 @@ bool ReportesManager::pedirFecha(Fecha& fecha, const std::string& mensaje) {
         }
 
         if (fecha.validarFechaStr(input)) {
-            return true; // fecha válida y seteada en el objeto fecha
+            return true; // fecha vï¿½lida y seteada en el objeto fecha
         }
 
-        std::cout << "Fecha inválida. Intente nuevamente.\n";
+        std::cout << "Fecha invï¿½lida. Intente nuevamente.\n";
         utilidades.pausar();
     }
 }
@@ -943,7 +972,7 @@ void ReportesManager::inscripcionesEntreFechas()
         std::cout << "Seleccione el tipo de inscripciones a mostrar:\n";
         std::cout << "1. Activas\n";
         std::cout << "2. Inactivas\n";
-        std::cout << "Ingrese opción (1 o 2): ";
+        std::cout << "Ingrese opciï¿½n (1 o 2): ";
         std::string opcion;
         std::getline(std::cin, opcion);
         if (opcion == "1") {
@@ -955,7 +984,7 @@ void ReportesManager::inscripcionesEntreFechas()
             break;
         }
         else {
-            std::cout << "Opción inválida. Intente nuevamente.\n";
+            std::cout << "Opciï¿½n invï¿½lida. Intente nuevamente.\n";
             utilidades.pausar();
         }
     }
@@ -1007,7 +1036,7 @@ void ReportesManager::inscripcionesEntreFechas()
             }
 
             std::cout << "----------------------------------\n";
-            std::cout << "ID Inscripción: " << insc.getIdInscripcion() << "\n";
+            std::cout << "ID Inscripciï¿½n: " << insc.getIdInscripcion() << "\n";
             std::cout << "Fecha: " << f.toString() << "\n";
             std::cout << "Alumno: " << (alumnoOk ? alumno.getNombre() + " " + alumno.getApellido() : "(No encontrado)") << "\n";
             std::cout << "Curso: " << (cursoOk ? curso.getNombre() : "(No encontrado)") << "\n";
@@ -1022,4 +1051,5 @@ void ReportesManager::inscripcionesEntreFechas()
         std::cout << "No se encontraron inscripciones en ese rango de fechas con ese estado.\n";
     }
     std::cout << "----------------------------------\n";
+    utilidades.pausar();
 }

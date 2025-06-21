@@ -238,7 +238,7 @@ bool ProfesorManager::emailValidacion(const std::string& input ) {
 bool ProfesorManager::direccionValidacion(const std::string& input){
     const int maximoDire = 50;
     const int minimoDire = 3;
-    std::regex patronDireccion(R"(^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ.\s]+[ ]\d{1,5}$)");/// Patron de una direccion estandard de la bibliteca regex
+    std::regex patronDireccion(R"(^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.\s]+[ ]\d{1,5}$)");/// Patron de una direccion estandard de la bibliteca regex
 
     int tamanioCadena = input.length();
 
@@ -257,7 +257,7 @@ bool ProfesorManager::direccionValidacion(const std::string& input){
     if (std::regex_match(input, patronDireccion)) {
         return true;
     } else {
-        std::cout << "Dirección inválida. Use el formato: 'Calle Nombre 123'.\n";
+        std::cout << "Direcciï¿½n invï¿½lida. Use el formato: 'Calle Nombre 123'.\n";
 
         system("pause");
 
@@ -621,13 +621,13 @@ void ProfesorManager::listar(){
 
     while(true)
     {
-        _utilidades.limpiarPantallaConEncabezado("=== SUBMENÚ - LISTADO DE PROFESORES ===");
+        _utilidades.limpiarPantallaConEncabezado("=== SUBMENï¿½ - LISTADO DE PROFESORES ===");
         std::cout << "1. Listar profesores activos\n";
         std::cout << "2. Listar profesores inactivos\n";
         std::cout << "3. Listar por apellido\n";
-        std::cout << "0. Volver al menú anterior\n";
+        std::cout << "0. Volver al menï¿½ anterior\n";
         std::cout << "=========================================\n";
-        std::cout << "Seleccione una opción: ";
+        std::cout << "Seleccione una opciï¿½n: ";
         std::getline(std::cin,input);
 
         if ( !_utilidades.esEnteroValido(input) ){
@@ -659,7 +659,7 @@ void ProfesorManager::listar(){
         case 0:
             return;
         default:
-            std::cout << "Opción no válida. Intente nuevamente.\n";
+            std::cout << "Opciï¿½n no vï¿½lida. Intente nuevamente.\n";
             system("pause");
             break;
         }
@@ -903,7 +903,7 @@ void ProfesorManager::buscar(){
         system("cls");
 
         std::cout << "========================================== \n";
-        std::cout << "         === BÚSQUEDA DE PROFESOR ===      \n";
+        std::cout << "         === Bï¿½SQUEDA DE PROFESOR ===      \n";
         std::cout << "==========================================\n";
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
@@ -929,7 +929,7 @@ void ProfesorManager::buscar(){
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
-            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nï¿½mero entero. Intente nuevamente.\n\n";
             system("pause");
             continue;
         }
@@ -1076,7 +1076,9 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
             return;
         }
 
-        case 2: {
+        case 2:
+            ///Baja del profesor;
+
             system("cls");
 
             if (_cursoManager.reasignarCursosDeProfesor(idProfesor)) {
@@ -1087,13 +1089,9 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
                 std::cin.ignore();
                 return;
             }
-            else {
-                std::cout << "\nNo se pudieron reasignar los cursos. Intente nuevamente.\n";
-                system("pause");
-            }
-
+            std::cin.ignore();
+            return;
             break;
-        }
 
         default:
             std::cout << "La opcion ingresada es incorrecta, intente nuevamente.\n";
@@ -1170,7 +1168,7 @@ void ProfesorManager::reactivarProfesor(){
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
-            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nï¿½mero entero. Intente nuevamente.\n\n";
             system("pause");
             continue;
         }
@@ -1266,7 +1264,7 @@ void ProfesorManager::modificar(){
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
-            std::cout << "\nDebe ingresar un número entero. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un nï¿½mero entero. Intente nuevamente.\n\n";
             system("pause");
             continue;
         }
