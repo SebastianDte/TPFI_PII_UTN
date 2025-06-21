@@ -992,6 +992,8 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
 {
     CursoArchivo _archivo = CursoArchivo();
     int totalCursos = _archivo.cantRegistros();
+    int contCursosProf = 0;
+    int contCursosReasignados = 0;
 
     if (totalCursos <= 0)
     {
@@ -999,8 +1001,21 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
         return false;
     }
 
+    for ( int i = 0; i < totalCursos; i++ ){
+
+        Curso curso = _archivo.leer(i);
+
+        // cuento solo los cursos asignados al profe que queremos reasignar
+        if (curso.getIdProfesor() == idProfesorActual){
+
+            contCursosProf ++;
+
+        }
+
+    }
+
+
     ProfesorArchivo profeArchivo;
-    bool huboCambio = false;
 
     for (int i = 0; i < totalCursos; i++)
     {
@@ -1060,7 +1075,7 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
                             if (_archivo.modificar(curso, i))
                             {
                                 std::cout << "Curso reasignado correctamente." << std::endl;
-                                huboCambio = true;
+                                contCursosReasignados ++;
                             }
                             else
                             {
@@ -1076,9 +1091,9 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
         }
     }
 
-    if (!huboCambio)
+    if ( contCursosProf != contCursosReasignados )
     {
-        std::cout << "No se realizaron cambios en la reasignación de cursos." << std::endl;
+        std::cout<<"\nPara eliminar el registro del profesor solicitado debe reasignar el o los cursos que estan a cargo de dicho profesor. \n\n";
         return false;
     }
 

@@ -1015,6 +1015,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
     while(true){
 
         system("cls");
+        std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
         std::cout<<"\nProfesor: " << _profesor.getApellido()<<", "<<_profesor.getNombre()<<".\n";
         std::cout<<"DNI: " << _profesor.getDni()<<".\n";
         std::cout<<"\nEl profesor que desea dar de baja, tiene asignado/s: "<< contCursosProfesor(idProfesor)<<" curso/s.\n";
@@ -1042,7 +1043,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
         if ( !_utilidades.esEnteroValido(input) ){
             system("cls");
-            std::cout << "\nEl ID ingresado es incorrecto, debe ser un numero entero.Intente nuevamente.\n\n";
+            std::cout << "\nLa opcion ingresada es incorrecta, debe ser un numero entero.Intente nuevamente.\n\n";
             system("pause");
             continue;
 
@@ -1087,7 +1088,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
                 std::cout<<"\nERROR.El profesor que desea dar de baja tiene cursos a su cargo con inscripciones activas.\n\n";
                 inscripActivas = false;
-                break;
+                std::cin.ignore();
                 return;
 
             }
@@ -1098,42 +1099,38 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor){
 
             std::cout<<"\nRegistro de profesor y curso/s eliminados exitosamente \n";
 
-            break;
+            std::cin.ignore();
+            return;
 
         case 2:
             ///Baja del profesor;
-<<<<<<< HEAD
-          /*
             system("cls");
 
-=======
-
-            system("cls");
->>>>>>> d44df611d7a39a07829ff6f9d72eb1ae177ea5aa
             if ( _cursoManager.reasignarCursosDeProfesor(idProfesor) ){
 
                 _profesor.setEstado(false);
                 _archivo.alta(_profesor,posicion);
 
-                std::cout<<"\nRegistro de profesor eliminado y cursos reasignados exitosamente \n";
+                std::cout<<"\nRegistro de profesor eliminado y cursos reasignados exitosamente.\n\n";
 
+                std::cin.ignore();
+                return;
+                break;
             }
-<<<<<<< HEAD
-          */
-=======
 
->>>>>>> d44df611d7a39a07829ff6f9d72eb1ae177ea5aa
-           break;
+            std::cin.ignore();
+            return;
+            break;
 
         default:
 
             std::cout<<"La opcion ingresada es incorrecta, intente nuevamente.\n";
-            system("pause");
 
-            break;
+            system("pause");
+            continue;
         }
 
-       return;
+
     }
 
 }
@@ -1183,7 +1180,7 @@ void ProfesorManager::reactivarProfesor(){
         std::cout << "==========================================\n";
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
-        std::cout<<"Ingrese el ID del profesor que desea buscar: \n";
+        std::cout<<"Ingrese el ID del profesor que desea reactivar: \n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
@@ -1213,7 +1210,7 @@ void ProfesorManager::reactivarProfesor(){
         id = std::stoi(input);
         posicion = _archivo.buscar(id);
 
-        if ( posicion <= 0 ){
+        if ( posicion < 0 ){
 
             std::cout << "\nEl ID ingresado no pertenece a un registro de profesor. Intente nuevamente.\n\n";
             system("pause") ;
@@ -1785,7 +1782,9 @@ void ProfesorManager::modificar(){
 
         case 0:
 
+            std::cin.ignore();
             return;
+            break;
 
         default:
 
@@ -1838,8 +1837,6 @@ void ProfesorManager::baja(){
         return;
 
     }
-
-
 
     while(true) {
 
