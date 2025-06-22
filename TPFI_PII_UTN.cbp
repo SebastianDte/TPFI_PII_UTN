@@ -44,7 +44,13 @@
 		<Unit filename="include/Inscripcion.h" />
 		<Unit filename="include/InscripcionArchivo.h" />
 		<Unit filename="include/InscripcionManager.h" />
+<<<<<<< Updated upstream
 		<Unit filename="include/MenuAlumno.h" />
+=======
+		<Unit filename="include/MenuAlumno.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+>>>>>>> Stashed changes
 		<Unit filename="include/MenuCurso.h" />
 		<Unit filename="include/MenuInscripcion.h" />
 		<Unit filename="include/MenuPrincipal.h" />

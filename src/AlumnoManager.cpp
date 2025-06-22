@@ -4,7 +4,8 @@
 #include "AlumnoArchivo.h"
 #include "Utilidades.h"
 #include "Fecha.h"
-#include <regex> /// LIBRERIA PARA VALIDACIONES
+#include "InscripcionManager.h"
+#include <regex> // LIBRERIA PARA VALIDACIONES
 AlumnoManager::AlumnoManager()
 {
     _archivo = AlumnoArchivo("alumnos.dat");
@@ -118,12 +119,12 @@ bool AlumnoManager::pedirApellido(std::string& apellido)
         return true;
     }
 }
-bool AlumnoManager::pedirEmail(std::string& email)
+bool AlumnoManager::pedirTelefono(std::string& telefono)
 {
     std::string input;
     while (true)
     {
-        std::cout << "\nIngrese email (máximo 49 caracteres): ";
+        std::cout << "\nIngrese teléfono (solo números, entre 7 y 19 dígitos): ";
         std::getline(std::cin, input);
 
         if (_utilidades.esComandoSalir(input))
@@ -131,49 +132,67 @@ bool AlumnoManager::pedirEmail(std::string& email)
             return false;
         }
 
-
-        const int maximoEmail = 49;
-        const int minimoEmail = 5;
-        int tamanioEmail = input.length();
-        int contArroba = 0;
-        int contPuntos = 0;
-
         if (input.empty())
         {
-            std::cout << "El email no puede estar vacío. Intente nuevamente.\n";
-            continue; // Vuelve a pedir el dato
+            std::cout << "El teléfono no puede estar vacío. Intente nuevamente.\n";
+            continue;
         }
-
-        if (tamanioEmail < minimoEmail || tamanioEmail > maximoEmail)
+        if (!_utilidades.soloNumeros(input))
         {
-            std::cout << "La longitud del email no es válida. Intente nuevamente.\n";
+            std::cout << "El teléfono debe contener solo números, sin espacios ni guiones. Intente nuevamente.\n";
             continue;
         }
 
-        for (int i = 0; i < tamanioEmail; i++)
+        if (input.length() < 7 || input.length() > 19)
         {
-            if (input[i] == '@')
-            {
-                contArroba++;
-            }
-            if (input[i] == '.')
-            {
-                contPuntos++;
-            }
-        }
-
-        if (contArroba != 1 || contPuntos == 0)
-        {
-            std::cout << "El formato del email no es válido (debe tener un '@' y al menos un '.'). Intente nuevamente.\n";
+            std::cout << "La cantidad de dígitos no es válida. Debe tener entre 7 y 19 dígitos. Intente nuevamente.\n";
             continue;
         }
 
-        // Si todas las validaciones pasan, asignamos el valor y salimos.
-        email = input;
-        return true; // Éxito
+        telefono = input;
+        return true;
     }
 }
+bool AlumnoManager::pedirEmail(std::string& email)
+{
 
+
+
+    // R"(...)" es un "raw string literal", facilita escribir patrones sin escapar las barras \.
+    const std::regex patronEmail(R"(([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+))");
+
+    std::string input;
+    while (true)
+    {
+        std::cout << "\nIngrese email (ej: nombre@dominio.com): ";
+        std::getline(std::cin, input);
+
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false;
+        }
+
+        if (input.empty() || input.length() > 49)
+        {
+            std::cout << "El email no puede estar vacío y debe tener menos de 50 caracteres.\n";
+            continue;
+        }
+
+        // 2. Usamos std::regex_match para validar el input contra el patrón.
+        if (std::regex_match(input, patronEmail))
+        {
+            // Si coincide, la validación es exitosa.
+            email = input;
+            return true;
+        }
+        else
+        {
+            // Si no coincide, mostramos el error.
+            std::cout << "El formato del email no es válido. Intente nuevamente.\n";
+            continue;
+        }
+    }
+}
 
 
 
@@ -204,6 +223,54 @@ bool AlumnoManager::pedirDireccion(std::string& direccion)
             std::cout << "Formato inválido. Use 'NOMBRE CALLE' seguido de 'NUMERO' (máximo 5 dígitos). Intente nuevamente.\n";
 
         }
+    }
+}
+bool AlumnoManager::pedirFechaNacimiento(Fecha& fecha)
+{
+    std::string input;
+    while (true)
+    {
+        std::cout << "\nIngrese la fecha de nacimiento (DD/MM/AAAA): ";
+        std::getline(std::cin, input);
+        if (_utilidades.esComandoSalir(input))
+        {
+            return false;
+        }
+
+        Fecha fechaTemp; // Usamos un objeto temporal para la validación
+
+        // 1. Validación de formato (DD/MM/AAAA)
+        if (!fechaTemp.validarFechaStr(input))
+        {
+            std::cout << "Formato de fecha incorrecto. Intente nuevamente.\n";
+            continue;
+        }
+
+        // 2. Validación de que no sea una fecha futura
+        Fecha fechaActual = Fecha::fechaActual();
+        if (fechaTemp.esMayorQue(fechaActual))
+        {
+            std::cout << "La fecha de nacimiento no puede ser en el futuro. Intente nuevamente.\n";
+            continue;
+        }
+
+        // 3. Validación de edad lógica
+        int edad = fechaActual.getAnio() - fechaTemp.getAnio();
+        // Ajuste simple por si aún no cumplió años este año
+        if (fechaActual.getMes() < fechaTemp.getMes() ||
+           (fechaActual.getMes() == fechaTemp.getMes() && fechaActual.getDia() < fechaTemp.getDia())) {
+            edad--;
+        }
+
+        if (edad < 6 || edad > 90)
+        {
+            std::cout << "La edad del alumno debe ser razonable (entre 6 y 90 años). Intente nuevamente.\n";
+            continue;
+        }
+
+        // Si todas las validaciones pasan
+        fecha = fechaTemp; // Asignamos la fecha validada al parámetro de referencia
+        return true;
     }
 }
 void AlumnoManager::mostrarAlumno(const Alumno& alumno)
@@ -259,22 +326,10 @@ void AlumnoManager::altaAlumno()
     nuevoAlumno.setApellido(inputUsuario);
 
     // Ingreso y validación del Teléfono
-    while (true)
+    if (!pedirTelefono(inputUsuario))
     {
-        std::cout << "\nIngrese teléfono (máximo 19 caracteres): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        if (inputUsuario.empty() || inputUsuario.length() > 19)
-        {
-            std::cout << "El teléfono no puede estar vacío y debe tener como máximo 19 caracteres. Intente nuevamente.\n";
-            continue;
-        }
-        nuevoAlumno.setTelefono(inputUsuario);
-        break;
+        std::cout << "Alta cancelada.\n";
+        return;
     }
 
     // Ingreso y validación del Email
@@ -296,7 +351,17 @@ void AlumnoManager::altaAlumno()
 
 
     // Fecha nacimiento
-    while (true)
+    Fecha fechaNacimiento;
+    if(!pedirFechaNacimiento(fechaNacimiento))
+    {
+        std::cout << "Alta cancelada." << std::endl;
+        return;
+    }
+    nuevoAlumno.setFechaNacimiento(fechaNacimiento );
+
+
+
+   /* while (true)
     {
         std::cout << "\nIngrese la fecha de nacimiento (DD/MM/AAAA): ";
         std::getline(std::cin, inputUsuario);
@@ -313,7 +378,7 @@ void AlumnoManager::altaAlumno()
         }
         nuevoAlumno.setFechaNacimiento(fechaNacimiento);
         break;
-    }
+    }*/
 
     // El alumno se ingresa como activo por defecto.
     nuevoAlumno.setActivo(true);
@@ -356,14 +421,8 @@ void AlumnoManager::bajaAlumno()
         }
 
         legajo = std::stoi(inputUsuario);
-        if (legajo <= 0)
-        {
-            std::cout << "El legajo debe ser mayor que 0." << std::endl;
-            continue;
-        }
+        posicion = _archivo.buscar(legajo, false); // Busca sin importar si está activo
 
-        // Se utiliza filtrarActivos=false para obtener el alumno sin importar su estado.
-        posicion = _archivo.buscar(legajo, false);
         if (posicion == -1)
         {
             std::cout << "No se encontró un alumno con ese legajo. Intente nuevamente." << std::endl;
@@ -372,44 +431,41 @@ void AlumnoManager::bajaAlumno()
 
         alumno = _archivo.leer(posicion);
 
-        // Si el alumno ya fue dado de baja, se notifica y se sale.
         if (!alumno.getActivo())
         {
-            std::cout << "El alumno ya fue dado de baja." << std::endl;
-            std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
-            std::cout << "Nombre: " << alumno.getNombre() << std::endl;
-            std::cout << "Apellido: " << alumno.getApellido() << std::endl;
-
+            std::cout << "El alumno con legajo " << legajo << " ya se encuentra dado de baja." << std::endl;
+            _utilidades.pausar();
             return;
         }
-        break;
+        break; // Encontramos un alumno activo para dar de baja
     }
-
 
     std::cout << "\nAlumno encontrado:" << std::endl;
     std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
-    std::cout << "Nombre: " << alumno.getNombre() << std::endl;
-
+    std::cout << "Nombre: " << alumno.getNombre() << " " << alumno.getApellido() << std::endl;
     std::cout << "\n¿Confirma dar de baja este alumno? (s/n): ";
     std::getline(std::cin, inputUsuario);
+
     if (_utilidades.aMinusculas(inputUsuario) != "s")
     {
         std::cout << "\nBaja de alumno cancelada." << std::endl;
         return;
     }
 
-    // Se procede a desactivar el alumno.
     alumno.setActivo(false);
     if (_archivo.modificar(alumno, posicion))
     {
+        InscripcionManager inscripcionManager;
+        inscripcionManager.bajaInscripcionesPorAlumno(alumno.getLegajo());
+
         std::cout << "\nAlumno dado de baja correctamente." << std::endl;
+        std::cout << "También se han desactivado todas sus inscripciones asociadas." << std::endl;
     }
     else
     {
         std::cout << "\nError al dar de baja el alumno." << std::endl;
     }
 }
-
 
 void AlumnoManager::buscarAlumnoLegajo()
 {
@@ -573,52 +629,52 @@ void AlumnoManager::modificarAlumno()
         switch (opcion)
         {
         case 1:
-        {
-            std::string nuevoDni;
-            std::cout << "Nuevo DNI del alumno: ";
-            std::getline(std::cin, nuevoDni);
-            alumno.setDni(nuevoDni);
-            std::cout << "DNI actualizado.\n";
-            break;
-        }
+            {
+                std::string nuevoDni;
+                std::cout << "Nuevo DNI del alumno: ";
+                std::getline(std::cin, nuevoDni);
+                alumno.setDni(nuevoDni);
+                std::cout << "DNI actualizado.\n";
+                break;
+            }
         case 2:
-        {
-            std::string nuevoNombre;
-            std::cout << "Nuevo nombre del alumno: ";
-            std::getline(std::cin, nuevoNombre);
-            alumno.setNombre(nuevoNombre);
-            std::cout << "Nombre actualizado.\n";
-            break;
-        }
+            {
+                std::string nuevoNombre;
+                std::cout << "Nuevo nombre del alumno: ";
+                std::getline(std::cin, nuevoNombre);
+                alumno.setNombre(nuevoNombre);
+                std::cout << "Nombre actualizado.\n";
+                break;
+            }
         case 3:
-        {
-            std::string nuevoApellido;
-            std::cout << "Nuevo apellido del alumno: ";
-            std::cin >> nuevoApellido;
-            std::cin.ignore();
-            alumno.setApellido(nuevoApellido);
-            std::cout << "Apellido actualizado.\n";
-            break;
-        }
+            {
+                std::string nuevoApellido;
+                std::cout << "Nuevo apellido del alumno: ";
+                std::cin >> nuevoApellido;
+                std::cin.ignore();
+                alumno.setApellido(nuevoApellido);
+                std::cout << "Apellido actualizado.\n";
+                break;
+            }
         case 4:
-        {
-            std::string nuevoTelefono;
-            std::cout << "Nuevo número de telefono del alumno: ";
-            std::cin >> nuevoTelefono;
-            std::cin.ignore();
-            alumno.setTelefono(nuevoTelefono);
-            std::cout << "Telefono actualizado.\n";
-            break;
-        }
+            {
+                std::string nuevoTelefono;
+                std::cout << "Nuevo número de telefono del alumno: ";
+                std::cin >> nuevoTelefono;
+                std::cin.ignore();
+                alumno.setTelefono(nuevoTelefono);
+                std::cout << "Telefono actualizado.\n";
+                break;
+            }
         case 5:
-        {
-            std::string nuevaDireccion;
-            std::cout << "Nueva direccion del alumno: ";
-            std::getline(std::cin, nuevaDireccion);
-            alumno.setDireccion(nuevaDireccion);
-            std::cout << "Direccion actualizada.\n";
-            break;
-        }
+            {
+                std::string nuevaDireccion;
+                std::cout << "Nueva direccion del alumno: ";
+                std::getline(std::cin, nuevaDireccion);
+                alumno.setDireccion(nuevaDireccion);
+                std::cout << "Direccion actualizada.\n";
+                break;
+            }
         case 0:
             if (alumno != alumnoOriginal)
             {
