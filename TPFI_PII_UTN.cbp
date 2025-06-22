@@ -34,35 +34,19 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/Alumno.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="include/AlumnoArchivo.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="include/AlumnoManager.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="include/Alumno.h" />
+		<Unit filename="include/AlumnoArchivo.h" />
+		<Unit filename="include/AlumnoManager.h" />
 		<Unit filename="include/Curso.h" />
 		<Unit filename="include/CursoArchivo.h" />
 		<Unit filename="include/CursoManager.h" />
 		<Unit filename="include/Fecha.h" />
-		<Unit filename="include/Inscripcion.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="include/InscripcionArchivo.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="include/InscripcionManager.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="include/MenuAlumno.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="include/Inscripcion.h" />
+		<Unit filename="include/InscripcionArchivo.h" />
+		<Unit filename="include/InscripcionManager.h" />
+		<Unit filename="include/MenuAlumno.h" />
 		<Unit filename="include/MenuCurso.h" />
-		<Unit filename="include/MenuInscripcion.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="include/MenuInscripcion.h" />
 		<Unit filename="include/MenuPrincipal.h" />
 		<Unit filename="include/MenuProfesor.h" />
 		<Unit filename="include/MenuReportes.h" />
@@ -80,20 +64,12 @@
 		<Unit filename="src/CursoArchivo.cpp" />
 		<Unit filename="src/CursoManager.cpp" />
 		<Unit filename="src/Fecha.cpp" />
-		<Unit filename="src/Inscripcion.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="src/InscripcionArchivo.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="src/InscripcionManager.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="src/Inscripcion.cpp" />
+		<Unit filename="src/InscripcionArchivo.cpp" />
+		<Unit filename="src/InscripcionManager.cpp" />
 		<Unit filename="src/MenuAlumno.cpp" />
 		<Unit filename="src/MenuCurso.cpp" />
-		<Unit filename="src/MenuInscripcion.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="src/MenuInscripcion.cpp" />
 		<Unit filename="src/MenuPrincipal.cpp" />
 		<Unit filename="src/MenuProfesor.cpp" />
 		<Unit filename="src/MenuReportes.cpp" />
