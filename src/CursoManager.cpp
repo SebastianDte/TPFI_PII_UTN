@@ -8,6 +8,7 @@
 #include "Profesor.h"
 #include "InscripcionArchivo.h"
 #include "Inscripcion.h"
+#include "InscripcionManager.h"
 
 CursoManager::CursoManager()
 {
@@ -925,8 +926,34 @@ void CursoManager::bajaCurso()
 
     if (_archivo.tieneInscripcionesActivas(idCurso))
     {
-        std::cout << "\n\nERROR: No se puede dar de baja el curso porque tiene inscripciones activas.\n";
-        return;
+        std::cout << "\n\nADVERTENCIA: El curso tiene inscripciones activas.\n";
+        std::cout << "Para dar de baja el curso, es necesario dar de baja todas las inscripciones asociadas.\n";
+        std::string confirmacion;
+
+        while (true)
+        {
+            std::cout << "¿Desea continuar y dar de baja las inscripciones? (s/n): ";
+            std::getline(std::cin, confirmacion);
+            confirmacion = _utilidades.aMinusculas(confirmacion);
+
+            if (confirmacion == "s" || confirmacion == "n")
+            {
+                break;
+            }
+            std::cout << "Opción no válida. Por favor, ingrese 's' para sí o 'n' para no.\n";
+        }
+
+        if (confirmacion == "s")
+        {
+            InscripcionManager inscripcionManager;
+            inscripcionManager.bajaInscripcionesPorCurso(idCurso);
+            std::cout << "\nInscripciones dadas de baja.\n";
+        }
+        else
+        {
+            std::cout << "\nOperación cancelada. El curso y sus inscripciones no han sido modificados.\n";
+            return;
+        }
     }
 
     if (_archivo.baja(idCurso))
