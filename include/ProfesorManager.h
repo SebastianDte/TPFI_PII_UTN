@@ -23,7 +23,7 @@ public:
     bool telefonoValidacion(const std::string& input);
     bool emailValidacion(const std::string& input);
     bool direccionValidacion(const std::string& input);
-
+    bool fechaValidacion(Fecha& fechaNac);
 
     void alta();
     void modificar();

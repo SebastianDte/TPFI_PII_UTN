@@ -361,25 +361,6 @@ void AlumnoManager::altaAlumno()
 
 
 
-   /* while (true)
-    {
-        std::cout << "\nIngrese la fecha de nacimiento (DD/MM/AAAA): ";
-        std::getline(std::cin, inputUsuario);
-        if (_utilidades.esComandoSalir(inputUsuario))
-        {
-            std::cout << "Alta de alumno cancelada." << std::endl;
-            return;
-        }
-        Fecha fechaNacimiento = Fecha();
-        if (!fechaNacimiento.validarFechaStr(inputUsuario))
-        {
-            std::cout << "Formato de fecha incorrecto. Intente nuevamente." << std::endl;
-            continue;
-        }
-        nuevoAlumno.setFechaNacimiento(fechaNacimiento);
-        break;
-    }*/
-
     // El alumno se ingresa como activo por defecto.
     nuevoAlumno.setActivo(true);
 
