@@ -33,8 +33,8 @@ public:
     void listarPorApellido();
     void reactivarProfesor();
     void buscar();
-    int contCursosProfesor(int idProfesor);
+    int contCursosProfesor(const int& idProfesor);
     void baja();
-    void bajaCursoProfesor(int idProfesor);
+    void bajaCursoProfesor(const int& idProfesor);
 
 };

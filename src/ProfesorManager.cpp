@@ -30,7 +30,14 @@ bool ProfesorManager::dniValidacion(const std::string& input){
 
     }
 
+    if (_archivo.existeDNI(input)){
 
+        std::cout << "El DNI ingresado pertenece a otro profesor. Intente nuevamente.\n";
+
+        system("pause");
+
+        return false;
+    }
 
     if ( (input.length() < minimoDNI || input.length() > tamanioDNI ) && _utilidades.soloNumeros(input)== true ){
 
@@ -287,7 +294,7 @@ int id,cantidadRegistros;
         std::cout << "=========================================\n";
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
-        std::cout<<"Ingrese DNI: \n";
+        std::cout<<"Ingrese el numero de DNI (sin puntos):\n";
         std::getline(std::cin,input);
 
         if (_utilidades.esComandoSalir(input)){
@@ -971,7 +978,7 @@ void ProfesorManager::buscar(){
 
 }
 
-int ProfesorManager::contCursosProfesor(int idProfesor){
+int ProfesorManager::contCursosProfesor(const int& idProfesor){
     Curso cursoProf;
     CursoArchivo archiCurso;
     int contCursos = 0;
@@ -1003,8 +1010,8 @@ int ProfesorManager::contCursosProfesor(int idProfesor){
 
 }
 
-void ProfesorManager::bajaCursoProfesor(int idProfesor) {
-    Curso cursoProf;
+void ProfesorManager::bajaCursoProfesor(const int& idProfesor) {
+    Curso cursoP;
     CursoArchivo archiCurso;
     int cantRegCursos, opcion, posicion;
     bool inscripActivas = false;
@@ -1051,14 +1058,16 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
             system("cls");
 
             for (int i = 0; i < cantRegCursos; i++) {
-                cursoProf = archiCurso.leer(i);
+                cursoP = archiCurso.leer(i);
 
-                if (cursoProf.getEstado() && cursoProf.getIdProfesor() == idProfesor) {
-                    if (archiCurso.tieneInscripcionesActivas(cursoProf.getId())) {
+                if (cursoP.getEstado() && cursoP.getIdProfesor() == idProfesor) {
+
+
+                    if ( archiCurso.tieneInscripcionesActivas(cursoP.getId() ) ) {
                         inscripActivas = true;
                         break;
                     }
-                    archiCurso.baja(cursoProf.getId());
+                    archiCurso.baja(cursoP.getId() );
                 }
             }
 
@@ -1084,7 +1093,7 @@ void ProfesorManager::bajaCursoProfesor(int idProfesor) {
                 _profesor.setEstado(false);
                 _archivo.alta(_profesor, posicion);
 
-                std::cout << "\nRegistro de profesor eliminado y cursos reasignados exitosamente.\n\n";
+                std::cout << "\nRegistro de profesor eliminado exitosamente.\n\n";
                 std::cin.ignore();
                 return;
             }

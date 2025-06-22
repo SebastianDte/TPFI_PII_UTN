@@ -7,25 +7,24 @@ class ProfesorArchivo{
 private:
 
     char  _nombreArchivo[30];
-    //int _tamanioRegistro;
 
 public:
 
     ProfesorArchivo();
 
-    ProfesorArchivo(std::string nombreArchivo);
+    ProfesorArchivo(const std::string& nombreArchivo);
 
-    bool alta(Profesor regProfesor);
+    bool alta(const Profesor& regProfesor);
 
     int cantRegistros();
 
-    int buscar(int id);
+    int buscar(const int& id);
 
-    Profesor leer(int posicion);
+    Profesor leer(const int& posicion);
 
-    int generarID (int cantRegistros);
+    int generarID (const int& cantRegistros);
 
-    bool alta(Profesor regModificado, int posicion);
+    bool alta(const Profesor& regModificado,const int& posicion);
 
-
+    bool existeDNI(const std::string& dni);
 };
