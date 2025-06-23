@@ -77,6 +77,13 @@ bool CursoManager::pedirNombreCurso(std::string& nombre)
 
 bool CursoManager::pedirCantidadMaximaAlumnos(int& cantidad)
 {
+    // estas constantes se pueden cambiar, por ahora se deja como minimo 1 aunque no es logico un curso asi, ya que
+    // por temas didacticos necesitamos comprobar el limite de cupos de un curso y para hacerlo rapido
+    // podemos crear un curso con un maximo de 1 cupo para comprobar que este correcta la validacion si se intenta
+    // inscribir mas de 1 alumno
+    const int MAX_ALUMNOS = 500;
+    const int MIN_ALUMNOS = 1;
+
     std::string input;
     while (true)
     {
@@ -88,20 +95,20 @@ bool CursoManager::pedirCantidadMaximaAlumnos(int& cantidad)
 
         if (!_utilidades.esEnteroValido(input))
         {
-            std::cout << "\nDebe ingresar un n�mero entero v�lido. Intente nuevamente.\n\n";
+            std::cout << "\nDebe ingresar un número entero válido. Intente nuevamente.\n\n";
             continue;
         }
 
         cantidad = std::stoi(input);
-        if (cantidad <= 0)
+        if (cantidad < MIN_ALUMNOS)
         {
-            std::cout << "\nLa cantidad debe ser mayor que cero. Intente nuevamente.\n\n";
+            std::cout << "\nLa cantidad debe ser mayor o igual a " << MIN_ALUMNOS << ". Intente nuevamente.\n\n";
             continue;
         }
 
-        if (cantidad > 500)
+        if (cantidad > MAX_ALUMNOS)
         {
-            std::cout << "\nLa cantidad máxima permitida es 500. Intente nuevamente.\n\n";
+            std::cout << "\nLa cantidad máxima permitida es " << MAX_ALUMNOS << ". Intente nuevamente.\n\n";
             continue;
         }
 
@@ -269,13 +276,13 @@ void CursoManager::modificarCurso()
 
         if (_utilidades.esComandoSalir(inputUsuario))
         {
-            std::cout << "\nOperaci�n cancelada.\n";
+            std::cout << "\nOperación cancelada.\n";
             return;
         }
 
         if (!_utilidades.esEnteroValido(inputUsuario))
         {
-            std::cout << "Debe ingresar un n�mero entero v�lido. Intente nuevamente.\n";
+            std::cout << "Debe ingresar un número entero válido. Intente nuevamente.\n";
             continue;
         }
 
@@ -289,11 +296,15 @@ void CursoManager::modificarCurso()
         posicion = _archivo.buscar(idCurso);
         if (posicion == -1)
         {
-            std::cout << "No se encontr� un curso activo con ese ID. Intente nuevamente.\n";
+            std::cout << "No se encontró un curso activo con ese ID. Intente nuevamente.\n";
             continue;
         }
 
         curso = _archivo.leer(posicion);
+        if (!curso.getEstado()){
+            std::cout << "\nEl curso solicitado se encuentra inactivo. Debe reactivarlo para poder modificarlo. Intente nuevamente.\n";
+            continue;
+        }
         break;
     }
 
@@ -417,7 +428,7 @@ void CursoManager::modificarCurso()
             }
             break;
         default:
-            std::cout << "Opci�n inv�lida. Intente nuevamente.\n";
+            std::cout << "Opción inválida. Intente nuevamente.\n";
         }
 
         if (opcion != 0)
@@ -1057,8 +1068,35 @@ void CursoManager::reactivarCurso()
 
     if (cambiarProfesor)
     {
+        int totalProfesores = archivoProfesor.cantRegistros();
+        Profesor* profesores = new Profesor[totalProfesores];
+
+        if (profesores == nullptr)
+        {
+            std::cout << "Error de memoria al cargar profesores.\n";
+            return;
+        }
+
+        for (int i = 0; i < totalProfesores; i++)
+        {
+            profesores[i] = archivoProfesor.leer(i);
+        }
+
+        std::cout << "\nProfesores disponibles para reasignar:\n";
+        for (int i = 0; i < totalProfesores; i++)
+        {
+            if (profesores[i].getEstado())
+            {
+                std::cout << "  ID: " << profesores[i].getId()
+                        << " - " << profesores[i].getNombre()
+                        << " " << profesores[i].getApellido() << std::endl;
+            }
+        }
+        std::cout << "\n\n";
+
         int nuevoIdProfesor;
         if (!pedirIdProfesor(nuevoIdProfesor)) return;
+
         posProfe = archivoProfesor.buscar(nuevoIdProfesor);
         profesor = archivoProfesor.leer(posProfe);
         curso.setIdProfesor(nuevoIdProfesor);
