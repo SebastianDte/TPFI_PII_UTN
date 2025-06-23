@@ -49,9 +49,15 @@ bool Utilidades::esFloatValido(const std::string& inputUsuario)
             puntoEncontrado = true;
             continue;
         }
+        return false;  // cualquier otro caracter inválido
+    }
+
+    if (digitos > 0) {
+        return true;
+    }
+    else {
         return false;
     }
-    return digitos > 0;
 }
 
 bool Utilidades::esComandoSalir(const std::string& inputUsuario)

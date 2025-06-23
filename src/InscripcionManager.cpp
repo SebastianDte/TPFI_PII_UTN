@@ -282,12 +282,14 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
     }
 
     Inscripcion insc;
+    bool hayInscripciones = false;
     for (int i = 0; i < cantidad; i++) {
         if (!archivoInscripciones.leer(i, insc)) continue;
 
         // Filtrado por estado
         if (filtroEstado != -1 && insc.getEstado() != (filtroEstado == 1)) continue;
 
+        hayInscripciones = true;
         // Mostrar la información.
         int posAlumno = archivoAlumnos.buscar(insc.getLegajoAlumno(), false);
         int posCurso = archivoCursos.buscar(insc.getIdCurso());
@@ -305,6 +307,13 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
         cout << "Estado: " << (insc.getEstado() ? "Activo" : "Inactivo") << endl;
         cout << "------------------------" << endl;
     }
+
+    if (!hayInscripciones) {
+        if (filtroEstado == 1)
+            cout << "No hay inscripciones activas para mostrar." << endl;
+        else if (filtroEstado == 0)
+            cout << "No hay inscripciones inactivas para mostrar." << endl;
+    }
 }
 
 void InscripcionManager::mostrarUnaInscripcion(const Inscripcion& inscripcion) {
@@ -312,7 +321,7 @@ void InscripcionManager::mostrarUnaInscripcion(const Inscripcion& inscripcion) {
     cout << "Legajo Alumno: " << inscripcion.getLegajoAlumno() << endl;
     cout << "ID Curso: " << inscripcion.getIdCurso() << endl;
     cout << "Fecha Inscripción: " << inscripcion.getFechaInscripcion().toString() << endl;
-    cout << std::fixed << std::setprecision(3);
+    cout << std::fixed << std::setprecision(2);
     cout << "Importe Abonado: $" << inscripcion.getImporteAbonado() << endl;
     cout << "Estado: " << (inscripcion.getEstado() ? "Activo" : "Inactivo") << endl;
     cout << "------------------------" << endl;
@@ -410,7 +419,7 @@ bool InscripcionManager::pedirImporte(float& importe) {
     std::string entrada;
 
     while (true) {
-        std::cout << "Importe abonado: ";
+        std::cout << "Importe abonado (usar punto como separador decimal, ej: 1234.56): ";
         std::getline(std::cin, entrada);
 
         if (_utilidades.esComandoSalir(entrada)) return false;
@@ -420,7 +429,9 @@ bool InscripcionManager::pedirImporte(float& importe) {
             return true;
         }
 
-        std::cout << "\nImporte inválido. Intente nuevamente.\n\n";
+        std::cout << "\n[!] Importe inválido.\n";
+        std::cout << "    Asegúrese de ingresar solo números, con un punto como separador decimal.\n";
+        std::cout << "    Ejemplos válidos: 1000, 1234.56, 0.99\n\n";
     }
 }
 
