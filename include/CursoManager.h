@@ -31,4 +31,10 @@ public:
     bool pedirIdProfesor(int& idProfesor);
     bool aulaUnica(int& numeroAula, int idCursoExcluido = -1);
     bool reasignarCursosDeProfesor(int idProfesorActual);
+
+
+    bool cursoProfInscripcionesActivas(const int& idProfesor);
+    bool bajaCurso(const int& idProfesor);
+
+
 };

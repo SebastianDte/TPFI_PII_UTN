@@ -1013,12 +1013,10 @@ int ProfesorManager::contCursosProfesor(const int& idProfesor){
 
 void ProfesorManager::bajaCursoProfesor(const int& idProfesor) {
     Curso cursoP;
-    CursoArchivo archiCurso;
-    int cantRegCursos, opcion, posicion;
-    bool inscripActivas = false;
+    CursoManager _cursoManager;
+    int  opcion, posicion;
     std::string input;
 
-    cantRegCursos = archiCurso.cantRegistros();
 
     while (true) {
         system("cls");
@@ -1051,32 +1049,38 @@ void ProfesorManager::bajaCursoProfesor(const int& idProfesor) {
         }
 
         opcion = std::stoi(input);
+
         posicion = _archivo.buscar(idProfesor);
+
+        if ( posicion < 0 ){
+
+            std::cout << "\nERROR. No se ah podido encontrar el profesor que desea dar de baja.\n\n";
+            std::cin.ignore();
+            return;
+        }
+
         _profesor = _archivo.leer(posicion);
 
         switch (opcion) {
         case 1: {
             system("cls");
 
-            for (int i = 0; i < cantRegCursos; i++) {
-                cursoP = archiCurso.leer(i);
+            if ( _cursoManager.cursoProfInscripcionesActivas( idProfesor ) ){
 
-                if (cursoP.getEstado() && cursoP.getIdProfesor() == idProfesor) {
-
-
-                    if ( archiCurso.tieneInscripcionesActivas(cursoP.getId() ) ) {
-                        inscripActivas = true;
-                        break;
-                    }
-                    archiCurso.baja(cursoP.getId() );
-                }
-            }
-
-            if (inscripActivas) {
                 std::cout << "\nERROR. El profesor que desea dar de baja tiene cursos a su cargo con inscripciones activas.\n\n";
                 std::cin.ignore();
                 return;
             }
+
+            if ( !_cursoManager.bajaCurso( idProfesor) ){
+
+                std::cout << "\nERROR.No se pudo dar de baja el curso asignado al profesor.\n\n";
+                std::cin.ignore();
+                return;
+
+            }
+
+            ///Si las 2 condiciones anteriores se cumplen se procede a dar de baja al profesor.
 
             _profesor.setEstado(false);
             _archivo.alta(_profesor, posicion);

@@ -1296,3 +1296,77 @@ bool CursoManager::reasignarCursosDeProfesor(int idProfesorActual)
 
     return exitoFinal;
 }
+
+
+bool CursoManager::cursoProfInscripcionesActivas(const int& idProfesor){
+    int cantRegCursos;
+    Curso regCurso;
+
+    cantRegCursos = _archivo.cantRegistros();
+
+    if ( cantRegCursos == 0 ){
+
+        return false;
+
+    }
+
+
+    for (int i = 0; i < cantRegCursos; i++) {
+
+        regCurso = _archivo.leer(i);
+
+        if (regCurso.getEstado() && regCurso.getIdProfesor() == idProfesor) {
+
+
+            if ( _archivo.tieneInscripcionesActivas( regCurso.getId()) ) {
+                return true;
+            }
+
+        }
+    }
+
+   return false;
+
+}
+
+
+bool CursoManager::bajaCurso(const int& idProfesor){
+    int cantRegCursos;
+    Curso regCurso;
+    bool bajaCurso = false;
+
+    cantRegCursos = _archivo.cantRegistros();
+
+    if ( cantRegCursos == 0 ){
+
+        std::cout<<"No hay registros de cursos.\n\n";
+        return false;
+
+    }
+
+    for (int i = 0; i < cantRegCursos; i++) {
+
+        regCurso = _archivo.leer(i);
+
+        if (regCurso.getEstado() && regCurso.getIdProfesor() == idProfesor) {
+
+            _archivo.baja( regCurso.getId() );
+
+            bajaCurso = true;
+        }
+    }
+
+    if ( bajaCurso == false ){
+
+        return false;
+    }
+
+    return true;
+
+}
+
+
+
+
+
+
