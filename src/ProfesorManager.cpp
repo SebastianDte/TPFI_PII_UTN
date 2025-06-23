@@ -265,9 +265,9 @@ bool ProfesorManager::fechaValidacion(Fecha& fechaNac){
 
         }
 
-        Fecha fechaTemp; // Usamos un objeto temporal para la validación
+        Fecha fechaTemp; ///Genero un objeto del tipo fecha auxiliar
 
-        // 1. Validación de formato (DD/MM/AAAA)
+        /// Validación de formato (DD/MM/AAAA)
         if (!fechaTemp.validarFechaStr(input))
         {
             std::cout << "Formato de fecha incorrecto. Intente nuevamente.\n";
@@ -275,7 +275,7 @@ bool ProfesorManager::fechaValidacion(Fecha& fechaNac){
             continue;
         }
 
-        // 2. Validación de que no sea una fecha futura
+        /// Validación de que no sea una fecha futura
         Fecha fechaActual = Fecha::fechaActual();
         if (fechaTemp.esMayorQue(fechaActual))
         {
@@ -284,11 +284,11 @@ bool ProfesorManager::fechaValidacion(Fecha& fechaNac){
             continue;
         }
 
-        // 3. Validación de edad lógica
+        ///Validación de edad razonable
 
         int edad = fechaActual.getAnio() - fechaTemp.getAnio();
 
-        // Ajuste simple por si aún no cumplió años este año
+        /// Ajuste simple por si aún no cumplió años este año
         if (fechaActual.getMes() < fechaTemp.getMes() ||
            (fechaActual.getMes() == fechaTemp.getMes() && fechaActual.getDia() < fechaTemp.getDia())) {
             edad--;
@@ -301,8 +301,8 @@ bool ProfesorManager::fechaValidacion(Fecha& fechaNac){
             continue;
         }
 
-        // Si todas las validaciones pasan
-        fechaNac = fechaTemp; // Asignamos la fecha validada al parámetro de referencia
+
+        fechaNac = fechaTemp; /// Asignamos la fecha validada al parámetro de referencia
         return true;
     }
 
@@ -814,8 +814,6 @@ void ProfesorManager::listarPorApellido(){
     }
 
 
-
-
     if ( cantActivos == 0 ){
 
         std::cout<<"No hay registros de profesores activos.\n";
@@ -1080,7 +1078,7 @@ void ProfesorManager::bajaCursoProfesor(const int& idProfesor) {
 
             }
 
-            ///Si las 2 condiciones anteriores se cumplen se procede a dar de baja al profesor.
+            ///Si las 2 condiciones anteriores no se cumplen se procede a dar de baja al profesor.
 
             _profesor.setEstado(false);
             _archivo.alta(_profesor, posicion);

@@ -12,8 +12,6 @@ public:
 
     ProfesorArchivo();
 
-    ProfesorArchivo(const std::string& nombreArchivo);
-
     bool alta(const Profesor& regProfesor);
 
     int cantRegistros();
