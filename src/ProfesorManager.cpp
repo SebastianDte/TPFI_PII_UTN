@@ -68,7 +68,7 @@ bool ProfesorManager::nombreValidacion(const std::string& input){
 
 
     if (!std::regex_match(input, patronNombre)) {
-        std::cout << "El nombre ingresado debe respetar la ubicacion correcta de las mayusculas, contener solo letras y/o espacios. Sin símbolos ni números.\n\n";
+        std::cout << "El nombre ingresado no respeta el formato valido (ej: Luis Alberto).\n\n";
         system("pause");
         return false;
     }
@@ -99,7 +99,7 @@ bool ProfesorManager::apellidoValidacion(const std::string& input){
 
 
     if (!std::regex_match(input, patronApellido)) {
-        std::cout << "El apellido ingresado debe respetar la ubicacion correcta de las mayusculas, contener solo letras y/o espacios. Sin símbolos ni números.\n\n";
+        std::cout << "El apellido ingresado no respeta el formato valido (ej: Perez Garcia)\n\n";
         system("pause");
         return false;
     }
@@ -363,7 +363,7 @@ int id,cantidadRegistros;
         std::cout << "=========================================\n";
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
-        std::cout<<"Ingrese su nombre: \n";
+        std::cout<<"Ingrese su nombre completo (ej: Pedro Luis): \n";
         std::getline(std::cin,input);
 
 
@@ -399,7 +399,7 @@ int id,cantidadRegistros;
         std::cout << "=========================================\n";
 
         std::cout << "Para cancelar, escriba 'salir' en cualquier momento.\n\n";
-        std::cout<<"Ingrese su apellido: \n";
+        std::cout<<"Ingrese su apellido completo (ej: Perez Gonzales): \n";
         std::getline(std::cin,input);
 
 
@@ -410,7 +410,7 @@ int id,cantidadRegistros;
 
         }
 
-        if( !nombreValidacion(input)) {
+        if( !apellidoValidacion(input) ) {
 
             continue;
 
