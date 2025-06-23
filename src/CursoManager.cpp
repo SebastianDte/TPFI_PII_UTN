@@ -365,8 +365,8 @@ void CursoManager::modificarCurso()
             int nuevaCantidad;
             if (pedirCantidadMaximaAlumnos(nuevaCantidad))
             {
-                InscripcionArchivo archivoInscripciones;
-                int inscriptosActuales = archivoInscripciones.contarInscriptosActivosPorCurso(curso.getId());
+                InscripcionManager ManagerInscripciones;
+                int inscriptosActuales = ManagerInscripciones.contarInscriptosActivosPorCurso(curso.getId());
                 if (nuevaCantidad < inscriptosActuales)
                 {
                     std::cout << "\nError: El nuevo cupo (" << nuevaCantidad << ") no puede ser menor que la cantidad de alumnos ya inscriptos (" << inscriptosActuales << ").\n";
@@ -429,7 +429,6 @@ void CursoManager::modificarCurso()
     }
     while (opcion != 0);
 }
-
 
 void CursoManager::listar()
 {
@@ -667,7 +666,6 @@ void CursoManager::listarSinCupo()
         std::cout << "No hay cursos sin cupo disponible para mostrar." << std::endl;
     }
 }
-
 
 void CursoManager::listarInactivos()
 {
@@ -966,7 +964,6 @@ void CursoManager::bajaCurso()
     }
 
 }
-
 
 void CursoManager::reactivarCurso()
 {

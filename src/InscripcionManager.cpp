@@ -8,7 +8,7 @@
 #include "AlumnoArchivo.h"
 #include "AlumnoManager.h"
 #include "Utilidades.h"
-
+#include "CursoArchivo.h"
 #include <limits>
 using namespace std;
 
@@ -300,7 +300,7 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
         cout << "Alumno: " << (alumnoOk ? alumno.getNombre() + " " + alumno.getApellido() : "(No encontrado)") << endl;
         cout << "Curso: " << (cursoOk ? curso.getNombre() : "(No encontrado)") << endl;
         cout << "Fecha: " << insc.getFechaInscripcion().toString() << endl;
-        cout << fixed << setprecision(3);
+        cout << fixed << setprecision(2);
         cout << "Importe Abonado: $" << insc.getImporteAbonado() << endl;
         cout << "Estado: " << (insc.getEstado() ? "Activo" : "Inactivo") << endl;
         cout << "------------------------" << endl;
@@ -531,4 +531,21 @@ void InscripcionManager::bajaInscripcionesPorAlumno(int legajo) {
             archivoInscripciones.baja(inscripcion.getIdInscripcion());
         }
     }
+}
+
+
+// Método para contar inscriptos activos por curso.
+int InscripcionManager::contarInscriptosActivosPorCurso(int idCurso) const {
+    int contador = 0;
+    int totalRegistros = _archivoInscripciones.cantRegistros();
+
+    for (int i = 0; i < totalRegistros; i++) {
+        Inscripcion insc;
+        if (_archivoInscripciones.leer(i, insc)) {
+            if (insc.getIdCurso() == idCurso && insc.getEstado()) {
+                contador++;
+            }
+        }
+    }
+    return contador;
 }

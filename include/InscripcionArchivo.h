@@ -17,6 +17,4 @@ public:
 	bool leer(int posicion, Inscripcion& insc) const;
 	int cantRegistros() const;
 	int obtenerProximoId();
-
-    int contarInscriptosActivosPorCurso(int idCurso) const;
 };

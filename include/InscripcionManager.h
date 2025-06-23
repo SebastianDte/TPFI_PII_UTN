@@ -39,4 +39,6 @@ public:
 	//Metodos para bajas en cascada
 	void bajaInscripcionesPorCurso(int idCurso);
 	void bajaInscripcionesPorAlumno(int legajo);
+
+	int contarInscriptosActivosPorCurso(int idCurso) const;
 };
