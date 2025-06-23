@@ -2,6 +2,8 @@
 #include "AlumnoArchivo.h"
 #include "Alumno.h"
 #include "Persona.h"
+#include "InscripcionArchivo.h"
+#include "Inscripcion.h"
 using namespace std;
 AlumnoArchivo::AlumnoArchivo(const char *n)
 {
@@ -113,8 +115,26 @@ bool AlumnoArchivo::existeDNI(const std::string& dni) const
         Alumno alumno = leer(i);
         if (alumno.getDni() == dni)
         {
-            return true; // Lo encontró, ya existe
+            return true;
         }
     }
-    return false; // No lo encontró, está disponible
+    return false;
+}
+bool AlumnoArchivo::tieneInscripcionesActivas(int legajo) const {
+    InscripcionArchivo archivoInscripcion; // Crea un objeto para leer inscripciones
+    int cantidad = archivoInscripcion.cantRegistros();
+    Inscripcion insc;
+
+    if (cantidad <= 0) {
+        return false;
+    }
+
+    for (int i = 0; i < cantidad; i++) {
+        if (archivoInscripcion.leer(i, insc)) {
+            if (insc.getEstado() && insc.getLegajoAlumno() == legajo) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

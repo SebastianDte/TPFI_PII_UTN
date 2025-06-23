@@ -16,6 +16,7 @@ public:
     Alumno leer(int posicion) const;
 
     bool existeDNI(const std::string& dni) const;
+    bool tieneInscripcionesActivas(int legajo) const;
 
     int cantRegistros() const;
 };

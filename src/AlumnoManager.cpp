@@ -178,16 +178,14 @@ bool AlumnoManager::pedirEmail(std::string& email)
             continue;
         }
 
-        // 2. Usamos std::regex_match para validar el input contra el patrón.
+        //  Usamos std::regex_match para validar el input contra el patrón.
         if (std::regex_match(input, patronEmail))
         {
-            // Si coincide, la validación es exitosa.
             email = input;
             return true;
         }
         else
         {
-            // Si no coincide, mostramos el error.
             std::cout << "El formato del email no es válido. Intente nuevamente.\n";
             continue;
         }
@@ -239,14 +237,13 @@ bool AlumnoManager::pedirFechaNacimiento(Fecha& fecha)
 
         Fecha fechaTemp; // Usamos un objeto temporal para la validación
 
-        // 1. Validación de formato (DD/MM/AAAA)
         if (!fechaTemp.validarFechaStr(input))
         {
             std::cout << "Formato de fecha incorrecto. Intente nuevamente.\n";
             continue;
         }
 
-        // 2. Validación de que no sea una fecha futura
+        //Validación de que no sea una fecha futura
         Fecha fechaActual = Fecha::fechaActual();
         if (fechaTemp.esMayorQue(fechaActual))
         {
@@ -254,11 +251,10 @@ bool AlumnoManager::pedirFechaNacimiento(Fecha& fecha)
             continue;
         }
 
-        // 3. Validación de edad lógica
         int edad = fechaActual.getAnio() - fechaTemp.getAnio();
-        // Ajuste simple por si aún no cumplió años este año
         if (fechaActual.getMes() < fechaTemp.getMes() ||
-           (fechaActual.getMes() == fechaTemp.getMes() && fechaActual.getDia() < fechaTemp.getDia())) {
+                (fechaActual.getMes() == fechaTemp.getMes() && fechaActual.getDia() < fechaTemp.getDia()))
+        {
             edad--;
         }
 
@@ -383,6 +379,10 @@ void AlumnoManager::bajaAlumno()
     Alumno alumno;
 
     _utilidades.limpiarPantallaConEncabezado("=== BAJA DE ALUMNOS ===");
+    std::cout << "Para cancelar, escribe 'salir' en cualquier momento.\n\n";
+    std::cin.clear();
+    std::cin.ignore();
+
 
     while (true)
     {
@@ -424,29 +424,59 @@ void AlumnoManager::bajaAlumno()
     std::cout << "\nAlumno encontrado:" << std::endl;
     std::cout << "Legajo: " << alumno.getLegajo() << std::endl;
     std::cout << "Nombre: " << alumno.getNombre() << " " << alumno.getApellido() << std::endl;
-    std::cout << "\n¿Confirma dar de baja este alumno? (s/n): ";
-    std::getline(std::cin, inputUsuario);
-
-    if (_utilidades.aMinusculas(inputUsuario) != "s")
+    if (_archivo.tieneInscripcionesActivas(legajo))
     {
-        std::cout << "\nBaja de alumno cancelada." << std::endl;
-        return;
+        std::cout << "\n\nADVERTENCIA: Este alumno tiene inscripciones activas.\n";
+        std::cout << "Para dar de baja al alumno, tambien se daran de baja todas sus inscripciones.\n";
+        std::string confirmacion;
+
+        while (true)
+        {
+            std::cout << "Desea continuar de todas formas? (s/n): ";
+            std::getline(std::cin, confirmacion);
+            confirmacion = _utilidades.aMinusculas(confirmacion);
+
+            if (confirmacion == "s" || confirmacion == "n")
+            {
+                break;
+            }
+            std::cout << "Opción no válida. Por favor, ingrese 's' para sí o 'n' para no.\n";
+        }
+
+        if (confirmacion == "n")
+        {
+            std::cout << "\nOperación cancelada. El alumno y sus inscripciones no han sido modificados.\n";
+            return;
+        }
+    }
+    else
+    {
+        std::cout << "\n¿Confirma dar de baja este alumno? (s/n): ";
+        std::getline(std::cin, inputUsuario);
+        if (_utilidades.aMinusculas(inputUsuario) != "s")
+        {
+            std::cout << "\nBaja de alumno cancelada." << std::endl;
+            return;
+        }
     }
 
+    // Se procede a desactivar el alumno
     alumno.setActivo(false);
     if (_archivo.modificar(alumno, posicion))
     {
+        // Se realiza la baja en cascada de las inscripciones
         InscripcionManager inscripcionManager;
         inscripcionManager.bajaInscripcionesPorAlumno(alumno.getLegajo());
 
         std::cout << "\nAlumno dado de baja correctamente." << std::endl;
-        std::cout << "También se han desactivado todas sus inscripciones asociadas." << std::endl;
+        std::cout << "También se han desactivado todas sus inscripciones asociadas (si las tuviera)." << std::endl;
     }
     else
     {
         std::cout << "\nError al dar de baja el alumno." << std::endl;
     }
 }
+
 
 void AlumnoManager::buscarAlumnoLegajo()
 {
@@ -465,6 +495,9 @@ void AlumnoManager::buscarAlumnoLegajo()
     int Legajo;
 
     _utilidades.limpiarPantallaConEncabezado("=== BUSQUEDA DE ALUMNOS ===");
+    std::cin.clear();
+    std::cin.ignore();
+
 
     while (true)
     {
@@ -519,7 +552,7 @@ void AlumnoManager::buscarAlumnoLegajo()
 void AlumnoManager::modificarAlumno()
 {
     int total = _archivo.cantRegistros();
-    Alumno alumno ;
+    Alumno alumno;
     int posicion = -1;
 
     if (total <= 0)
@@ -528,13 +561,12 @@ void AlumnoManager::modificarAlumno()
         return;
     }
 
-
     std::string inputUsuario;
     int legajo;
 
-    std::cout << "=========================================\n";
-    std::cout << "         === MODIFICAR ALUMNO ===        \n";
-    std::cout << "=========================================\n";
+    _utilidades.limpiarPantallaConEncabezado("=== MODIFICAR ALUMNO ===");
+    std::cin.clear();
+    std::cin.ignore();
 
     while (true)
     {
@@ -554,14 +586,8 @@ void AlumnoManager::modificarAlumno()
         }
 
         legajo = std::stoi(inputUsuario);
-        if (legajo <= 0)
-        {
-            std::cout << "El LEGAJO debe ser mayor que 0.\n";
-            continue;
-        }
-
-        // Se utiliza filtrarActivos = false para obtener el alumno independientemente de su estado.
         posicion = _archivo.buscar(legajo, false);
+
         if (posicion == -1)
         {
             std::cout << "No se encontró un alumno con ese legajo. Intente nuevamente.\n";
@@ -570,29 +596,23 @@ void AlumnoManager::modificarAlumno()
 
         alumno = _archivo.leer(posicion);
 
-
         if (!alumno.getActivo())
         {
-            std::cout << "El alumno se encuentra dado de baja.\n";
+            std::cout << "No se puede modificar un alumno que se encuentra dado de baja.\n";
+            _utilidades.pausar();
             return;
         }
         break;
     }
-    Alumno alumnoOriginal = alumno; // esto es para mantener el estado original y poder comparar si hubo modificaciones
 
-
-    system("cls");
-
-    std::cout << "=========================================\n";
-    std::cout << "    MODIFICAR AlUMNO SELECCIONADO\n";
-    std::cout << "-----------------------------------------\n";
-    std::cout << "ID: " << alumno.getLegajo() << "\n";
-    std::cout << "Nombre: " << alumno.getNombre() << "\n";
-    std::cout << "=========================================\n";
+    Alumno alumnoOriginal = alumno; // Guardamos el estado original para comparar al final
 
     int opcion;
     do
     {
+        _utilidades.limpiarPantallaConEncabezado("MODIFICAR ALUMNO SELECCIONADO");
+        std::cout << "ID: " << alumno.getLegajo() << " | Nombre: " << alumno.getNombre() << " " << alumno.getApellido() << "\n";
+        std::cout << "=========================================\n";
         std::cout << "\nSeleccione qué desea modificar:\n";
         std::cout << "1. DNI del alumno\n";
         std::cout << "2. Nombre del alumno\n";
@@ -602,66 +622,82 @@ void AlumnoManager::modificarAlumno()
         std::cout << "0. Guardar cambios y salir\n";
         std::cout << "-----------------------------------------\n";
         std::cout << "Ingrese opción: ";
-        std::cin >> opcion;
-        std::cin.ignore();
 
-        system("cls");
+        std::string inputOpcion;
+        std::getline(std::cin, inputOpcion);
+        if (!_utilidades.esEnteroValido(inputOpcion))
+        {
+            opcion = -1;
+        }
+        else
+        {
+            opcion = std::stoi(inputOpcion);
+        }
 
         switch (opcion)
         {
         case 1:
+        {
+            std::string nuevoDni;
+            std::cout << "\nEl DNI actual es: " << alumno.getDni() << std::endl;
+            if (pedirDNI(nuevoDni))
             {
-                std::string nuevoDni;
-                std::cout << "Nuevo DNI del alumno: ";
-                std::getline(std::cin, nuevoDni);
                 alumno.setDni(nuevoDni);
-                std::cout << "DNI actualizado.\n";
-                break;
+                std::cout << "DNI actualizado temporalmente.\n";
             }
+            break;
+        }
         case 2:
+        {
+            std::string nuevoNombre;
+            std::cout << "\nEl Nombre actual es: " << alumno.getNombre() << std::endl;
+            if (pedirNombre(nuevoNombre))
             {
-                std::string nuevoNombre;
-                std::cout << "Nuevo nombre del alumno: ";
-                std::getline(std::cin, nuevoNombre);
                 alumno.setNombre(nuevoNombre);
-                std::cout << "Nombre actualizado.\n";
-                break;
+                std::cout << "Nombre actualizado temporalmente.\n";
             }
+            break;
+        }
         case 3:
+        {
+            std::string nuevoApellido;
+            std::cout << "\nEl Apellido actual es: " << alumno.getApellido() << std::endl;
+            if (pedirApellido(nuevoApellido))
             {
-                std::string nuevoApellido;
-                std::cout << "Nuevo apellido del alumno: ";
-                std::cin >> nuevoApellido;
-                std::cin.ignore();
                 alumno.setApellido(nuevoApellido);
-                std::cout << "Apellido actualizado.\n";
-                break;
+                std::cout << "Apellido actualizado temporalmente.\n";
             }
+            break;
+        }
         case 4:
+        {
+            std::string nuevoTelefono;
+            std::cout << "\nEl Teléfono actual es: " << alumno.getTelefono() << std::endl;
+            if (pedirTelefono(nuevoTelefono))
             {
-                std::string nuevoTelefono;
-                std::cout << "Nuevo número de telefono del alumno: ";
-                std::cin >> nuevoTelefono;
-                std::cin.ignore();
                 alumno.setTelefono(nuevoTelefono);
-                std::cout << "Telefono actualizado.\n";
-                break;
+                std::cout << "Teléfono actualizado temporalmente.\n";
             }
+            break;
+        }
         case 5:
+        {
+            std::string nuevaDireccion;
+            std::cout << "\nLa Dirección actual es: " << alumno.getDireccion() << std::endl;
+            if(pedirDireccion(nuevaDireccion))
             {
-                std::string nuevaDireccion;
-                std::cout << "Nueva direccion del alumno: ";
-                std::getline(std::cin, nuevaDireccion);
                 alumno.setDireccion(nuevaDireccion);
-                std::cout << "Direccion actualizada.\n";
-                break;
+                std::cout << "Dirección actualizada temporalmente.\n";
             }
+            break;
+        }
         case 0:
+        {
             if (alumno != alumnoOriginal)
             {
                 if (_archivo.modificar(alumno, posicion))
                 {
-                    std::cout << "\nalumno modificado correctamente.\n";
+                    std::cout << "\nAlumno modificado correctamente.\n";
                 }
                 else
                 {
@@ -670,18 +706,17 @@ void AlumnoManager::modificarAlumno()
             }
             else
             {
-                std::cout << "\nNo se realizaron cambios en los alumnos.\n";
+                std::cout << "\nNo se realizaron cambios en el alumno.\n";
             }
             break;
+        }
         default:
             std::cout << "Opción inválida. Intente nuevamente.\n";
         }
 
         if (opcion != 0)
         {
-            std::cout << "\nPresione ENTER para continuar...";
-            std::cin.get();
-            system("cls");
+            _utilidades.pausar();
         }
 
     }
@@ -748,7 +783,6 @@ void AlumnoManager::listarActivos()
         if(alumno.getActivo())
         {
             mostrarAlumno(alumno);
-
 
         }
     }

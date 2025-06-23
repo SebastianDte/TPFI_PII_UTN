@@ -25,7 +25,6 @@ void MenuAlumno:: mostrarMenuAlumno()
         std::cout << "=========================================\n";
         std::cout << "Seleccione una opción: ";
         std::cin >> opcion;
-
         system("cls");
         switch(opcion)
         {
