@@ -1,6 +1,6 @@
 #include "ProfesorManager.h"
+#include <string>
 #include <iostream>
-#include "string"
 #include <regex>
 
 ///Validaciones
@@ -164,7 +164,7 @@ bool ProfesorManager::emailValidacion(const std::string& input ) {
     const int minimoEmail = 5;
     int tamanioEmail = input.length();
 
-    // R"(...)" es un "raw string literal", facilita escribir patrones sin escapar las barras \.
+    /// R"(...)" es un "raw string literal", nos permite usar solamente una barra invertida (\),sino seria un comentario
     const std::regex patronEmail(R"(([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+))");
 
 
@@ -941,6 +941,7 @@ void ProfesorManager::buscar(){
             continue;
         }
 
+        ///Convierto el valor string input a su representacion int
         id = std::stoi(input);
 
         posicion = _archivo.buscar(id);
