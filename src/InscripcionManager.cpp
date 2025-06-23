@@ -287,7 +287,21 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
         if (!archivoInscripciones.leer(i, insc)) continue;
 
         // Filtrado por estado
-        if (filtroEstado != -1 && insc.getEstado() != (filtroEstado == 1)) continue;
+        bool estadoInsc = insc.getEstado(); 
+
+        if (filtroEstado != -1) {
+            if (filtroEstado == 1) {
+                if (!estadoInsc) { // si filtro por activos (1) y estadoInsc es false
+                    continue;      // salto la inscripción
+                }
+            }
+            if (filtroEstado == 0) {
+                if (estadoInsc) {  // si filtro por inactivos (0) y estadoInsc es true
+                    continue;      // salto la inscripción
+                }
+            }
+        }
+        // si filtroEstado == -1, dejo pasar todo sin filtro
 
         hayInscripciones = true;
         // Mostrar la información.
@@ -295,8 +309,31 @@ void InscripcionManager::mostrarListadoInscripciones(int filtroEstado) {
         int posCurso = archivoCursos.buscar(insc.getIdCurso());
         Alumno alumno;
         Curso curso;
-        bool alumnoOk = (posAlumno != -1 && (alumno = archivoAlumnos.leer(posAlumno), true));
-        bool cursoOk = (posCurso != -1 && (curso = archivoCursos.leer(posCurso), true));
+
+		// Verificar si el alumno y curso existen.
+        bool alumnoOk;
+        if (posAlumno != -1) {
+            alumno = archivoAlumnos.leer(posAlumno);
+            alumnoOk = true;
+        }
+        else {
+            alumnoOk = false;
+        }
+
+        bool cursoOk;
+
+        if (posCurso != -1) {
+            curso = archivoCursos.leer(posCurso);
+            cursoOk = true;
+        }
+        else {
+            cursoOk = false;
+        }
+        
+        // Saltea esta inscripción porque está incompleta,por si hay algun error con datos huerfanos.
+        if (!alumnoOk || !cursoOk) {
+            continue;  
+        }
 
         cout << "ID Inscripción: " << insc.getIdInscripcion() << endl;
         cout << "Alumno: " << (alumnoOk ? alumno.getNombre() + " " + alumno.getApellido() : "(No encontrado)") << endl;
